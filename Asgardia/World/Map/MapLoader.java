@@ -1,13 +1,11 @@
 package Asgardia.World.Map;
 
 import java.io.*;
-import java.util.*;
 import java.sql.*;
 
 import Asgardia.Types.*;
 import Asgardia.Server.*;
 import Asgardia.World.*;
-import Asgardia.World.Map.*;
 
 public class MapLoader
 {
@@ -29,8 +27,9 @@ public class MapLoader
 		 * 載入伺服器地圖檔案
 		 */
 		System.out.printf ("\t-> Load map files...") ;
+		System.out.println () ;
+		
 		long t_starts = System.currentTimeMillis () ;
-		//for (int MapNo = 0; MapNo <= MAPID_LIMIT; MapNo++) {
 		for (int[] Info : MapInfo.INFO) {
 			try {
 				if (Info[OFFSET_MAPID] > MAPID_LIMIT) {
@@ -86,9 +85,11 @@ public class MapLoader
 				ValidCount++;
 			} catch (Exception e) {
 				System.out.println (e.toString () + " x:" + x + " y:" + y) ;
+				e.printStackTrace () ;
 			}
 		} //end for mapid	
 		long t_ends = System.currentTimeMillis () ;
+		
 		float used_time = (float) (t_ends - t_starts) / 1000;
 		System.out.printf ("\t\t%d files loaded in\t%.3f s\n", ValidCount, used_time) ;
 	}

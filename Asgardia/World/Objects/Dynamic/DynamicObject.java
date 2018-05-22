@@ -18,7 +18,7 @@ public class DynamicObject extends ObjectInstance
 	/* 勇水/精餅狀態: 0:一般 1:加速 */
 	public int BraveSpeed = 0; 
 	
-	public int Gfx;
+	public int Gfx; /* 使用外型編號 */
 	public int TempGfx;
 	
 	public String Name = null;

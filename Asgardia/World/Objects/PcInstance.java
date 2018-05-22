@@ -61,8 +61,6 @@ public class PcInstance extends DynamicObject implements Runnable
 	
 	public int Sex = 0;
 	public int Type = 0; /* 0:Royal 1:Knight 2:Elf 3:Mage 4:Darkelf */
-	//public int Class = 0; //GFX
-	//public int TmpGfx = 0;
 	
 	public int Satiation = 0; //飽食度
 	public int PkCount = 0;
@@ -545,18 +543,22 @@ public class PcInstance extends DynamicObject implements Runnable
 			if (UsingWeapon.Uuid == uuid) {
 				UsingWeapon.IsEquipped = false;
 				Handle.SendPacket (new ItemUpdateName(UsingWeapon).getRaw () ) ;
+				DatabaseCmds.UpdatePcItem (UsingWeapon) ;
 				UsingWeapon = null;
 			} else {
 				UsingWeapon.IsEquipped = false;
 				Handle.SendPacket (new ItemUpdateName(UsingWeapon).getRaw () ) ;
+				DatabaseCmds.UpdatePcItem (UsingWeapon) ;
 				UsingWeapon = FindItemByUuid (uuid) ;
 				UsingWeapon.IsEquipped = true;
 				Handle.SendPacket (new ItemUpdateName(UsingWeapon).getRaw () ) ;
+				DatabaseCmds.UpdatePcItem (UsingWeapon) ;
 			}
 		} else {
 			UsingWeapon = FindItemByUuid (uuid) ;
 			UsingWeapon.IsEquipped = true;
 			Handle.SendPacket (new ItemUpdateName(UsingWeapon).getRaw () ) ;
+			DatabaseCmds.UpdatePcItem (UsingWeapon) ;
 		}
 	}
 	
@@ -698,6 +700,10 @@ public class PcInstance extends DynamicObject implements Runnable
 	}
 	
 	public void SaveItem () {
+		//
+	}
+	
+	public void UpdateParameters () {
 		//
 	}
 	

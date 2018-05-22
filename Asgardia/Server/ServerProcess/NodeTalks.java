@@ -7,7 +7,7 @@ public class NodeTalks
 {
 	PacketBuilder Builder = new PacketBuilder () ;
 	
-	public NodeTalks (PcInstance Node, String Text, int Opcode, int TalksType) {
+	public NodeTalks (PcInstance Node, String Text, int Opcode, int TalksType) {		
 		Builder.WriteByte (Opcode) ;
 		Builder.WriteByte (TalksType) ;
 		Builder.WriteDoubleWord (Node.Uuid) ;

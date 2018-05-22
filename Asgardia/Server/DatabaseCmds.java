@@ -122,4 +122,14 @@ public class DatabaseCmds
 		String q = String.format ("SELECT * FROM spawnlist_door WHERE mapid=\'%d\';", mapid) ;
 		return Db.Query (q) ;		
 	}
+	
+	public static ResultSet MobSpawnlist (int mapid) {
+		String q = String.format ("SELECT * FROM spawnlist WHERE mapid=\'%d\';", mapid) ;
+		return Db.Query (q) ;
+	}
+	
+	public static ResultSet MobDroplist (int mob_id) {
+		String q = String.format ("SELECT * FROM droplist WHERE mobId=\'%d\';", mob_id) ;
+		return Db.Query (q) ;
+	}
 }

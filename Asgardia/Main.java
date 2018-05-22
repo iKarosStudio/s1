@@ -15,8 +15,8 @@ import Asgardia.Config.*;
 import Asgardia.Server.*;
 import Asgardia.World.*;
 
-public class AsgardiaMain {
-	private static Logger Log = Logger.getLogger (AsgardiaMain.class.getSimpleName () ) ;
+public class Main {
+	private static Logger Log = Logger.getLogger (Main.class.getSimpleName () ) ;
 	
 	static final String SLOG[] = {
 		"---------------------------------------------------------------",

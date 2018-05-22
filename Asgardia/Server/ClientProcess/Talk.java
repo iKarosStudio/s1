@@ -15,27 +15,28 @@ public class Talk
 		
 		PcInstance Pc = Handle.Account.ActivePc;
 		int TalkType = Reader.ReadByte () ;
-		String Talks = Reader.ReadString () ;
+		String Content = Reader.ReadString () ;
+		
 		
 		/* 說壞壞的字>3<
 		if (Talks.contains ("壞") ) {
 		}
 		*/
 		
-		if (Talks.startsWith (".help") ) {
+		if (Content.startsWith (".help") ) {
 			byte[] packet = new SystemMessage (String.format ("RD開發資訊") ).getRaw () ;
 			Handle.SendPacket (packet);
 			return;
 		}
 		
-		if (Talks.startsWith (".tile") ) {
+		if (Content.startsWith (".tile") ) {
 			
 			String msg = String.format ("Tile(%d:%5d, %5d):0x%02X", Pc.CurrentMap.MapId, Pc.location.x, Pc.location.y, Pc.CurrentMap.getTile (Pc.location.x, Pc.location.y) ) ;
 			Handle.SendPacket (new SystemMessage (msg).getRaw () ) ;
 		}
 		
-		if (Talks.startsWith (".tp") ) {
-			String[] TpLocation = Talks.split (" ") ;
+		if (Content.startsWith (".tp") ) {
+			String[] TpLocation = Content.split (" ") ;
 			if (TpLocation.length == 4) {
 				int DestMapId = Integer.valueOf (TpLocation[1]) ;
 				int DestX = Integer.valueOf (TpLocation[2]) ;
@@ -53,8 +54,7 @@ public class Talk
 			}
 		}
 		
-		byte[] ChatPacket = new NodeTalks (Pc, Talks, ServerOpcodes.NORMAL_TALKS, TalkType).getRaw () ; 
-		//List<PcInstance> NodesInsight = Pc.getPcInsight () ;
+		byte[] ChatPacket = new NodeTalks (Pc, Content, ServerOpcodes.NORMAL_TALKS, TalkType).getRaw () ; 
 		
 		if (TalkType == 0x00) { //普通對話
 			Handle.SendPacket (ChatPacket) ;
@@ -76,10 +76,12 @@ public class Talk
 				case 4 : TalkTypeS = "血盟"; break;
 				default : TalkTypeS = "不明"; break;
 			}
-			System.out.printf ("[%s]%s: %s ->", TalkTypeS, Pc.Name, Talks) ;
-			for (byte b : Talks.getBytes () ) {
+			
+			System.out.printf ("[%s]%s: %s ->", TalkTypeS, Pc.Name, Content) ;
+			for (byte b : Content.getBytes () ) {
 				System.out.printf ("0x%02X ", b) ;
 			}
+			System.out.println();
 		}
 	}
 }

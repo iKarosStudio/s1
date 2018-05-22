@@ -11,10 +11,9 @@ public class BoardcastMessage extends Thread implements Runnable
 {
 	private static BoardcastMessage instance;
 	private static Asgardia world;
-	private static int SerialCount = 0;
 	
 	public void run () {
-		String BoardcastMessage = String.format ("[%4d]循環廣播訊息測試", SerialCount++) ;
+		String BoardcastMessage = String.format ("循環廣播訊息測試") ;
 		System.out.println ("[伺服器廣播]" + BoardcastMessage) ;
 		world.BoardcastToAll (new SystemMessage (BoardcastMessage).getRaw () ) ;
 	}

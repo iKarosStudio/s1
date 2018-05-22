@@ -3,11 +3,11 @@ package Asgardia.World.Map;
 import java.util.ArrayList;
 import java.util.*;
 import java.util.concurrent.*;
-import java.math.*;
 
 
 import Asgardia.Config.*;
 import Asgardia.Types.*;
+import Asgardia.Server.*;
 import Asgardia.World.*;
 import Asgardia.World.Npc.*;
 import Asgardia.World.Objects.*;
@@ -42,6 +42,7 @@ public class AsgardiaMap
 	public final int SizeY;
 	
 	public MonsterGenerator MobGenerator = null;
+	public MonsterAiController MobAi = null;
 	
 	public ConcurrentHashMap<Integer, Location> TpLocation; //傳送點列表
 	
@@ -74,6 +75,17 @@ public class AsgardiaMap
 		Npcs = new ConcurrentHashMap<Integer, NpcInstance> () ;
 		GndItems = new ConcurrentHashMap<Integer, ItemInstance> () ;
 		Doors = new ConcurrentHashMap<Integer, DoorInstance> () ;
+		
+		
+		/*
+		 * 怪物產生控制
+		 */
+		MobGenerator = new MonsterGenerator (this) ;
+		KernelThreadPool.getInstance ().ScheduleAtFixedRate (MobGenerator, 10000, 5000) ;
+		
+		//MobAi = new MonsterAiController (this) ;
+		//KernelThreadPool.getInstance ().ScheduleAtFixedRate (MobAi, 12000, 1000) ;
+		
 	}
 	
 	public void setPassable (int x, int y, boolean passable) {
