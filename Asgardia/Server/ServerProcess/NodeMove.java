@@ -3,6 +3,7 @@ package Asgardia.Server.ServerProcess;
 import Asgardia.World.*;
 import Asgardia.World.Map.*;
 import Asgardia.World.Objects.*;
+import Asgardia.World.Objects.Dynamic.*;
 import Asgardia.Server.*;
 import Asgardia.Server.Opcodes.*;
 
@@ -12,6 +13,7 @@ import Asgardia.Server.Opcodes.*;
 public class NodeMove
 {
 	PacketBuilder builder = null;
+	
 	public NodeMove (int uuid, int x, int y, int heading) {
 		builder = new PacketBuilder () ;
 
@@ -24,7 +26,8 @@ public class NodeMove
 		builder.WriteDoubleWord (0) ;
 	}
 	
-	public NodeMove (PcInstance Node) {
+	public NodeMove (DynamicObject Node) {
+	//public NodeMove (PcInstance Node) {
 		builder = new PacketBuilder () ;
 
 		builder.WriteByte (ServerOpcodes.MOVE_NODE) ;

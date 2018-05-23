@@ -5,22 +5,30 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import Asgardia.Server.*;
+import Asgardia.World.*;
+import Asgardia.World.Objects.*;
+import Asgardia.World.Objects.Template.*;
 
 public class MonsterGenerator extends Thread implements Runnable
 {
 	AsgardiaMap Map;
 	ConcurrentHashMap<Integer, MonsterSpawnList> SpawnList = null;
-	ConcurrentHashMap<Integer, MonsterDropList[]> DropList = null;
+	ConcurrentHashMap<Integer, List<MonsterDropList>> DropList = null;
 	
 	public void run () {
-		//System.out.printf ("monster generator updating -> map:%d\n", Map.MapId) ;
+		SpawnList.forEach ((Integer u, MonsterSpawnList msl)->{
+			System.out.printf ("msl instance size:%d, count:%d\n", msl.Mobs.size (), msl.Count) ;
+			if (msl.Mobs.size () < msl.Count) {
+				System.out.printf ("需要生怪%s在地圖%d\n", msl.Location, msl.MapId) ;
+			}
+		});
 	}
 	
 	
 	public MonsterGenerator (AsgardiaMap map) {
 		Map = map;
 		SpawnList = new ConcurrentHashMap<Integer, MonsterSpawnList> () ;
-		DropList  = new ConcurrentHashMap<Integer, MonsterDropList[]> () ;
+		DropList  = new ConcurrentHashMap<Integer, List<MonsterDropList>> () ;
 		UpdateSpawnList () ;
 	}
 	
@@ -58,22 +66,30 @@ public class MonsterGenerator extends Thread implements Runnable
 				int MonsterId = rs.getInt ("npc_templateid") ;
 				ResultSet rs_drop = DatabaseCmds.MobDroplist (MonsterId) ;
 				rs_drop.last () ;
-				System.out.printf ("map:%d,", Map.MapId) ;
-				System.out.printf ("%s : %d\n", rs.getString("location"), rs_drop.getRow () ) ;
+				int DropListSize = rs_drop.getRow () ;
 				
-				while (rs_drop.next () ) {
-					//DropList.putIfAbsent ()
-				}
-				
-				/*
-				MonsterDropList mdl = new MonsterDropList (
+				if (DropListSize > 0 && !DropList.containsKey (MonsterId) ) {
+					rs_drop.first () ;
+					List<MonsterDropList> DropTable= new ArrayList<MonsterDropList> () ;
 					
-				) ;*/
-				
+					while (rs_drop.next () ) {
+						MonsterDropList mdl = new MonsterDropList (
+							rs_drop.getInt ("mobId"),
+							rs_drop.getInt ("itemId"),
+							rs_drop.getInt ("min"),
+							rs_drop.getInt ("max"),
+							rs_drop.getInt ("chance") ) ;
+						DropTable.add (mdl) ;
+					}
+					DropList.putIfAbsent (MonsterId, DropTable) ;
+					
+				}
 				count++;
 			}
-			System.out.printf ("load %d spawn list in map:%d\n", count, Map.MapId) ;
-		} catch (Exception e) {e.printStackTrace () ;}
+			
+		} catch (Exception e) {
+			e.printStackTrace () ;
+		}
 	}
 	
 	/*
@@ -99,7 +115,7 @@ public class MonsterGenerator extends Thread implements Runnable
 		public int Rest;
 		public int NearSpawn;
 		
-		//
+		public List<MonsterInstance> Mobs;
 		
 		public MonsterSpawnList (
 			int list_id,
@@ -140,6 +156,8 @@ public class MonsterGenerator extends Thread implements Runnable
 			MovementDistance = movement_distance;
 			Rest = rest;
 			NearSpawn = near_spawn;
+			
+			Mobs = new ArrayList<MonsterInstance> () ;
 		}
 	}
 	

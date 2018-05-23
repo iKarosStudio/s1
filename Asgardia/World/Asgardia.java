@@ -134,6 +134,18 @@ public class Asgardia extends Thread
 		
 		return AllPcs;
 	}
+	
+	public PcInstance getPcByUuid (int uuid) {
+		return null;
+	}
+	
+	public List<PcInstance> getPcByClanId (int clan_id) {
+		return null;
+	}
+	
+	public List<PcInstance> getPcByParty (int party_id) {
+		return null;
+	}
 
 	public synchronized void addPc (PcInstance Pc) {
 		try {
