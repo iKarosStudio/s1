@@ -151,7 +151,7 @@ public class CacheData
 			float used_time = (float) (t_ends - t_starts) / 1000;
 			System.out.printf ("\t\t" + Counter + " npc cached in\t%.3f s\n", used_time) ;
 		} catch (Exception e) {
-			System.out.println (e.toString () ) ;
+			e.printStackTrace () ;
 		}
 	}
 	
@@ -189,7 +189,7 @@ public class CacheData
 			float used_time = (float) (t_ends - t_starts) / 1000;
 			System.out.printf ("\t\t" + Counter + " npc talk cached in\t%.3f s\n", used_time) ;
 		} catch (Exception e) {
-			System.out.println (e.toString () ) ;
+			e.printStackTrace () ;
 		}
 		
 	}
@@ -234,7 +234,7 @@ public class CacheData
 			float used_time = (float) (t_ends - t_starts) / 1000;
 			System.out.printf ("\t\t" + Counter + " items cached in\t%.3f s\n", used_time) ;
 		} catch (Exception e) {
-			System.out.println (e.toString () ) ;
+			e.printStackTrace () ;
 		}
 	}
 	
@@ -338,7 +338,7 @@ public class CacheData
 			float used_time = (float) (t_ends - t_starts) / 1000;
 			System.out.printf ("\t\t" + Counter + " weapons cached in\t%.3f s\n", used_time) ;
 		} catch (Exception e) {
-			System.out.println (e.toString () ) ;
+			e.printStackTrace () ;
 		}
 	}
 	
@@ -404,7 +404,7 @@ public class CacheData
 			float used_time = (float) (t_ends - t_starts) / 1000;
 			System.out.printf ("\t\t" + Counter + " armors cached in \t%.3f s\n", used_time) ;
 		} catch (Exception e) {
-			System.out.println (e.toString () ) ;
+			e.printStackTrace () ;
 		}
 	}
 }

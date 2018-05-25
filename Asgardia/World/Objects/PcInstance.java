@@ -32,6 +32,7 @@ public class PcInstance extends DynamicObject implements Runnable
 	/* 視界內物件 */
 	public ConcurrentHashMap<Integer, PcInstance> PcInsight = null;
 	public ConcurrentHashMap<Integer, NpcInstance> NpcInsight = null;
+	public ConcurrentHashMap<Integer, MonsterInstance> MonsterInsight = null;
 	public ConcurrentHashMap<Integer, ItemInstance> GndItemInsight = null;
 	public ConcurrentHashMap<Integer, DoorInstance> DoorInsight = null;
 	public ConcurrentHashMap<Integer, PetInstance> Pet = null;
@@ -77,6 +78,7 @@ public class PcInstance extends DynamicObject implements Runnable
 		
 		PcInsight = new ConcurrentHashMap<Integer, PcInstance> () ;
 		NpcInsight = new ConcurrentHashMap<Integer, NpcInstance> () ;
+		MonsterInsight = new ConcurrentHashMap<Integer, MonsterInstance> () ;
 		GndItemInsight = new ConcurrentHashMap<Integer, ItemInstance> () ;
 		DoorInsight = new ConcurrentHashMap<Integer, DoorInstance> () ;
 	}
@@ -86,6 +88,7 @@ public class PcInstance extends DynamicObject implements Runnable
 		
 		PcInsight = new ConcurrentHashMap<Integer, PcInstance> () ;
 		NpcInsight = new ConcurrentHashMap<Integer, NpcInstance> () ;
+		MonsterInsight = new ConcurrentHashMap<Integer, MonsterInstance> () ;
 		GndItemInsight = new ConcurrentHashMap<Integer, ItemInstance> () ;
 		DoorInsight = new ConcurrentHashMap<Integer, DoorInstance> () ;
 		//Item = new ConcurrentHashMap () ;
@@ -359,6 +362,11 @@ public class PcInstance extends DynamicObject implements Runnable
 		return Results;
 	}
 	
+	public List<MonsterInstance> getMonsterInsight () {
+		List<MonsterInstance> Results = CurrentMap.getMonsterInstance (location.x, location.y) ;
+		return Results;
+	}
+	
 	public List<ItemInstance> getItemInsight () {
 		List<ItemInstance> Results = CurrentMap.getGndItemInstance (location.x, location.y) ;
 		return Results;
@@ -403,6 +411,10 @@ public class PcInstance extends DynamicObject implements Runnable
 		NpcInsight.putIfAbsent (Npc.Uuid, Npc) ;
 	}
 	
+	public void addMonsterInstance (MonsterInstance Mob) {
+		MonsterInsight.putIfAbsent (Mob.Uuid, Mob) ;
+	}
+	
 	public void addGndItemInstance (ItemInstance item) {
 		GndItemInsight.putIfAbsent (item.Uuid, item) ;
 	}
@@ -420,6 +432,10 @@ public class PcInstance extends DynamicObject implements Runnable
 	
 	public void removeNpcInsight (NpcInstance Npc) {
 		NpcInsight.remove (Npc.Uuid) ;
+	}
+	
+	public void removeMonsterInsight (MonsterInstance Mob) {
+		MonsterInsight.remove (Mob.Uuid) ;
 	}
 	
 	public void removeDoorInsight (DoorInstance Door) {

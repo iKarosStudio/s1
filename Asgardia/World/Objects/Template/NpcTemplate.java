@@ -10,10 +10,14 @@ import Asgardia.World.Objects.Template.*;
 public class NpcTemplate extends DynamicObject
 {
 	public int Gfx = 0;
+	public String Impl;
 	public String Name;
 	public String NameId;
+	public String Family;
 	public String Note;
 	public String NpcType;
+	
+	public int Exp;
 	
 	public NpcTemplate () {
 		//System.out.println ("警告 不該被呼叫") ;
@@ -49,8 +53,21 @@ public class NpcTemplate extends DynamicObject
 		Uuid = npc_id;
 		Name = name;
 		NameId = name_id;
+		Family = family;
+		Impl = impl;
 		Note = note;
 		NpcType = impl ;
 		Gfx = gfxid;
+		BasicParameter = new QualityParameters () ;
+		BasicParameter.Str = str; BasicParameter.Con = con; BasicParameter.Dex = dex;
+		BasicParameter.Wis = wis; BasicParameter.Cha = 0  ; BasicParameter.Intel = intel;
+		BasicParameter.DefWater = weak_water; BasicParameter.DefWind = weak_wind;
+		BasicParameter.DefEarth = weak_earth; BasicParameter.DefFire = weak_fire;
+		BasicParameter.MaxHp = hp; BasicParameter.MaxMp = mp;
+		BasicParameter.Ac = ac;
+		
+		Level = level;
+		Exp = exp;
+		
 	}
 }

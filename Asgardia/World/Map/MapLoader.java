@@ -15,7 +15,7 @@ public class MapLoader
 	public static final int OFFSET_START_Y = 3;
 	public static final int OFFSET_END_Y = 4;
 	
-	public static final int MAPID_LIMIT = 3;
+	public static final int MAPID_LIMIT = 0;
 	
 	public MapLoader (Asgardia Handle) 
 	{
@@ -46,7 +46,7 @@ public class MapLoader
 						Info[OFFSET_START_X],
 						Info[OFFSET_END_X],
 						Info[OFFSET_START_Y],
-						Info[OFFSET_END_Y]) ;
+						Info[OFFSET_END_Y] ) ;
 				
 				String s = null;
 				y = 0;

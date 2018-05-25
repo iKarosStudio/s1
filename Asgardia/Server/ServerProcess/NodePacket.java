@@ -174,6 +174,40 @@ public class NodePacket
 	/*
 	 * 報告怪物物件
 	 */
+	public NodePacket (MonsterInstance Npc) {
+		Builder.WriteByte (ServerOpcodes.NODE_PACK);
+		Builder.WriteWord (Npc.location.x) ;
+		Builder.WriteWord (Npc.location.y) ;
+		Builder.WriteDoubleWord (Npc.Uuid) ;
+		
+		Builder.WriteWord (Npc.Gfx) ; //get gfx
+		if (Npc.isDead) {
+		//showDead
+		} else {
+			Builder.WriteByte (0) ;//weapon 0:hand 4:sword
+		}
+		Builder.WriteByte (Npc.location.Heading) ;
+		Builder.WriteByte (10) ; //light
+		Builder.WriteByte (Npc.MoveSpeed) ; //move speed;
+		
+		Builder.WriteDoubleWord (0) ; //EXP
+		Builder.WriteWord (0) ; //Lawful
+		Builder.WriteString (Npc.NameId) ;
+		Builder.WriteString (null) ;//title
+		Builder.WriteByte (Npc.Status) ; //status
+		Builder.WriteDoubleWord (0) ;
+		Builder.WriteString (null) ;
+		Builder.WriteString (null) ;
+		Builder.WriteByte (0x00) ;
+		
+		Builder.WriteByte (0xFF) ; //血條百分比
+		
+		Builder.WriteByte (0x00) ;
+		Builder.WriteByte (Npc.Level) ;
+		Builder.WriteByte (0x00) ;
+		Builder.WriteByte (0xFF) ;
+		Builder.WriteByte (0xFF) ;
+	}
 	
 	public byte[] getRaw () {
 		return Builder.GetPacketNoPadding () ;

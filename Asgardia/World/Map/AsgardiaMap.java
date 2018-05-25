@@ -50,7 +50,7 @@ public class AsgardiaMap
 	private ConcurrentHashMap<Integer, NpcInstance> Npcs; //Npcs' table in this map
 	private ConcurrentHashMap<Integer, ItemInstance> GndItems; //Items on ground
 	private ConcurrentHashMap<Integer, DoorInstance> Doors; //Doors
-	//private ConcurrentHashMap<Integer, MonsterInstance> Monsters;
+	private ConcurrentHashMap<Integer, MonsterInstance> Monsters;
 	//private ConcurrentHashMap<Integer, PetInstance> Pets;
 	
 	public AsgardiaMap (int id, int start_x, int end_x, int start_y, int end_y) {
@@ -75,6 +75,7 @@ public class AsgardiaMap
 		Npcs = new ConcurrentHashMap<Integer, NpcInstance> () ;
 		GndItems = new ConcurrentHashMap<Integer, ItemInstance> () ;
 		Doors = new ConcurrentHashMap<Integer, DoorInstance> () ;
+		Monsters = new ConcurrentHashMap<Integer, MonsterInstance> () ;
 		
 		//MobAi = new MonsterAiController (this) ;
 		//KernelThreadPool.getInstance ().ScheduleAtFixedRate (MobAi, 1000, 500) ;
@@ -150,10 +151,15 @@ public class AsgardiaMap
 		Doors.remove (d.Uuid) ;
 	}
 	
-	public void addMonster () {
+	/*
+	 * 未來考慮取得視線內MonsterInstance物件改由MonsterSpawnList內登記的Mobs取得所有怪物物件的參考
+	 */
+	public void addMonster (MonsterInstance m) {
+		Monsters.put (m.Uuid, m) ;
 	}
 	
-	public void removeMonster () {
+	public void removeMonster (MonsterInstance m) {
+		Monsters.remove (m.Uuid) ;
 	}
 	
 	public boolean isInTpLocation (int x, int y) {
@@ -291,6 +297,26 @@ public class AsgardiaMap
 			return GndItems.get (uuid) ;
 		}
 		return null;
+	}
+	
+	/*
+	 * 回報p(x, y)視距內怪物
+	 */
+	public List<MonsterInstance> getMonsterInstance (int x, int y) {
+		ArrayList<MonsterInstance> Results = new ArrayList<MonsterInstance> () ;
+		
+		try {
+			Monsters.forEach ((Integer u, MonsterInstance node) -> {
+				int distance = node.getDistance (x, y) ;
+				if (distance < Configurations.SIGHT_RAGNE) {
+					Results.add (node) ;
+				}
+			}) ;
+		} catch (Exception e) {
+			e.printStackTrace () ;
+		}
+		
+		return Results;
 	}
 	
 	public List<PcInstance> getAllPcs () {

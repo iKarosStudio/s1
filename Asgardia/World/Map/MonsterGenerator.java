@@ -4,6 +4,7 @@ import java.sql.*;
 import java.util.*;
 import java.util.concurrent.*;
 
+import Asgardia.Types.*;
 import Asgardia.Server.*;
 import Asgardia.Server.Utility.*;
 import Asgardia.World.*;
@@ -14,27 +15,36 @@ import Asgardia.World.Objects.Template.*;
 public class MonsterGenerator extends Thread implements Runnable
 {
 	AsgardiaMap Map;
+	
+	/* <K, V> = <spawnlist主鍵, 產生參數> */
 	ConcurrentHashMap<Integer, MonsterSpawnList> SpawnList = null;
+	
+	/* <K, V> = <怪物編號, 物品掉落清單> */
 	ConcurrentHashMap<Integer, List<MonsterDropList>> DropList = null;
 	
 	public void run () {
-		SpawnList.forEach ((Integer u, MonsterSpawnList msl)->{
-			//System.out.printf ("msl instance size:%d, count:%d\n", msl.Mobs.size (), msl.Count) ;
-			if (msl.Mobs.size () < msl.Count) {
-				//System.out.printf ("需要生怪[%s]在地圖%d\n", msl.Location, msl.MapId) ;
-				
-				//生怪 把實體加到Mobs List裡面OAO!
-				//MonsterInstance NewMob = new MonsterInstance (CacheData.NpcCache.get (msl.NpcTemplateId) ) ;
-				
-				NpcInstance n = new NpcInstance (CacheData.NpcCache.get (msl.NpcTemplateId)) ;
-				n.Uuid = UuidGenerator.Next () ;
-				n.location.x = msl.LocX;
-				n.location.y = msl.LocY;
-				n.location.MapId = msl.MapId;
-				n.location.Heading = msl.Heading;
-				Map.addNpc (n) ;
-			}
-		});
+		try {
+			SpawnList.forEach ((Integer u, MonsterSpawnList msl)->{
+				System.out.printf ("要求產生[%s]%d隻在地圖%d\n", msl.Location, (msl.Count-msl.Mobs.size()), msl.MapId) ;
+				while (msl.Mobs.size () < msl.Count) {	
+					NpcTemplate Temp = CacheData.NpcCache.get (msl.NpcTemplateId) ;
+					Location SpawnLoc = new Location (msl.MapId, msl.LocX, msl.LocY, msl.Heading) ;
+					
+					//產生怪物把實體加到Mobs List裡面OAO!
+					MonsterInstance NewMob = new MonsterInstance (Temp, SpawnLoc) ;
+					
+					/*
+					 * 產生怪物持有道具
+					 */
+					DropList.get (msl.NpcTemplateId) ;
+					
+					Map.addMonster (NewMob) ;
+					msl.Mobs.add (NewMob) ;
+				}
+			});
+		} catch (Exception e) {
+			e.printStackTrace () ;
+		}
 	}
 	
 	
