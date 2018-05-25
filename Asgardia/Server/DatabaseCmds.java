@@ -66,6 +66,11 @@ public class DatabaseCmds
 		return Db.Query (q) ;
 	}
 	
+	public static ResultSet LoadTeleportBookmark (int uuid) {
+		String q = String.format ("SELECT * FROM character_teleport WHERE char_id=\'%d\' ORDER BY name ASC", uuid) ;
+		return Db.Query (q) ;
+	}
+	
 	public static void SetItemEquip (int uuid, int isEquip) {
 		//
 	}
@@ -107,7 +112,15 @@ public class DatabaseCmds
 	}
 	
 	public static void SavePc (PcInstance p) {
-		String q = String.format ("UPDATE characters SET LocX=\'%d\',LocY=\'%d\',Heading=\'%d\',MapID=\'%d\' WHERE objid=\'%d\';",
+		String q = String.format ("UPDATE characters SET level=\'%d\',Exp=\'%d\',MaxHp=\'%d\',CurHp=\'%d\',MaxMp=\'%d\',CurMp=\'%d\',Ac=\'%d\',Status=\'%d\',LocX=\'%d\',LocY=\'%d\',Heading=\'%d\',MapID=\'%d\' WHERE objid=\'%d\';",
+				p.Level,
+				p.Exp,
+				p.BasicParameter.MaxHp,
+				p.Hp,
+				p.BasicParameter.MaxMp,
+				p.Mp,
+				p.BasicParameter.Ac,
+				p.Status,
 				p.location.x,
 				p.location.y,
 				p.location.Heading,
@@ -115,8 +128,6 @@ public class DatabaseCmds
 				p.Uuid) ;
 		Db.Insert (q);
 	}
-	
-	
 	
 	public static ResultSet DoorSpawinlist (int mapid) {
 		String q = String.format ("SELECT * FROM spawnlist_door WHERE mapid=\'%d\';", mapid) ;

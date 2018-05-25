@@ -18,7 +18,7 @@ public class ExpMonitor extends TimerTask implements Runnable
 	
 	public void run () {
 		try {
-			//
+			System.out.printf ("pc exp monitor\n") ;
 		} catch (Exception e) {
 			System.out.printf ("%s ExpMonitor:%s\n", Pc.Name, e.toString () ) ;
 		}

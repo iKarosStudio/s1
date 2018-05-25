@@ -1,6 +1,7 @@
 package Asgardia.World.Objects;
 
 import Asgardia.World.Objects.Dynamic.*;
+import Asgardia.World.Objects.Template.*;
 
 /*
  * 怪物實體
@@ -26,4 +27,9 @@ public class MonsterInstance extends DynamicObject
 	//持有道具
 	//持有經驗值
 	//仇恨清單 (玩家, 寵物)
+	public MonsterInstance (NpcTemplate n) {
+		//
+	}
+	
+	
 }

@@ -6,7 +6,6 @@ import java.util.*;
 
 import Asgardia.World.Objects.*;
 import Asgardia.World.*;
-import Asgardia.World.Map.*;
 
 public class GuiMain extends Thread
 {

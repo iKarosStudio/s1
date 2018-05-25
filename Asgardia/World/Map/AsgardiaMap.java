@@ -76,16 +76,13 @@ public class AsgardiaMap
 		GndItems = new ConcurrentHashMap<Integer, ItemInstance> () ;
 		Doors = new ConcurrentHashMap<Integer, DoorInstance> () ;
 		
-		
-		/*
-		 * 怪物產生控制
-		 */
-		MobGenerator = new MonsterGenerator (this) ;
-		KernelThreadPool.getInstance ().ScheduleAtFixedRate (MobGenerator, 10000, 5000) ;
-		
 		//MobAi = new MonsterAiController (this) ;
-		//KernelThreadPool.getInstance ().ScheduleAtFixedRate (MobAi, 12000, 1000) ;
+		//KernelThreadPool.getInstance ().ScheduleAtFixedRate (MobAi, 1000, 500) ;
 		
+	}
+	
+	public int SpawnMonster () {
+		return 0;
 	}
 	
 	public void setPassable (int x, int y, boolean passable) {

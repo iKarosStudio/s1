@@ -14,13 +14,18 @@ public class HpMonitor extends TimerTask implements Runnable
 	private PcInstance Pc;
 	private SessionHandler Handle;
 	
+	private int Status = 0;
+	
 	public HpMonitor (PcInstance Pc) {
 		this.Pc = Pc;
 		Handle = Pc.getHandler () ;
-		TaskInterval = 100;
+		TaskInterval = 1000;
 	}
 	
 	public void run () {
+		
+		
+		
 		int div10 = 0;
 		try {
 			if (div10 < 0) {
@@ -34,12 +39,13 @@ public class HpMonitor extends TimerTask implements Runnable
 				div10 = 0;
 			}
 		} catch (Exception e) {
-			System.out.printf ("HP Monitor %s\n", e.toString () ) ;
+			e.printStackTrace () ;
+			//System.out.printf ("HP Monitor %s\n", e.toString () ) ;
 		}
 	}
 	
 	public void Start () {
-		t.scheduleAtFixedRate (this, 0, TaskInterval) ;
+		t.scheduleAtFixedRate (this, 1000, TaskInterval) ;
 	}
 	
 	public void Stop () {

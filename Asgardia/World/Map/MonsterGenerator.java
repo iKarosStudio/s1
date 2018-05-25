@@ -5,7 +5,9 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import Asgardia.Server.*;
+import Asgardia.Server.Utility.*;
 import Asgardia.World.*;
+import Asgardia.World.Npc.*;
 import Asgardia.World.Objects.*;
 import Asgardia.World.Objects.Template.*;
 
@@ -17,9 +19,20 @@ public class MonsterGenerator extends Thread implements Runnable
 	
 	public void run () {
 		SpawnList.forEach ((Integer u, MonsterSpawnList msl)->{
-			System.out.printf ("msl instance size:%d, count:%d\n", msl.Mobs.size (), msl.Count) ;
+			//System.out.printf ("msl instance size:%d, count:%d\n", msl.Mobs.size (), msl.Count) ;
 			if (msl.Mobs.size () < msl.Count) {
-				System.out.printf ("需要生怪%s在地圖%d\n", msl.Location, msl.MapId) ;
+				//System.out.printf ("需要生怪[%s]在地圖%d\n", msl.Location, msl.MapId) ;
+				
+				//生怪 把實體加到Mobs List裡面OAO!
+				//MonsterInstance NewMob = new MonsterInstance (CacheData.NpcCache.get (msl.NpcTemplateId) ) ;
+				
+				NpcInstance n = new NpcInstance (CacheData.NpcCache.get (msl.NpcTemplateId)) ;
+				n.Uuid = UuidGenerator.Next () ;
+				n.location.x = msl.LocX;
+				n.location.y = msl.LocY;
+				n.location.MapId = msl.MapId;
+				n.location.Heading = msl.Heading;
+				Map.addNpc (n) ;
 			}
 		});
 	}
@@ -35,7 +48,6 @@ public class MonsterGenerator extends Thread implements Runnable
 	public void UpdateSpawnList () {
 		ResultSet rs = DatabaseCmds.MobSpawnlist (Map.MapId) ;
 		try {
-			int count = 0;
 			while (rs.next () ) {
 				MonsterSpawnList msl = new MonsterSpawnList (
 					rs.getInt ("id"),
@@ -84,8 +96,7 @@ public class MonsterGenerator extends Thread implements Runnable
 					DropList.putIfAbsent (MonsterId, DropTable) ;
 					
 				}
-				count++;
-			}
+			} //End of rs.next()
 			
 		} catch (Exception e) {
 			e.printStackTrace () ;

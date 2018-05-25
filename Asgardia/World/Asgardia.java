@@ -9,6 +9,7 @@ import Asgardia.Server.*;
 import Asgardia.Server.ServerProcess.*;
 import Asgardia.Server.Utility.*;
 import Asgardia.World.Map.*;
+import Asgardia.World.Map.MonsterGenerator;
 import Asgardia.World.Npc.*;
 import Asgardia.World.Objects.*;
 
@@ -60,38 +61,61 @@ public class Asgardia extends Thread
 	
 	public void Initialize () {
 		try {
-			//cache items, equipment data, npc types...
+			/*
+			 * Cache items, equipment data, npc types...
+			 */
 			CacheData.getInstance () ;
 			
+			/*
+			 * Fetch Server last UUID
+			 */
 			UuidGenerator.getInstance () ;
 			
-			//load maps
-			MapLoader MLoader = new MapLoader (instance) ;
+			/*
+			 * Load maps
+			 */
+			new MapLoader (instance) ;
 			
-			//load npc
-			NpcLoader NLoader = new NpcLoader (instance) ;
+			/*
+			 * Load npc
+			 */
+			new NpcLoader (instance) ;
 			
+			/* 
+			 * Load Door
+			 */
+			DoorGenerator.getInstance () ;
+			
+			/*
+			 * Generate monster
+			 */
+			System.out.printf ("Generate Monster...") ;
+			Maps.forEach ((Integer map_id, AsgardiaMap map)->{
+				map.MobGenerator = new MonsterGenerator (map) ;
+				KernelThreadPool.getInstance ().ScheduleAtFixedRate (map.MobGenerator, 5000, 5000) ;
+			}) ;
+			System.out.printf ("success\n") ;
+			
+			/*
+			 * Start server time
+			 */
 			Time = ServerTime.getInstance () ;
 			KernelThreadPool.getInstance ().ScheduleAtFixedRate (Time, 0, 1000) ;
 			
-			DoorGenerator.getInstance () ;
-			//load monster
-			//Monsters = new ConcurrentHashMap () ;
 			//load boss
 			//load special system
 			
+			/*
+			 * Server memory usage monitor
+			 */
 			MemMonitor = MemoryMonitor.getInstance () ;
 			KernelThreadPool.getInstance ().ScheduleAtFixedRate (MemMonitor, 0, 5000) ;
 			
+			/*
+			 * Game boardcast message
+			 */
 			SysMessage = BoardcastMessage.getInstance () ;
 			KernelThreadPool.getInstance ().ScheduleAtFixedRate (SysMessage, 10000, 30000) ;
-			
-			/*
-			Maps.forEach ((Integer map_id, AsgardiaMap map)->{
-				MonsterGenerator monster = new MonsterGenerator (map_id) ;
-				KernelThreadPool.getInstance ().execute (monster) ;
-			});
-			*/
 		} catch (Exception e) {
 			e.printStackTrace () ;
 		}

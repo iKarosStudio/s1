@@ -1,9 +1,7 @@
 package Asgardia.Server.Utility;
 
 import Asgardia.Server.*;
-import Asgardia.Server.ClientProcess.*;
 import Asgardia.Server.ServerProcess.*;
-import Asgardia.Server.Utility.*;
 import Asgardia.World.Objects.*;
 
 public class CharacterInitializer

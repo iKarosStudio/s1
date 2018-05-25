@@ -38,7 +38,7 @@ public class Main {
 	/*
 	 * 主進入點
 	 */
-	public static void main (String[] args) {
+	public static void main (String[] args) throws InterruptedException {
 		ShowSlog () ;
 		System.out.printf ("Kernel Author:%s\n", Configurations.AUTHOR) ;
 		System.out.printf ("OS:%s-%s\n", System.getProperty ("os.name"), System.getProperty ("os.arch" ) ) ;
@@ -94,7 +94,12 @@ public class Main {
 		/*
 		 * 本地端控制台
 		 */
+		Runtime.getRuntime ().addShutdownHook (new Shutdown () ) ;
+		while (true) {
+			Thread.sleep (1000) ;
+		}
 		
+		/*
 		Scanner KeyboardReader = new Scanner (System.in) ;
 		do {
 			//System.out.print ("#") ;
@@ -111,6 +116,6 @@ public class Main {
 					e.printStackTrace () ;
 				}
 			}
-		} while (true) ;
+		} while (true) ;*/
 	}
 }

@@ -41,7 +41,7 @@ public class UuidGenerator
 				} 
 				Uuid = uuid;
 				
-				System.out.printf ("\t-> UUID Generator...\t\t0x%08X\n", Uuid) ;
+				System.out.printf ("UUID Generator...0x%08X\n", Uuid) ;
 			}
 			
 		} catch (Exception e) {

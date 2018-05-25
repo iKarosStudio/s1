@@ -5,11 +5,9 @@ import java.util.concurrent.*;
 import javax.xml.parsers.*;
 import org.w3c.dom.*;
 
-import Asgardia.World.*;
-import Asgardia.World.Npc.*;
-
-//server/database/NpcActionTable參考
-
+/*
+ * server/database/NpcActionTable參考
+ */
 public class NpcActionXmlLoader
 {
 	private static final String XML_PATH = "./XML/NpcActions" ;

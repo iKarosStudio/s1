@@ -720,14 +720,11 @@ public class PcInstance extends DynamicObject implements Runnable
 	}
 	
 	public void LoadTeleportBookmark () {
-		HikariCP db = Handle.getDbHandle () ;
-		String q = String.format ("SELECT * FROM character_teleport WHERE char_id=\'%s\' ORDER BY name ASC", Name) ;
-		
+		ResultSet rs = DatabaseCmds.LoadTeleportBookmark (Uuid) ;
 		try {
-			Statement st = db.con.createStatement () ;
-			ResultSet rs = st.executeQuery (q) ;
-		} catch (Exception e) {
-			//
-		}	
+			while (rs.next () ) {
+				//回報記憶傳送資訊
+			}
+		} catch (Exception e) {e.printStackTrace () ;}
 	}
 }

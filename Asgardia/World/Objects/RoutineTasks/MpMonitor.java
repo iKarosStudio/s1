@@ -12,6 +12,8 @@ public class MpMonitor extends TimerTask implements Runnable
 	private PcInstance Pc;
 	private SessionHandler Handle;
 	
+	private int Status = 0;
+	
 	public MpMonitor (PcInstance Pc) {
 		this.Pc = Pc;
 		Handle = Pc.getHandler () ;

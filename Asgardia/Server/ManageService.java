@@ -23,12 +23,12 @@ public class ManageService extends Thread
 	 */
 	public void run () {		
 		while (true) {
-			/*
+			
 			String t = String.format ("Cpu:%2.4f%% 執行緒:%d 使用記憶體:%1.1f kB",
 				osmb.getProcessCpuLoad (),
 				mana.getThreadCount (),
 				(float) World.UsedMemory / (1024)
-			) ;*/
+			) ;
 			try {
 				Socket Sock = ServiceSocket.accept () ;
 				//String ClientIp = Sock.getInetAddress ().getHostAddress ();
