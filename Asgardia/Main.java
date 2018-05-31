@@ -27,6 +27,11 @@ public class Main {
 		"----                          <Jenseits von Gut und Böse>  ----",
 		"----                                 Nietzsche, Friedrich  ----",
 		"---------------------------------------------------------------",
+		"                                                               ",
+		"      Sponsor us with BTC :                                    ",
+		"                         1GELjCWcxVZN48w5Ns9VeBzj9ZjL6PTtwR    ",
+		"                                                               ",
+		"---------------------------------------------------------------"
 	} ;
 	
 	public static void ShowSlog () {
@@ -94,7 +99,7 @@ public class Main {
 		/*
 		 * 本地端控制台
 		 */
-		Runtime.getRuntime ().addShutdownHook (new Shutdown () ) ;
+		//Runtime.getRuntime ().addShutdownHook (new Shutdown () ) ;
 		while (true) {
 			Thread.sleep (1000) ;
 		}

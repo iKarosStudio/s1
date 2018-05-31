@@ -18,8 +18,8 @@ public class Teleport
 			
 			AsgardiaMap map = Asgardia.getInstance ().getMap (Pc.location.MapId) ;
 			map.addPc (Pc) ;
-			Pc.CurrentMap.removePc (Pc) ;
-			Pc.CurrentMap = map;
+			Pc.Map.removePc (Pc) ;
+			Pc.Map = map;
 		}
 		
 		Pc.location.x = Dest.x;

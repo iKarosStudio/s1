@@ -1,6 +1,7 @@
 package Asgardia.World.Objects;
 
 import java.lang.*;
+import java.math.*;
 
 import Asgardia.Types.*;
 import Asgardia.Config.*;
@@ -17,12 +18,12 @@ public class ObjectInstance
 	public int Uuid = 0; 
 	
 	public Location location = new Location () ;
-	public AsgardiaMap CurrentMap = null;
+	public AsgardiaMap Map = null;
 	
 	public boolean isVisible = true;
 		
 	public int UpdateCurrentMap () {
-		CurrentMap = Asgardia.getInstance ().getMap (location.MapId) ;
+		Map = Asgardia.getInstance ().getMap (location.MapId) ;
 		return location.MapId;
 	}
 	
@@ -46,7 +47,6 @@ public class ObjectInstance
 			if (location.MapId != i.location.MapId) {
 				return false;
 			}
-			//return (Utility.getDistance (location.x, location.y, i.X, i.Y) < Configurations.SIGHT_RAGNE) ;
 			return getDistance (i.location.x, i.location.y) < Configurations.SIGHT_RAGNE;
 		} catch (Exception e) {
 			return false;
@@ -59,7 +59,8 @@ public class ObjectInstance
 	public int getDistance (int x, int y) {
 		int dx = Math.abs (x - location.x) ;
 		int dy = Math.abs (y - location.y) ;
-		return (int) Math.sqrt ((dx * dx) + (dy * dy)) ;
+		
+		return (int) Math.sqrt (Math.pow (dx, 2) + Math.pow (dy, 2) );		
 	}
 	
 	/*

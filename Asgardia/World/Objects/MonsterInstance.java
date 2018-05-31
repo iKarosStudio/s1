@@ -1,8 +1,12 @@
 package Asgardia.World.Objects;
 
+import java.util.*;
 import java.util.concurrent.*;
 
 import Asgardia.Types.*;
+import Asgardia.Server.ServerProcess.*;
+import Asgardia.World.*;
+import Asgardia.World.Map.*;
 import Asgardia.World.Objects.Items.*;
 import Asgardia.World.Objects.Dynamic.*;
 import Asgardia.World.Objects.Template.*;
@@ -14,11 +18,16 @@ public class MonsterInstance extends DynamicObject
 {
 	public String NameId; 
 	
-	public int ActionStatus = 0; /* 0:Idle 1:Searching 2:Dead */
+	/* 
+	 * 0:Stop
+	 * 1:Idle(Roaming)
+	 * 2:Attack(Attacking or Intent to attack)
+	 * 3:Dead
+	 */
+	public int ActionStatus = 0;
 	
 	public int GroupId;
-	
-	public Location location;
+
 	public int RandomX;
 	public int RandomY;
 	public int MovementDistance;
@@ -26,7 +35,7 @@ public class MonsterInstance extends DynamicObject
 	
 	
 	/*
-	 * 怪物道具
+	 * 怪物持有道具
 	 */
 	public ConcurrentHashMap<Integer, ItemInstance> Items = null;
 	
@@ -41,6 +50,8 @@ public class MonsterInstance extends DynamicObject
 	 */
 	public ConcurrentHashMap<Integer, Integer> HateList;
 	
+	public MonsterAiController AiController;
+	
 	public MonsterInstance (NpcTemplate n, Location loc) {
 		Uuid = n.Uuid;
 		Gfx = n.Gfx;
@@ -51,6 +62,7 @@ public class MonsterInstance extends DynamicObject
 		Exp = n.Exp;
 		
 		location = loc;
+		UpdateCurrentMap () ;
 		
 		BasicParameter = new QualityParameters () ;
 		BasicParameter.MaxHp = n.BasicParameter.MaxHp;
@@ -58,6 +70,67 @@ public class MonsterInstance extends DynamicObject
 		BasicParameter.Ac = n.BasicParameter.Ac;
 		
 		Items = new ConcurrentHashMap<Integer, ItemInstance> () ;
-	}
 		
+		AiController = new MonsterAiController (this) ;
+	}
+	
+	public void MoveToHeading (int heading) {
+		
+		int px = location.x;
+		int py = location.y;
+		
+		switch (heading) {
+		case 0: py--; break;
+		case 1: px++; py--; break;
+		case 2: px++; break;
+		case 3: px++; py++; break;
+		case 4: py++; break;
+		case 5: px--; py++; break;
+		case 6: px--; break;
+		case 7: px--; py--; break;
+		default: break;
+		}
+		
+		if (Map.isNextTileAccessible (location.x, location.y, heading) ) {
+			
+			//System.out.printf ("Go->(%d,%d)=0x%02x\n", px, py, Map.getTile (px, py) ) ;
+			
+			Map.setAccessible (location.x, location.y, true) ;
+			
+			List<PcInstance> pcs = Map.getPcInstance (location.x, location.y) ;
+			byte[] MovePacket = new NodeMove (Uuid, location.x, location.y, heading).getRaw () ;
+			for (PcInstance pc : pcs) {
+				pc.getHandler ().SendPacket (MovePacket) ;
+			}
+			
+			//update loc
+			Map.setAccessible (px, py, false) ;
+			location.x = px;
+			location.y = py;
+			location.Heading = heading;
+		} else {
+			//System.out.printf ("next p(%d,%d) can't pass\n", px, py) ;
+			return ;
+		}
+	}
+	
+	public void SetAttactTarget (int uuid) {
+	}
+	
+	public boolean isStoped () {
+		return ActionStatus == 0;
+	}
+	
+	public boolean isRoaming () {
+		return ActionStatus == 1;
+	}
+	
+	public boolean isAttacking () {
+		return ActionStatus == 2;
+	}
+	
+	public boolean isDead () {
+		return ActionStatus == 3;
+	}
+	
 }

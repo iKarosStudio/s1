@@ -9,6 +9,8 @@ import Asgardia.Server.Opcodes.*;
 
 /*
  * 由Server端告知物件移動使用的封包
+ * 令UUID物件由位置(x,y)往Heading方向移動一單位
+ * 發送封包後記得更新原物件(x,y)
  */
 public class NodeMove
 {

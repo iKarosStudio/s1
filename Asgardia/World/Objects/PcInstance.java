@@ -353,27 +353,27 @@ public class PcInstance extends DynamicObject implements Runnable
 	}
 	
 	public List<PcInstance> getPcInsight () {
-		List<PcInstance> Results = CurrentMap.getPcInstance (location.x, location.y) ;
+		List<PcInstance> Results = Map.getPcInstance (location.x, location.y) ;
 		return Results;
 	}
 	
 	public List<NpcInstance> getNpcInsight () {
-		List<NpcInstance> Results = CurrentMap.getNpcInstance (location.x, location.y) ;
+		List<NpcInstance> Results = Map.getNpcInstance (location.x, location.y) ;
 		return Results;
 	}
 	
 	public List<MonsterInstance> getMonsterInsight () {
-		List<MonsterInstance> Results = CurrentMap.getMonsterInstance (location.x, location.y) ;
+		List<MonsterInstance> Results = Map.getMonsterInstance (location.x, location.y) ;
 		return Results;
 	}
 	
 	public List<ItemInstance> getItemInsight () {
-		List<ItemInstance> Results = CurrentMap.getGndItemInstance (location.x, location.y) ;
+		List<ItemInstance> Results = Map.getGndItemInstance (location.x, location.y) ;
 		return Results;
 	}
 	
 	public List<DoorInstance> getDoorInsight () {
-		List<DoorInstance> Results = CurrentMap.getDoorInstance (location.x, location.y) ;
+		List<DoorInstance> Results = Map.getDoorInstance (location.x, location.y) ;
 		return Results;
 	}
 
@@ -583,7 +583,7 @@ public class PcInstance extends DynamicObject implements Runnable
 	}
 	
 	public void pickItem (int uuid, int count, int x, int y) {
-		ItemInstance pick = CurrentMap.getGndItemInstanceByUuid (uuid) ;
+		ItemInstance pick = Map.getGndItemInstanceByUuid (uuid) ;
 		if (pick != null) {
 			byte[] packet = new RemoveObject (pick.Uuid).getRaw () ;
 			byte[] action = new NodeAction (15, Uuid, location.Heading).getRaw () ;
@@ -595,7 +595,7 @@ public class PcInstance extends DynamicObject implements Runnable
 			
 			pick.OwnerId = Uuid;
 			addItem (pick) ;
-			CurrentMap.removeGndItem (pick) ;
+			Map.removeGndItem (pick) ;
 		}
 	}
 	
@@ -648,7 +648,7 @@ public class PcInstance extends DynamicObject implements Runnable
 			drop.location.y = y;
 			drop.location.MapId = location.MapId;
 			
-			CurrentMap.addGndItem (drop) ;
+			Map.addGndItem (drop) ;
 		}
 	}
 	

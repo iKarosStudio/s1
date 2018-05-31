@@ -30,9 +30,16 @@ public class Talk
 		}
 		
 		if (Content.startsWith (".tile") ) {
-			
-			String msg = String.format ("Tile(%d:%5d, %5d):0x%02X", Pc.CurrentMap.MapId, Pc.location.x, Pc.location.y, Pc.CurrentMap.getTile (Pc.location.x, Pc.location.y) ) ;
-			Handle.SendPacket (new SystemMessage (msg).getRaw () ) ;
+			String[] _Content = Content.split (" ") ;
+			if (_Content.length == 3) {
+				int t = Pc.Map.getTile (Integer.valueOf (_Content[1]), Integer.valueOf (_Content[2]) ) ;
+				String msg = String.format ("Tile(%s,%s):0x%02X", _Content[1], _Content[2], t) ; 
+				Handle.SendPacket (new SystemMessage (msg).getRaw () ) ;
+			} else {
+				String msg = String.format ("Tile(%d:%5d, %5d):0x%02X", Pc.Map.MapId, Pc.location.x, Pc.location.y, Pc.Map.getTile (Pc.location.x, Pc.location.y) ) ;
+				Handle.SendPacket (new SystemMessage (msg).getRaw () ) ;
+			}
+			return ;
 		}
 		
 		if (Content.startsWith (".tp") ) {

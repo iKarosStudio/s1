@@ -4,6 +4,7 @@ import java.sql.*;
 import java.util.*;
 import java.util.concurrent.*;
 
+import Asgardia.Config.*;
 import Asgardia.Types.*;
 import Asgardia.Server.*;
 import Asgardia.Server.Utility.*;
@@ -25,21 +26,33 @@ public class MonsterGenerator extends Thread implements Runnable
 	public void run () {
 		try {
 			SpawnList.forEach ((Integer u, MonsterSpawnList msl)->{
-				System.out.printf ("要求產生[%s]%d隻在地圖%d\n", msl.Location, (msl.Count-msl.Mobs.size()), msl.MapId) ;
-				while (msl.Mobs.size () < msl.Count) {	
+				//while (msl.Mobs.size () < msl.Count) {
+				if (msl.Mobs.size () < msl.Count) {
+				//if (msl.Mobs.size () < 1) { //只生一隻 測試
 					NpcTemplate Temp = CacheData.NpcCache.get (msl.NpcTemplateId) ;
 					Location SpawnLoc = new Location (msl.MapId, msl.LocX, msl.LocY, msl.Heading) ;
 					
-					//產生怪物把實體加到Mobs List裡面OAO!
-					MonsterInstance NewMob = new MonsterInstance (Temp, SpawnLoc) ;
+					/*
+					 * 製作怪物實體
+					 */
+					MonsterInstance Mob = new MonsterInstance (Temp, SpawnLoc) ;
+					Mob.MovementDistance = msl.MovementDistance;
+					Mob.Uuid = UuidGenerator.Next () ;
+					
+					//System.out.printf ("要求產生[%s]%d隻在地圖%d", msl.Location, (msl.Count-msl.Mobs.size()), msl.MapId) ;
+					//System.out.printf (":0x%08X\n", Mob.Uuid) ;
 					
 					/*
 					 * 產生怪物持有道具
 					 */
-					DropList.get (msl.NpcTemplateId) ;
+					/*
+					List mdl = DropList.get (msl.NpcTemplateId) ;
+					if (mdl != null) {
+						//
+					}*/
 					
-					Map.addMonster (NewMob) ;
-					msl.Mobs.add (NewMob) ;
+					Map.addMonster (Mob) ;
+					msl.Mobs.add (Mob) ;
 				}
 			});
 		} catch (Exception e) {
@@ -82,6 +95,10 @@ public class MonsterGenerator extends Thread implements Runnable
 					rs.getInt ("rest"),
 					rs.getInt ("near_spawn") 
 				) ; //End of new MonsterSpawnList
+				
+				if (msl.MovementDistance < 1) {
+					msl.MovementDistance = Configurations.DEFAULT_MOVEMENT_RANGE;
+				}
 				
 				SpawnList.put (msl.ListId, msl) ;
 				

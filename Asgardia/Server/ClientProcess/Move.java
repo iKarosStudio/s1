@@ -15,7 +15,7 @@ public class Move {
 		int tmpy = Reader.ReadWord () ; //pseudo
 		int Heading = Reader.ReadByte () ;
 		
-		AsgardiaMap m = Pc.CurrentMap;
+		AsgardiaMap m = Pc.Map;
 		
 		/*
 		 * Server config 參數為3的情況下, 使用腳色原本的座標操作, 封包的座標無效
@@ -23,7 +23,7 @@ public class Move {
 		int x = Pc.location.x;
 		int y = Pc.location.y;
 		
-		m.setPassable (Pc.location.x, Pc.location.y, true) ;
+		m.setAccessible (Pc.location.x, Pc.location.y, true) ;
 		
 		switch (Heading) {
 		case 0:
@@ -85,17 +85,17 @@ public class Move {
 		/*
 		 * 檢查是否需要傳送位置
 		 */
-		if (Pc.CurrentMap.isInTpLocation (x, y) ) {
-			new Teleport (Pc, Pc.CurrentMap.getTpDestination (x, y), false) ;
+		if (Pc.Map.isInTpLocation (x, y) ) {
+			new Teleport (Pc, Pc.Map.getTpDestination (x, y), false) ;
 			return ;
 		}
 		
 		/*
 		 * 更新自身位置
 		 */
-		m.setPassable (Pc.location.x, Pc.location.y, false) ;
 		Pc.location.x = x;
 		Pc.location.y = y;
 		Pc.location.Heading = Heading;
+		m.setAccessible (Pc.location.x, Pc.location.y, false) ;
 	}
 }

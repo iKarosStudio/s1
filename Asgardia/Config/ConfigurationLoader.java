@@ -22,7 +22,6 @@ public class ConfigurationLoader
 		
 		try {
 			p.load (new FileInputStream ("configs/asgardia.properties") ) ;
-			
 			Configurations.RateExp = Integer.valueOf (p.getProperty ("RATE_EXP") ) ;
 			Configurations.RatePetExp = Integer.valueOf (p.getProperty ("RATE_PET_EXP") ) ;
 			Configurations.RateDropItem = Integer.valueOf (p.getProperty ("RATE_DROP_ITEM") ) ;
@@ -35,7 +34,9 @@ public class ConfigurationLoader
 			Configurations.USE_GUI = Boolean.valueOf (p.getProperty ("UseLocalGui") ) ;
 			Configurations.SIGHT_RAGNE = Integer.valueOf (p.getProperty ("SightRange") ) ;
 			Configurations.CASINO = Boolean.valueOf (p.getProperty ("CasinoSystem") ) ;
-			
+			Configurations.MONSTER_GENERATOR_UPDATE_RATE = Integer.valueOf (p.getProperty ("MonsterGeneratorUpdateRate") ) ;
+			Configurations.MONSTER_AI_UPDATE_RATE = Integer.valueOf (p.getProperty ("MonsterAiUpdateRate") ) ;
+			Configurations.DEFAULT_MOVEMENT_RANGE = Integer.valueOf (p.getProperty ("DefaultMovementRange") ) ;			
 			System.out.printf ("success\n") ;
 			
 		} catch (Exception e) {

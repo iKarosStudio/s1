@@ -16,14 +16,14 @@ import Asgardia.World.Objects.Items.*;
 /*
  * 讀取的地圖實例
  * 
- * BIT[7] 1:可通過 0:不可通過 (GENERAL)
+ * BIT[7] 1:不可通過 0:可通過 (GENERAL)
  * 
  * BIT[6] //
  * 
  * BIT[5]
  * BIT[4] 0:Normal Zone 1:Safe Zone 2:Combat Zone
  * 
- * BIT[3]
+ * BIT[3] 1:Arraw passble
  * BIT[2]
  * BIT[1]
  * BIT[0] 
@@ -42,7 +42,6 @@ public class AsgardiaMap
 	public final int SizeY;
 	
 	public MonsterGenerator MobGenerator = null;
-	public MonsterAiController MobAi = null;
 	
 	public ConcurrentHashMap<Integer, Location> TpLocation; //傳送點列表
 	
@@ -78,7 +77,7 @@ public class AsgardiaMap
 		Monsters = new ConcurrentHashMap<Integer, MonsterInstance> () ;
 		
 		//MobAi = new MonsterAiController (this) ;
-		//KernelThreadPool.getInstance ().ScheduleAtFixedRate (MobAi, 1000, 500) ;
+		//KernelThreadPool.getInstance ().ScheduleAtFixedRate (MobAi, 1000, Configurations.MONSTER_AI_UPDATE_RATE) ;
 		
 	}
 	
@@ -86,7 +85,7 @@ public class AsgardiaMap
 		return 0;
 	}
 	
-	public void setPassable (int x, int y, boolean passable) {
+	public void setAccessible (int x, int y, boolean passable) {
 		if (passable) {
 			Tile[x - StartX][y - StartY] &= 0x7F;
 		} else {
@@ -94,8 +93,54 @@ public class AsgardiaMap
 		}
 	}
 	
-	public boolean isPassable (int x, int y) {
-		return (Tile[x - StartX][y - StartY] >> 7) == 0;
+	/*
+	 * 檢查p(x, y)->heading p'(x', y')是否可通過
+	 */
+	public boolean isNextTileAccessible (int x, int y, int heading) {
+		byte Next = getHeadingTile (x, y, heading) ;
+		
+		/*
+		 * 檢查動態物件佔有
+		 */
+		if ((Next & 0x80) > 0) {
+			return false;
+		}
+		
+		if ((Next & 0x03) > 0) {	
+			/*
+			 * 檢查方向單位是否可通行
+			 */
+			if (heading == 0) {
+				return isYAxisAccessible (Next) ;
+			} else if (heading == 2) { //
+				return isXAxisAccessible (Next) ;
+			} else if (heading == 4) {
+				return isYAxisAccessible (Next) ;
+			} else if (heading == 6) {
+				return isXAxisAccessible (Next) ;
+				
+				//
+			} else if (heading == 1) {
+				byte[] side = getHeadingSideTile (x, y, heading) ;
+				return isYAxisAccessible (side[0]) || isXAxisAccessible (side[1]) ;
+				
+			} else if (heading == 3) { //
+				byte[] side = getHeadingSideTile (x, y, heading) ;
+				return isYAxisAccessible (side[0]) || isXAxisAccessible (side[1]) ;
+	
+			} else if (heading == 5) {
+				byte[] side = getHeadingSideTile (x, y, heading) ;
+				return isYAxisAccessible (side[0]) || isXAxisAccessible (side[1]) ;
+	
+			} else if (heading == 7) {
+				byte[] side = getHeadingSideTile (x, y, heading) ;
+				return isYAxisAccessible (side[0]) || isXAxisAccessible (side[1]) ;
+	
+			} else {
+				//return false;
+			}
+		}
+		return false;
 	}
 	
 	public boolean isNormalZone (int x, int y) {
@@ -105,7 +150,7 @@ public class AsgardiaMap
 	public boolean isSafeZone (int x, int y) {
 		return ((Tile[x - StartX][y - StartY] & 0x30) == 0x10) ;
 	}
-	
+	 
 	public boolean isCombatZone (int x, int y) {
 		return ((Tile[x - StartX][y - StartY] & 0x30) == 0x20) ;
 	}
@@ -116,6 +161,71 @@ public class AsgardiaMap
 	
 	public byte getTile (int x, int y) {
 		return Tile[x - StartX][y - StartY];
+	}
+	
+	public byte getHeadingTile (int x, int y, int heading) {
+		if (heading == 0) {
+			return getTile (x, y-1) ;
+		} else if (heading == 1) {
+			return getTile (x+1, y-1) ;
+		} else if (heading == 2) {
+			return getTile (x+1, y) ;
+		} else if (heading == 3) {
+			return getTile (x+1, y+1) ;
+		} else if (heading == 4) {
+			return getTile (x, y+1) ;
+		} else if (heading == 5) {
+			return getTile (x-1, y+1) ;
+		} else if (heading == 6) {
+			return getTile (x-1, y) ;
+		} else if (heading == 7) {
+			return getTile (x-1, y-1) ;
+		} else {
+			return 0;
+		}
+	}
+	
+	public byte[] getHeadingSideTile (int x, int y, int heading) {
+		byte[] res = new byte[2];
+		
+		if (heading == 0) {
+			res[0] = getHeadingTile (x, y, 7) ;
+			res[1] = getHeadingTile (x, y, 1) ;
+		} else if (heading == 1) {
+			res[0] = getHeadingTile (x, y, 0) ;
+			res[1] = getHeadingTile (x, y, 2) ;
+		} else if (heading == 2) {
+			res[0] = getHeadingTile (x, y, 1) ;
+			res[1] = getHeadingTile (x, y, 3) ;
+		} else if (heading == 3) {
+			res[0] = getHeadingTile (x, y, 2) ;
+			res[1] = getHeadingTile (x, y, 4) ;
+		} else if (heading == 4) {
+			res[0] = getHeadingTile (x, y, 3) ;
+			res[1] = getHeadingTile (x, y, 5) ;
+		} else if (heading == 5) {
+			res[0] = getHeadingTile (x, y, 4) ;
+			res[1] = getHeadingTile (x, y, 6) ;
+		} else if (heading == 6) {
+			res[0] = getHeadingTile (x, y, 5) ;
+			res[1] = getHeadingTile (x, y, 7) ;
+		} else if (heading == 7) {
+			res[0] = getHeadingTile (x, y, 6) ;
+			res[1] = getHeadingTile (x, y, 0) ;
+		} else {
+			res[0] = 0;
+			res[1] = 0;
+		}
+		
+		return res;
+	}
+	
+	public boolean isXAxisAccessible (byte t) {
+		return (t & 0x01) > 0;
+	}
+	
+	public boolean isYAxisAccessible (byte t) {
+		return (t & 0x02) > 0;
 	}
 	
 	public void addPc (PcInstance pc) {
@@ -156,6 +266,10 @@ public class AsgardiaMap
 	 */
 	public void addMonster (MonsterInstance m) {
 		Monsters.put (m.Uuid, m) ;
+	}
+	
+	public long getMonsterAmount () {
+		return Monsters.mappingCount () ;
 	}
 	
 	public void removeMonster (MonsterInstance m) {
@@ -306,11 +420,24 @@ public class AsgardiaMap
 		ArrayList<MonsterInstance> Results = new ArrayList<MonsterInstance> () ;
 		
 		try {
-			Monsters.forEach ((Integer u, MonsterInstance node) -> {
-				int distance = node.getDistance (x, y) ;
+			Monsters.forEach ((Integer u, MonsterInstance m)->{
+				int distance = m.getDistance (x, y) ;
 				if (distance < Configurations.SIGHT_RAGNE) {
-					Results.add (node) ;
+					Results.add (m) ;
 				}
+			}) ;
+		} catch (Exception e) {
+			e.printStackTrace () ;
+		}
+		
+		return Results;
+	}
+	
+	public List<MonsterInstance> getAllMonster () {
+		ArrayList<MonsterInstance> Results = new ArrayList<MonsterInstance> () ;
+		try {
+			Monsters.forEach ((Integer u, MonsterInstance m)->{
+				Results.add (m) ;
 			}) ;
 		} catch (Exception e) {
 			e.printStackTrace () ;

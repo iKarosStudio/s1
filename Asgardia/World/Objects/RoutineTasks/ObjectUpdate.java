@@ -74,10 +74,10 @@ public class ObjectUpdate extends TimerTask implements Runnable
 	
 	public void Monster () {
 		List<MonsterInstance> Mobs = Pc.getMonsterInsight () ;
-		for (MonsterInstance MobNode : Mobs) {
-			if (!Pc.MonsterInsight.containsKey (MobNode.Uuid) ) {
-				Pc.addMonsterInstance (MobNode) ;
-				Handle.SendPacket (new NodePacket (MobNode).getRaw () );
+		for (MonsterInstance m : Mobs) {
+			if (!Pc.MonsterInsight.containsKey (m.Uuid) ) {
+				Pc.addMonsterInstance (m) ;
+				Handle.SendPacket (new NodePacket (m).getRaw () );
 			}
 		}
 		Mobs = null;

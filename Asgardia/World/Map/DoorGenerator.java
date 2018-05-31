@@ -46,7 +46,7 @@ public class DoorGenerator
 						) ;
 						
 						map.addDoor (d) ;
-						map.setPassable (d.location.x, d.location.y, false) ;
+						map.setAccessible (d.location.x, d.location.y, false) ;
 					}
 				} catch (Exception e) {e.printStackTrace () ; }
 			}

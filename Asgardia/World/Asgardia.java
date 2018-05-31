@@ -55,7 +55,7 @@ public class Asgardia extends Thread
 	}
 	
 	public Asgardia () {
-		//System.out.println ("[*] Creating Asgardia world instance " + this) ;
+		System.out.println ("Creating Asgardia world instance " + this) ;
 		Maps = new ConcurrentHashMap<Integer, AsgardiaMap> () ;
 	}
 	
@@ -92,9 +92,13 @@ public class Asgardia extends Thread
 			System.out.printf ("Generate Monster...") ;
 			Maps.forEach ((Integer map_id, AsgardiaMap map)->{
 				map.MobGenerator = new MonsterGenerator (map) ;
-				KernelThreadPool.getInstance ().ScheduleAtFixedRate (map.MobGenerator, 5000, 5000) ;
+				KernelThreadPool.getInstance ().ScheduleAtFixedRate (map.MobGenerator, 1000, Configurations.MONSTER_GENERATOR_UPDATE_RATE) ;
 			}) ;
 			System.out.printf ("success\n") ;
+			
+			/*
+			 * Monster AI controller
+			 */
 			
 			/*
 			 * Start server time
@@ -177,7 +181,7 @@ public class Asgardia extends Thread
 			m.addPc (Pc) ;
 			Pc.UpdateOnlineStatus (true) ;
 			OnlinePcs ++;
-			System.out.printf ("Character:%s(UUID:0x%08X) 進入世界\n", Pc.Name, Pc.Uuid) ;
+			System.out.printf ("角色:%s(UUID:0x%08X) 進入世界\n", Pc.Name, Pc.Uuid) ;
 		} catch (Exception e) {
 			e.printStackTrace () ;
 		}
@@ -189,7 +193,7 @@ public class Asgardia extends Thread
 			m.removePc (Pc) ;
 			Pc.UpdateOnlineStatus (false) ;
 			OnlinePcs --;
-			System.out.printf ("Character:%s(UUID:0x%08X) 離開世界\n", Pc.Name, Pc.Uuid) ;
+			System.out.printf ("角色:%s(UUID:0x%08X) 離開世界\n", Pc.Name, Pc.Uuid) ;
 		} catch (Exception e) {
 			e.printStackTrace () ;
 		}

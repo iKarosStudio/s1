@@ -15,7 +15,7 @@ public class MapLoader
 	public static final int OFFSET_START_Y = 3;
 	public static final int OFFSET_END_Y = 4;
 	
-	public static final int MAPID_LIMIT = 0;
+	public static final int MAPID_LIMIT = 3;
 	
 	public MapLoader (Asgardia Handle) 
 	{
