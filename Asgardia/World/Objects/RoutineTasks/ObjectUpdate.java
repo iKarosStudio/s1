@@ -9,6 +9,7 @@ import Asgardia.Server.SessionHandler;
 import Asgardia.World.Npc.*;
 import Asgardia.World.Objects.*;
 import Asgardia.World.Objects.Items.*;
+import Asgardia.World.Objects.Monster.MonsterInstance;
 
 public class ObjectUpdate extends TimerTask implements Runnable
 {
@@ -131,7 +132,7 @@ public class ObjectUpdate extends TimerTask implements Runnable
 	}
 	
 	public void Start () {
-		t.scheduleAtFixedRate (this, 0, 1000) ; //32ms interval
+		t.scheduleAtFixedRate (this, 0, 1000) ; //1000ms interval
 	}
 	
 	public void Stop () {

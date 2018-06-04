@@ -12,6 +12,7 @@ import Asgardia.World.*;
 import Asgardia.World.Npc.*;
 import Asgardia.World.Objects.*;
 import Asgardia.World.Objects.Items.*;
+import Asgardia.World.Objects.Monster.MonsterInstance;
 
 /*
  * 讀取的地圖實例
@@ -45,11 +46,11 @@ public class AsgardiaMap
 	
 	public ConcurrentHashMap<Integer, Location> TpLocation; //傳送點列表
 	
-	private ConcurrentHashMap<Integer, PcInstance> Pcs; //Online player's table
-	private ConcurrentHashMap<Integer, NpcInstance> Npcs; //Npcs' table in this map
-	private ConcurrentHashMap<Integer, ItemInstance> GndItems; //Items on ground
-	private ConcurrentHashMap<Integer, DoorInstance> Doors; //Doors
-	private ConcurrentHashMap<Integer, MonsterInstance> Monsters;
+	public ConcurrentHashMap<Integer, PcInstance> Pcs; //Online player's table
+	public ConcurrentHashMap<Integer, NpcInstance> Npcs; //Npcs' table in this map
+	public ConcurrentHashMap<Integer, ItemInstance> GndItems; //Items on ground
+	public ConcurrentHashMap<Integer, DoorInstance> Doors; //Doors
+	public ConcurrentHashMap<Integer, MonsterInstance> Monsters;
 	//private ConcurrentHashMap<Integer, PetInstance> Pets;
 	
 	public AsgardiaMap (int id, int start_x, int end_x, int start_y, int end_y) {

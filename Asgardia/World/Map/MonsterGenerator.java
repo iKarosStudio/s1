@@ -11,6 +11,7 @@ import Asgardia.Server.Utility.*;
 import Asgardia.World.*;
 import Asgardia.World.Npc.*;
 import Asgardia.World.Objects.*;
+import Asgardia.World.Objects.Monster.MonsterInstance;
 import Asgardia.World.Objects.Template.*;
 
 public class MonsterGenerator extends Thread implements Runnable
@@ -27,8 +28,8 @@ public class MonsterGenerator extends Thread implements Runnable
 		try {
 			SpawnList.forEach ((Integer u, MonsterSpawnList msl)->{
 				//while (msl.Mobs.size () < msl.Count) {
-				if (msl.Mobs.size () < msl.Count) {
-				//if (msl.Mobs.size () < 1) { //只生一隻 測試
+				//if (msl.Mobs.size () < msl.Count) {
+				if (msl.Mobs.size () < 1) {
 					NpcTemplate Temp = CacheData.NpcCache.get (msl.NpcTemplateId) ;
 					Location SpawnLoc = new Location (msl.MapId, msl.LocX, msl.LocY, msl.Heading) ;
 					
@@ -53,6 +54,7 @@ public class MonsterGenerator extends Thread implements Runnable
 					
 					Map.addMonster (Mob) ;
 					msl.Mobs.add (Mob) ;
+					Mob.AiController.Start () ;
 				}
 			});
 		} catch (Exception e) {

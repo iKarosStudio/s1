@@ -19,7 +19,22 @@ public class Attack
 			return;
 		}
 		
+		/*
+		 * 表現攻擊動作
+		 */
 		Pc.location.Heading = Pc.getDirection (TargetX, TargetY) ;
-		Pc.Attack (TargetUuid) ;	
+		byte[] action_packet= new NodeAction (1, Pc.Uuid, Pc.location.Heading).getRaw () ;
+		Handle.SendPacket (action_packet) ;
+		Pc.BoardcastPcInsight (action_packet) ;
+		
+		/*
+		 * 傷害判定
+		 */		
+		Pc.Attack (TargetUuid, TargetX, TargetY) ;
+		
+		/*
+		 * 攻擊驗算參考
+		 * model/L1Attack.java
+		 */
 	}
 }

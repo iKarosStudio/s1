@@ -2,12 +2,10 @@ package Asgardia.World;
 
 import java.util.concurrent.*;
 import java.sql.*;
-import javax.xml.parsers.*;
 import org.w3c.dom.*;
 
 import Asgardia.Server.*;
 import Asgardia.World.Npc.*;
-import Asgardia.World.Objects.*;
 import Asgardia.World.Objects.Template.*;
 
 public class CacheData

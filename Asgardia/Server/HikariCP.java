@@ -23,7 +23,7 @@ public class HikariCP
 		
 		try {
 			HikariConfig Config = new HikariConfig ("configs/hikari.properties") ;
-			Config.setConnectionTimeout (250) ;
+			Config.setConnectionTimeout (1000) ;
 			Ds = new HikariDataSource (Config) ;
 			
 			con = Ds.getConnection () ;

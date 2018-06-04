@@ -14,6 +14,7 @@ import Asgardia.World.Npc.*;
 import Asgardia.World.Skills.*;
 import Asgardia.World.Objects.Dynamic.DynamicObject;
 import Asgardia.World.Objects.Items.*;
+import Asgardia.World.Objects.Monster.MonsterInstance;
 import Asgardia.World.Objects.RoutineTasks.*;
 import Asgardia.World.Objects.Template.*;
 
@@ -708,18 +709,23 @@ public class PcInstance extends DynamicObject implements Runnable
 		return Type == 4;
 	}
 
-	public void Attack (int TargetUuid) {
-		byte[] action_packet= new NodeAction (1, Uuid, location.Heading).getRaw () ;
+	public void Attack (int uuid, int x, int y) {
 		
-		Handle.SendPacket (action_packet) ;
-		BoardcastPcInsight (action_packet) ;
+		if (Map.Monsters.containsKey (uuid) ) {
+			new CommonAttack (this, Map.Monsters.get (uuid) ) ;
+		} else if (Map.Pcs.containsKey (uuid) ) {
+			//
+		}
 	}
 	
 	public void SaveItem () {
 		//
 	}
 	
-	public void UpdateParameters () {
+	/*
+	 * 套用裝備加乘效果到腳色素質
+	 */
+	public void ApplyEquipmentEffects () {
 		//
 	}
 	

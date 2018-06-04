@@ -5,6 +5,7 @@ import Asgardia.Server.Opcodes.ServerOpcodes;
 import Asgardia.World.Npc.*;
 import Asgardia.World.Objects.*;
 import Asgardia.World.Objects.Items.*;
+import Asgardia.World.Objects.Monster.MonsterInstance;
 import Asgardia.World.Objects.Template.NpcTemplate;
 
 /*

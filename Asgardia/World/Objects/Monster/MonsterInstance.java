@@ -1,4 +1,4 @@
-package Asgardia.World.Objects;
+package Asgardia.World.Objects.Monster;
 
 import java.util.*;
 import java.util.concurrent.*;
@@ -8,6 +8,7 @@ import Asgardia.Server.ServerProcess.*;
 import Asgardia.World.*;
 import Asgardia.World.Map.*;
 import Asgardia.World.Objects.Items.*;
+import Asgardia.World.Objects.PcInstance;
 import Asgardia.World.Objects.Dynamic.*;
 import Asgardia.World.Objects.Template.*;
 
@@ -33,6 +34,11 @@ public class MonsterInstance extends DynamicObject
 	public int MovementDistance;
 	public int Rest; /* 復活次數 */
 	
+	public int MoveInterval = 0;
+	public int AttackInterval = 0;
+	public int MajorSkillInterval = 0;
+	public int MinorSkillInterval = 0;
+	
 	
 	/*
 	 * 怪物持有道具
@@ -50,7 +56,8 @@ public class MonsterInstance extends DynamicObject
 	 */
 	public ConcurrentHashMap<Integer, Integer> HateList;
 	
-	public MonsterAiController AiController;
+	public MonsterAiKernel AiController;
+	public MoveTask Move;
 	
 	public MonsterInstance (NpcTemplate n, Location loc) {
 		Uuid = n.Uuid;
@@ -69,12 +76,18 @@ public class MonsterInstance extends DynamicObject
 		BasicParameter.MaxMp = n.BasicParameter.MaxMp;
 		BasicParameter.Ac = n.BasicParameter.Ac;
 		
+		MoveInterval = n.MoveInterval;
+		AttackInterval = n.AttackInterval;
+		MajorSkillInterval = n.MajorSkillInterval;
+		MinorSkillInterval = n.MinorSkillInterval;
+		
 		Items = new ConcurrentHashMap<Integer, ItemInstance> () ;
 		
-		AiController = new MonsterAiController (this) ;
+		ActionStatus = 1; //roaminig
+		AiController = new MonsterAiKernel (this) ;
 	}
 	
-	public void MoveToHeading (int heading) {
+	public synchronized void MoveToHeading (int heading) {
 		
 		int px = location.x;
 		int py = location.y;
@@ -93,7 +106,7 @@ public class MonsterInstance extends DynamicObject
 		
 		if (Map.isNextTileAccessible (location.x, location.y, heading) ) {
 			
-			//System.out.printf ("Go->(%d,%d)=0x%02x\n", px, py, Map.getTile (px, py) ) ;
+			//System.out.printf ("Move->(%d,%d)=0x%02x", px, py, Map.getTile (px, py) ) ;
 			
 			Map.setAccessible (location.x, location.y, true) ;
 			
@@ -109,7 +122,7 @@ public class MonsterInstance extends DynamicObject
 			location.y = py;
 			location.Heading = heading;
 		} else {
-			//System.out.printf ("next p(%d,%d) can't pass\n", px, py) ;
+			//System.out.printf ("next p(%d,%d) can't pass", px, py) ;
 			return ;
 		}
 	}

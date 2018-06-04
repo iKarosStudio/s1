@@ -135,8 +135,8 @@ public class DatabaseCmds
 	}
 	
 	public static ResultSet MobSpawnlist (int mapid) {
-		//String q = String.format ("SELECT * FROM spawnlist WHERE mapid=\'%d\' and id='62000';", mapid) ; //test
-		String q = String.format ("SELECT * FROM spawnlist WHERE mapid=\'%d\';", mapid) ;
+		String q = String.format ("SELECT * FROM spawnlist WHERE mapid=\'%d\' and id='62000';", mapid) ; //test
+		//String q = String.format ("SELECT * FROM spawnlist WHERE mapid=\'%d\';", mapid) ;
 		return Db.Query (q) ;
 	}
 	

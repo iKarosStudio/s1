@@ -19,6 +19,14 @@ public class NpcTemplate extends DynamicObject
 	
 	public int Exp;
 	
+	/*
+	 * 每 n ms執行一次
+	 */
+	public int MoveInterval;
+	public int AttackInterval;
+	public int MajorSkillInterval;
+	public int MinorSkillInterval;
+	
 	public NpcTemplate () {
 		//System.out.println ("警告 不該被呼叫") ;
 	}
@@ -69,5 +77,9 @@ public class NpcTemplate extends DynamicObject
 		Level = level;
 		Exp = exp;
 		
+		MoveInterval = passispeed;
+		AttackInterval = atkspeed;
+		MajorSkillInterval = atk_magic_speed;
+		MinorSkillInterval = sub_magic_speed;
 	}
 }
