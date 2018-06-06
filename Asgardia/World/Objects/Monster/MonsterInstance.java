@@ -57,7 +57,7 @@ public class MonsterInstance extends DynamicObject
 	public ConcurrentHashMap<Integer, Integer> HateList;
 	
 	public MonsterAiKernel AiController;
-	public MoveTask Move;
+	//public MoveTask Move;
 	
 	public MonsterInstance (NpcTemplate n, Location loc) {
 		Uuid = n.Uuid;
@@ -83,7 +83,6 @@ public class MonsterInstance extends DynamicObject
 		
 		Items = new ConcurrentHashMap<Integer, ItemInstance> () ;
 		
-		ActionStatus = 1; //roaminig
 		AiController = new MonsterAiKernel (this) ;
 	}
 	
@@ -103,17 +102,19 @@ public class MonsterInstance extends DynamicObject
 		case 7: px--; py--; break;
 		default: break;
 		}
+		//上段需要優化
 		
-		if (Map.isNextTileAccessible (location.x, location.y, heading) ) {
-			
-			//System.out.printf ("Move->(%d,%d)=0x%02x", px, py, Map.getTile (px, py) ) ;
-			
+		if (Map.isNextTileAccessible (location.x, location.y, heading) ) {			
 			Map.setAccessible (location.x, location.y, true) ;
 			
 			List<PcInstance> pcs = Map.getPcInstance (location.x, location.y) ;
 			byte[] MovePacket = new NodeMove (Uuid, location.x, location.y, heading).getRaw () ;
 			for (PcInstance pc : pcs) {
-				pc.getHandler ().SendPacket (MovePacket) ;
+				if (!pc.getHandler ().isClosed () ) {
+					pc.getHandler ().SendPacket (MovePacket) ;
+				} else {
+					System.out.printf ("error pc handler\n") ;
+				}
 			}
 			
 			//update loc
@@ -122,7 +123,7 @@ public class MonsterInstance extends DynamicObject
 			location.y = py;
 			location.Heading = heading;
 		} else {
-			//System.out.printf ("next p(%d,%d) can't pass", px, py) ;
+			//can't pass
 			return ;
 		}
 	}

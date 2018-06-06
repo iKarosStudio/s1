@@ -26,8 +26,7 @@ public class MapLoader
 		/*
 		 * 載入伺服器地圖檔案
 		 */
-		System.out.printf ("\t-> Load map files...") ;
-		System.out.println () ;
+		System.out.printf ("Load map files...") ;
 		
 		long t_starts = System.currentTimeMillis () ;
 		for (int[] Info : MapInfo.INFO) {
@@ -91,6 +90,6 @@ public class MapLoader
 		long t_ends = System.currentTimeMillis () ;
 		
 		float used_time = (float) (t_ends - t_starts) / 1000;
-		System.out.printf ("\t\t%d files loaded in\t%.3f s\n", ValidCount, used_time) ;
+		System.out.printf ("%d files loaded in\t%.3f s\n", ValidCount, used_time) ;
 	}
 }

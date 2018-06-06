@@ -23,7 +23,7 @@ public class KernelThreadPool
 		Pool = Executors.newCachedThreadPool () ;
 		
 		KernelPool = Executors.newScheduledThreadPool (
-			10, //Size
+			200, //Size
 			new PriorityThreadFactory ("KernelService", Thread.NORM_PRIORITY) //ThreadFactory
 		) ;
 		

@@ -24,10 +24,10 @@ public class ManageService extends Thread
 	public void run () {		
 		while (true) {
 			
-			String t = String.format ("Cpu:%2.4f%% 執行緒:%d 使用記憶體:%1.1f kB",
+			String t = String.format ("Cpu:%2.4f%% 執行緒:%d 使用記憶體:%1.1f MB",
 				osmb.getProcessCpuLoad (),
 				mana.getThreadCount (),
-				(float) World.UsedMemory / (1024)
+				(float) World.UsedMemory / (1024 * 1024)
 			) ;
 			try {
 				Socket Sock = ServiceSocket.accept () ;
@@ -39,7 +39,7 @@ public class ManageService extends Thread
 				
 			} catch (SocketTimeoutException e) {
 				//it's ok
-				//System.out.println (t) ;
+				System.out.println (t) ;
 			} catch (Exception e) {e.printStackTrace () ;}
 		}
 	}
@@ -60,7 +60,7 @@ public class ManageService extends Thread
 		System.out.printf ("Management Port %d binding...", 2001) ;
 		try {
 			ServiceSocket = new ServerSocket (2001) ;
-			ServiceSocket.setSoTimeout (1000) ; //10s accept timeout
+			ServiceSocket.setSoTimeout (3000) ; //10s accept timeout
 			System.out.printf ("success\n") ;
 			
 			this.setName ("MANAGEMENT SERVICE");

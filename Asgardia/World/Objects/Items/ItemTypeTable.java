@@ -150,4 +150,22 @@ public class ItemTypeTable
 	public static final int MATERIAL_GLASS = 19;
 	public static final int MATERIAL_MINERAL = 20;
 	public static final int MATERIAL_ORIHARUKON = 21;
+	
+	public static int ArmorMinorType2UseType (int minor_type) {
+		switch (minor_type) {
+			case ARMOR_TYPE_HELM  : return TYPE_USE_HELM;
+			case ARMOR_TYPE_ARMOR : return TYPE_USE_ARMOR;
+			case ARMOR_TYPE_T     : return TYPE_USE_T;
+			case ARMOR_TYPE_CLOAK : return TYPE_USE_CLOAK;
+			case ARMOR_TYPE_GLOVE : return TYPE_USE_GLOVE;
+			case ARMOR_TYPE_BOOTS : return TYPE_USE_BOOTS;
+			case ARMOR_TYPE_SHIELD: return TYPE_USE_SHIELD;
+			case ARMOR_TYPE_AMULET: return TYPE_USE_AMULET;
+			case ARMOR_TYPE_RING  : return TYPE_USE_RING;
+			case ARMOR_TYPE_RING2 : return TYPE_USE_RING;
+			case ARMOR_TYPE_BELT  : return TYPE_USE_BELT;
+			case ARMOR_TYPE_EARRING:return TYPE_USE_EARRING;
+			default : return TYPE_USE_NONE;
+		}
+	}
 }

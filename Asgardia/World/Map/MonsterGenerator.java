@@ -54,6 +54,7 @@ public class MonsterGenerator extends Thread implements Runnable
 					
 					Map.addMonster (Mob) ;
 					msl.Mobs.add (Mob) ;
+					Mob.ActionStatus = 1; /* 生怪後的初始狀態 */
 					Mob.AiController.Start () ;
 				}
 			});

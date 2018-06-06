@@ -9,6 +9,7 @@ public class ClientConfig
 		int Length = reader.ReadDoubleWord () - 3;
 		byte[] Conf = reader.ReadRaw () ;
 		
+		/*
 		System.out.println ("Client config:") ;
 		for (int i = 0; i < Conf.length; i++) {
 			if ((i % 16) == 0 && (i > 0) ) {
@@ -18,5 +19,6 @@ public class ClientConfig
 			
 		}
 		System.out.println () ;
+		*/
 	}
 }

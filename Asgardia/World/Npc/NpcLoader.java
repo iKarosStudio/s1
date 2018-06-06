@@ -17,7 +17,7 @@ public class NpcLoader
 		Db = HikariCP.getInstance () ;
 		int ValidCount = 0;
 
-		System.out.printf ("\t-> Load npc datas...") ;
+		System.out.printf ("Load npc datas...") ;
 		long t_starts = System.currentTimeMillis () ;
 		
 		/* 載入NPC產生清單 by Map */
@@ -71,7 +71,7 @@ public class NpcLoader
 		
 		long t_ends = System.currentTimeMillis () ;
 		float used_time = (float) (t_ends - t_starts) / 1000;
-		System.out.printf ("\t\t%d npcs loaded in\t%.3f s\n", ValidCount, used_time) ;
+		System.out.printf ("%d npcs loaded in\t%.3f s\n", ValidCount, used_time) ;
 		
 		if (ErrorList.size () > 0) {
 			System.out.printf ("[***WARN!***] %d NPC LOAD FAIL:\n", ErrorList.size () ) ;

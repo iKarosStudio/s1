@@ -31,6 +31,7 @@ public class ServerOpcodes
 	public static final int DOOR_DETAIL = 81;
 	public static final int ITEM_LIST = 82;
 	public static final int UPDATE_PC_GFX = 84;
+	public static final int NODE_DEF = 85;
 	public static final int DISCONNECT = 88; /*強制客戶端離線*/
 	public static final int NODE_STATUS = 89;
 	public static final int NPC_RESULT = 92;

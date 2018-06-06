@@ -16,19 +16,7 @@ import Asgardia.World.Objects.Monster.MonsterInstance;
 
 /*
  * 讀取的地圖實例
- * 
- * BIT[7] 1:不可通過 0:可通過 (GENERAL)
- * 
- * BIT[6] //
- * 
- * BIT[5]
- * BIT[4] 0:Normal Zone 1:Safe Zone 2:Combat Zone
- * 
- * BIT[3] 1:Arraw passble
- * BIT[2]
- * BIT[1]
- * BIT[0] 
- * 
+ * 參照 MapTileBitStruct 
  */
 public class AsgardiaMap
 {
@@ -42,16 +30,45 @@ public class AsgardiaMap
 	public final int SizeX;
 	public final int SizeY;
 	
+	/*
+	 * 生怪控制器, 數量邏輯控制
+	 */
 	public MonsterGenerator MobGenerator = null;
 	
+	/*
+	 * 傳送點列表
+	 */
 	public ConcurrentHashMap<Integer, Location> TpLocation; //傳送點列表
 	
-	public ConcurrentHashMap<Integer, PcInstance> Pcs; //Online player's table
-	public ConcurrentHashMap<Integer, NpcInstance> Npcs; //Npcs' table in this map
+	/*
+	 * 線上使用者實體
+	 */
+	public ConcurrentHashMap<Integer, PcInstance> Pcs;
+	
+	/*
+	 * NPC實體
+	 */
+	public ConcurrentHashMap<Integer, NpcInstance> Npcs;
+	
+	/*
+	 * 地面道具實體
+	 */
 	public ConcurrentHashMap<Integer, ItemInstance> GndItems; //Items on ground
+	
+	/*
+	 * 門的實體
+	 */
 	public ConcurrentHashMap<Integer, DoorInstance> Doors; //Doors
+	
+	/*
+	 * 怪物實體
+	 */
 	public ConcurrentHashMap<Integer, MonsterInstance> Monsters;
-	//private ConcurrentHashMap<Integer, PetInstance> Pets;
+	
+	/*
+	 * 寵物, 召喚怪物實體
+	 */
+	//public ConcurrentHashMap<Integer, PetInstance> Pets;
 	
 	public AsgardiaMap (int id, int start_x, int end_x, int start_y, int end_y) {
 		MapId = id;
@@ -77,9 +94,7 @@ public class AsgardiaMap
 		Doors = new ConcurrentHashMap<Integer, DoorInstance> () ;
 		Monsters = new ConcurrentHashMap<Integer, MonsterInstance> () ;
 		
-		//MobAi = new MonsterAiController (this) ;
-		//KernelThreadPool.getInstance ().ScheduleAtFixedRate (MobAi, 1000, Configurations.MONSTER_AI_UPDATE_RATE) ;
-		
+		//
 	}
 	
 	public int SpawnMonster () {
@@ -234,7 +249,6 @@ public class AsgardiaMap
 	}
 	
 	public void removePc (PcInstance pc) {
-		System.out.printf ("地圖[%d] 移除 %s\n", MapId, pc.Name) ;
 		Pcs.remove (pc.Uuid) ;
 	}
 	
@@ -466,6 +480,6 @@ public class AsgardiaMap
 	}
 	
 	public int getPcAmount () {
-		return Pcs.size () ;
+		return (int) Pcs.mappingCount () ;
 	}
 }

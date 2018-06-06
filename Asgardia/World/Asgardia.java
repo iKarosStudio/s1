@@ -81,6 +81,8 @@ public class Asgardia extends Thread
 			 */
 			new NpcLoader (instance) ;
 			
+			System.out.println () ;
+			
 			/* 
 			 * Load Door
 			 */
@@ -167,11 +169,11 @@ public class Asgardia extends Thread
 		return null;
 	}
 	
-	public List<PcInstance> getPcByClanId (int clan_id) {
+	public List<PcInstance> getPcsByClanId (int clan_id) {
 		return null;
 	}
 	
-	public List<PcInstance> getPcByParty (int party_id) {
+	public List<PcInstance> getPcsByParty (int party_id) {
 		return null;
 	}
 
@@ -238,7 +240,20 @@ public class Asgardia extends Thread
 		
 		return amount ;
 	}
+	
+	public void kickOnlinePlayers () {
+		try {
+			Maps.forEach ((Integer id, AsgardiaMap map)->{
+				List<PcInstance> pcs = map.getAllPcs () ;
+				if (pcs.size () > 0) {
+					for (PcInstance p : pcs) {
+						p.Offline () ;
+					}
+				}
+			});
+			
+		} catch (Exception e) {
+			e.printStackTrace () ;
+		}
+	}
 }
-	
-	
-	

@@ -86,7 +86,6 @@ public class Main {
 			System.out.println ("使用本地管理介面") ;
 			GuiMain gui = new GuiMain (world) ;
 		}
-		//
 		
 		
 		/*
@@ -99,9 +98,9 @@ public class Main {
 		/*
 		 * 本地端控制台
 		 */
-		//Runtime.getRuntime ().addShutdownHook (new Shutdown () ) ;
+		Runtime.getRuntime ().addShutdownHook (new Shutdown () ) ;
 		while (true) {
-			Thread.sleep (1000) ;
+			Thread.sleep (10000) ;
 		}
 		
 		/*

@@ -28,12 +28,16 @@ public class ItemHandler
 			
 		} else if (i.MajorType == 1) {
 			Pc.EquipWeapon (i.Uuid) ;
+			
+			/* 更新腳色武器外型 */
 			byte[] Packet = new UpdatePcGfx (Pc.Uuid, Pc.getWeaponGfx () ).getRaw () ;
 			Handle.SendPacket (Packet) ;
 			Pc.BoardcastPcInsight (Packet) ;
 			
 		} else if (i.MajorType == 2) {
-			Pc.EquipArmor (i.Uuid) ;		
+			Pc.EquipArmor (i.Uuid) ;
+			
+			
 		} else {
 			System.out.printf ("%s 使用不明道具 %d\n", p.Name, i.Uuid) ;
 		}

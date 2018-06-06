@@ -14,7 +14,7 @@ public class CommonAttack
 	 * 玩家對怪物
 	 */
 	public CommonAttack (PcInstance src, MonsterInstance dest) {
-		if (src.UsingWeapon == null) {
+		if (src.equipment.getWeapon () == null) {
 			System.out.printf ("%s 使用%s對 %s(%d) 攻擊",
 					src.Name,
 					"空手",
@@ -24,7 +24,7 @@ public class CommonAttack
 		} else {
 			System.out.printf ("%s 使用%s對 %s(%d) 攻擊",
 				src.Name,
-				src.UsingWeapon.getName (),
+				src.equipment.getWeapon ().getName (),
 				dest.Name,
 				dest.Uuid
 			) ;

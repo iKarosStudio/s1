@@ -19,7 +19,10 @@ public class ItemInstance extends StaticObject
 	public String TypeName; 
 	public String MaterialName;
 	
+	/* 0:道具 1:武器 2:防具 */
 	public int MajorType = 0;
+	
+	
 	public int MinorType = 0;
 	public int UseType = 0;
 	public int Material = 0;
@@ -28,12 +31,18 @@ public class ItemInstance extends StaticObject
 	public int Weight = 0;
 	public int InvGfx = 0;
 	public int GndGfx = 0;
+	
+	/* 腳色持有武器的外觀編號 */
 	public int PcGfx = 0;
 	
 	public int ItemDescId = 0; /* 鑑定說明編號 */
+	
 	public int SafeEnchant = 0;
 	public int Enchant = 0;
+	
+	/* 損壞度 */
 	public int Durability = 0;
+	
 	public int ChargeCount = 0;
 	public boolean IsEquipped = false;
 	public boolean IsIdentified = false;
@@ -49,32 +58,36 @@ public class ItemInstance extends StaticObject
 	public boolean HasteItem = false;
 	public boolean ManaItem = false;
 	
-	public int MinLevel = 0;
-	public int MaxLevel = 0;
+	public int MinLevel = 0; //要求使用等級
+	public int MaxLevel = 0; //最大使用等級
 	public boolean UseRoyal;
 	public boolean UseKnight;
 	public boolean UseMage;
 	public boolean UseElf;
 	public boolean UseDarkElf;
-	public int AddStr, AddDex, AddCon, AddInt, AddWis, AddCha;
+	public int AddStr, AddDex, AddCon, AddInt, AddWis, AddCha; //增加素質
 	public int AddHp, AddMp, AddHpr, AddMpr, AddSp, Mdef;
 	
-	public int DmgSmall = 0;
-	public int DmgLarge = 0;
-	public int HitModifier = 0;
-	public int DmgModifier = 0;
-	public int MagicDmgModifier = 0;
-	public boolean CanBeDmg = true;
-	public boolean isTwoHanded = false;
+	public int DmgSmall = 0; //小怪傷害
+	public int DmgLarge = 0; //大怪傷害
+	public int HitModifier = 0; //命中加成
+	public int DmgModifier = 0; //額外攻擊點數
+	public int MagicDmgModifier = 0; //魔法攻擊點數
+	public boolean CanBeDmg = true; //會壞刀
+	public boolean isTwoHanded = false; //雙手武器
 	
-	public int Ac = 0;
-	public int BowHitRate = 0;
-	public int DamegeReduction = 0;
-	public int WeightReduction = 0;
+	public int Ac = 0; //防禦數值
+	public int BowHitRate = 0; //弓箭命中修正
+	public int DamegeReduction = 0; //傷害減免
+	public int WeightReduction = 0; //負重減免
 	public int DefenseWater = 0, DefenseWind = 0, DefenseFire = 0, DefenseEarth = 0;
 	public int ResistStan = 0, ResistStone = 0, ResistSleep = 0, ResistFreeze = 0;
 	
 	private byte[] Detail = null;
+	
+	public ItemInstance () {
+		//
+	}
 	
 	public ItemInstance (
 		int item_uuid,
@@ -145,7 +158,9 @@ public class ItemInstance extends StaticObject
 			Name = a.Name; NameId = a.NameId;
 			TypeName = a.TypeName;
 			Material = a.Material; MaterialName = a.MaterialName;
-			MajorType = a.MajorType; MinorType = a.MinorType; UseType = ItemTypeTable.TYPE_USE_ARMOR;
+			MajorType = a.MajorType; MinorType = a.MinorType;
+			//UseType = ItemTypeTable.TYPE_USE_ARMOR;
+			UseType = ItemTypeTable.ArmorMinorType2UseType (a.MinorType) ;
 			Weight = a.Weight;
 			InvGfx = a.InvGfx; GndGfx = a.GndGfx;
 			Bless = a.Bless; Trade = a.Trade;

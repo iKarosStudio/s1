@@ -26,9 +26,12 @@ public class PcInstance extends DynamicObject implements Runnable
 	private SessionHandler Handle;
 	public boolean exit = false;
 	
-	/* 持有道具 */
-	public ConcurrentHashMap<Integer, ItemInstance> Item = null; // <uuid, iteminstance>
-	public ItemInstance UsingWeapon = null;
+	/* 持有道具  <K, V> = <uuid, ItemInstance> */
+	public ConcurrentHashMap<Integer, ItemInstance> Item = null;
+	
+	/* 角色裝備參考 */
+	public Equipment equipment = null;
+	
 	
 	/* 視界內物件 */
 	public ConcurrentHashMap<Integer, PcInstance> PcInsight = null;
@@ -61,7 +64,7 @@ public class PcInstance extends DynamicObject implements Runnable
 	
 	QualityParameters EquipPara;
 	
-	public int Sex = 0;
+	public int Sex = 0; /* 0:Male 1:Female */
 	public int Type = 0; /* 0:Royal 1:Knight 2:Elf 3:Mage 4:Darkelf */
 	
 	public int Satiation = 0; //飽食度
@@ -82,6 +85,8 @@ public class PcInstance extends DynamicObject implements Runnable
 		MonsterInsight = new ConcurrentHashMap<Integer, MonsterInstance> () ;
 		GndItemInsight = new ConcurrentHashMap<Integer, ItemInstance> () ;
 		DoorInsight = new ConcurrentHashMap<Integer, DoorInstance> () ;
+		
+		equipment = new Equipment (Handle) ;
 	}
 	
 	public PcInstance (SessionHandler Handle) {
@@ -95,6 +100,8 @@ public class PcInstance extends DynamicObject implements Runnable
 		//Item = new ConcurrentHashMap () ;
 		//Pet = new ConcurrentHashMap () ;
 		//SummonMonster = new ConcurrentHashMap () ;
+		
+		equipment = new Equipment (Handle) ;
 	}
 	
 	//參照MysqlCharacterStorage.java (l1j270)
@@ -197,13 +204,21 @@ public class PcInstance extends DynamicObject implements Runnable
 					rs.getBoolean ("is_id")
 				) ;
 				Item.put (rs.getInt ("id"), i) ;
-				
-				if ((i.MajorType == 1) && (i.IsEquipped) ) {
-					UsingWeapon = i;
-				}
 			}
 			
 			Handle.SendPacket (new ReportHeldItem(Item).getRaw () ) ;
+			
+			Item.forEach ((Integer u, ItemInstance i)->{
+				if ((i.MajorType == 1) && (i.IsEquipped) ) {
+					equipment.setWeapon (i) ;
+				}
+				
+				if ((i.MajorType == 2) && (i.IsEquipped) ) {
+					equipment.setArmor (i) ;
+				}
+			});
+			
+			
 		} catch (Exception e) {e.printStackTrace () ; }
 	}
 	
@@ -265,7 +280,15 @@ public class PcInstance extends DynamicObject implements Runnable
 		return (getWeight () * 100) / (int) (getMaxWeight () * 3.4) ;
 	}
 	
-	public int getWeaponGfx () {		
+	public int getWeaponGfx () {
+		ItemInstance w = equipment.getWeapon () ;
+		if (w == null) {
+			return 0;
+		} else {
+			return w.PcGfx;
+		}
+		
+		/*
 		ArrayList<ItemInstance> Found = new ArrayList<ItemInstance> () ;
 		int Gfx = 0;
 		
@@ -282,6 +305,7 @@ public class PcInstance extends DynamicObject implements Runnable
 		} catch (Exception e) {e.printStackTrace () ; }
 		
 		return Gfx;
+		*/
 	}
 	
 	public int getAc () {
@@ -469,6 +493,30 @@ public class PcInstance extends DynamicObject implements Runnable
 		return PcInsight.containsValue (p) ;
 	}
 	
+	public boolean CanUseEquipment (ItemInstance i) {
+		if ((i.MaxLevel != 0) && (Level > i.MaxLevel)) {
+			return false;
+		}
+		
+		if ((i.MinLevel != 0) && !(Level > i.MinLevel)) {
+			return false;
+		}
+		
+		if (Type == 0) {  //Royal
+			return i.UseRoyal;
+		} else if (Type == 1) { //Knight
+			return i.UseKnight;
+		} else if (Type == 2) { //Elf
+			return i.UseElf;
+		} else if (Type == 3) { //Mage
+			return i.UseMage;
+		} else if (Type == 4) { //Darkelf
+			return i.UseDarkElf;
+		} else {
+			return false;
+		}
+	}
+	
 	public void BoardcastAll (byte[] Packet) {
 		List<PcInstance> Pcs = Asgardia.getInstance ().getAllPc () ;
 		for (PcInstance p : Pcs) {
@@ -534,8 +582,6 @@ public class PcInstance extends DynamicObject implements Runnable
 	}
 	
 	public synchronized void removeItem (int uuid, int amount) {
-		HikariCP Db = Handle.getDbHandle () ;
-		
 		if (Item.containsKey (uuid) ) {
 			ItemInstance item = Item.get (uuid) ;
 			
@@ -554,33 +600,28 @@ public class PcInstance extends DynamicObject implements Runnable
 	}
 	
 	public void EquipWeapon (int uuid) {
-		System.out.printf ("裝備武器 %d\n", uuid) ;
 		
-		if (UsingWeapon != null) {
-			if (UsingWeapon.Uuid == uuid) {
-				UsingWeapon.IsEquipped = false;
-				Handle.SendPacket (new ItemUpdateName(UsingWeapon).getRaw () ) ;
-				DatabaseCmds.UpdatePcItem (UsingWeapon) ;
-				UsingWeapon = null;
-			} else {
-				UsingWeapon.IsEquipped = false;
-				Handle.SendPacket (new ItemUpdateName(UsingWeapon).getRaw () ) ;
-				DatabaseCmds.UpdatePcItem (UsingWeapon) ;
-				UsingWeapon = FindItemByUuid (uuid) ;
-				UsingWeapon.IsEquipped = true;
-				Handle.SendPacket (new ItemUpdateName(UsingWeapon).getRaw () ) ;
-				DatabaseCmds.UpdatePcItem (UsingWeapon) ;
-			}
+		/* 檢查職業可用 */
+		
+		ItemInstance w = FindItemByUuid (uuid) ;
+		if (w != null && CanUseEquipment (w) ) {
+			equipment.setWeapon (w) ;
 		} else {
-			UsingWeapon = FindItemByUuid (uuid) ;
-			UsingWeapon.IsEquipped = true;
-			Handle.SendPacket (new ItemUpdateName(UsingWeapon).getRaw () ) ;
-			DatabaseCmds.UpdatePcItem (UsingWeapon) ;
+			//
 		}
+		
+		ApplyEquipmentEffects () ;
 	}
 	
 	public void EquipArmor (int uuid) {
-		System.out.printf ("裝備防具 %d\n", uuid) ;
+		ItemInstance i = FindItemByUuid (uuid) ;
+		if ((i != null) && CanUseEquipment (i) ) {
+			equipment.setArmor (i) ;
+		} else {
+			//
+		}
+		
+		ApplyEquipmentEffects () ;
 	}
 	
 	public void pickItem (int uuid, int count, int x, int y) {
@@ -601,13 +642,11 @@ public class PcInstance extends DynamicObject implements Runnable
 	}
 	
 	public void dropItem (int uuid, int amount, int x, int y) {
-		HikariCP Db = Handle.getDbHandle () ;
-		
 		if (Item.containsKey (uuid) ) {
 			ItemInstance item = Item.get (uuid) ;
 			ItemInstance drop = null;
 			
-			if (item.Count > amount) {
+			if (item.Count > amount) { /* 丟出數量小於持有數量  */
 				item.Count -= amount;
 				
 				drop = new ItemInstance (
