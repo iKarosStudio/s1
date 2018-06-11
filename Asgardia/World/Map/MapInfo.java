@@ -1,8 +1,32 @@
 package Asgardia.World.Map;
 
+import java.util.*;
+
 public class MapInfo
 {
-	public static final int[][] INFO = { 
+	private static MapInfo instance = null;
+	public static HashMap<Integer, int[]> Table;
+	
+	public static MapInfo getInstance () {
+		if (instance == null) {
+			instance = new MapInfo () ;
+		}
+		return instance;
+	}
+	
+	public MapInfo () {
+		Table = new HashMap<Integer, int[]> () ;
+		
+		for (int[] info : IzNFO) {
+			int map_id = info[0] ;
+			int[] SizeData = new int[4];
+			System.arraycopy (info, 1, SizeData, 0, 4) ;
+			
+			Table.put (map_id, SizeData) ;
+		}
+	}
+	
+	public static final int[][] IzNFO = { 
 		{ 0, 32256, 32767, 32768, 33279 },
 		{ 1, 32640, 32767, 32768, 32895 },
 		{ 2, 32640, 32831, 32768, 32895 },

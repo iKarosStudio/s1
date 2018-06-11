@@ -88,6 +88,8 @@ public class ObjectUpdate extends TimerTask implements Runnable
 				Pc.removeMonsterInsight (m) ;
 				Handle.SendPacket (new RemoveObject (m.Uuid).getRaw () ) ;
 			}
+			
+			m.ToggleAi () ;
 		}) ;
 	}
 	
@@ -132,7 +134,7 @@ public class ObjectUpdate extends TimerTask implements Runnable
 	}
 	
 	public void Start () {
-		t.scheduleAtFixedRate (this, 0, 1000) ; //1000ms interval
+		t.scheduleAtFixedRate (this, 0, 300) ; //1000ms interval
 	}
 	
 	public void Stop () {

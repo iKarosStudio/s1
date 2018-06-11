@@ -10,18 +10,18 @@ import Asgardia.World.*;
 public class MapLoader
 {
 	public static final int OFFSET_MAPID = 0;
-	public static final int OFFSET_START_X = 1;
-	public static final int OFFSET_END_X = 2;
-	public static final int OFFSET_START_Y = 3;
-	public static final int OFFSET_END_Y = 4;
+	public static final int OFFSET_START_X = 0;
+	public static final int OFFSET_END_X = 1;
+	public static final int OFFSET_START_Y = 2;
+	public static final int OFFSET_END_Y = 3;
 	
 	public static final int MAPID_LIMIT = 3;
 	
 	public MapLoader (Asgardia Handle) 
 	{
-		int x = 0;
-		int y = 0;
-		int ValidCount = 0;
+		//int x = 0;
+		//int y = 0;
+		//int ValidCount = 0;
 		
 		/*
 		 * 載入伺服器地圖檔案
@@ -29,33 +29,33 @@ public class MapLoader
 		System.out.printf ("Load map files...") ;
 		
 		long t_starts = System.currentTimeMillis () ;
-		for (int[] Info : MapInfo.INFO) {
+		//for (int[] Info : MapInfo.INFO) {
+		MapInfo.getInstance ().Table.forEach ((Integer map_id, int[] Info)->{
 			try {
-				if (Info[OFFSET_MAPID] > MAPID_LIMIT) {
-					break;
-				}
+				if (map_id > MAPID_LIMIT) return ;
 				
-				String Path = String.format ("./maps/%d.txt", Info[OFFSET_MAPID]) ;
+				String Path = String.format ("./maps/%d.txt", map_id) ;
 				FileReader FileHandler = new FileReader (Path) ;
 				BufferedReader b = new BufferedReader (FileHandler) ;
 				//System.out.printf ("\tLoad map->%s\n", Path) ;
 				
 				AsgardiaMap map = new AsgardiaMap (
-						Info[OFFSET_MAPID],
+						map_id,
 						Info[OFFSET_START_X],
 						Info[OFFSET_END_X],
 						Info[OFFSET_START_Y],
 						Info[OFFSET_END_Y] ) ;
 				
 				String s = null;
-				y = 0;
+				
+				int y = 0;
 				while ((s = b.readLine () ) != null) {
 					if (s.length () == 0) {
 						continue;
 					}
 					
 					String[] tile = s.split (",") ;
-					x = 0;
+					int x = 0;
 					for (String t : tile) {
 						map.setTile (x, y, Byte.valueOf (t) ) ;
 						x++;
@@ -81,15 +81,15 @@ public class MapLoader
 					map.addTpLocation (Tps.getInt ("src_x"), Tps.getInt ("src_y"), Dest) ;
 				}
 				
-				ValidCount++;
+				//ValidCount++;
 			} catch (Exception e) {
-				System.out.println (e.toString () + " x:" + x + " y:" + y) ;
+				//System.out.println (e.toString () + " x:" + x + " y:" + y) ;
 				e.printStackTrace () ;
 			}
-		} //end for mapid	
+		}); //end for mapid	
 		long t_ends = System.currentTimeMillis () ;
 		
 		float used_time = (float) (t_ends - t_starts) / 1000;
-		System.out.printf ("%d files loaded in\t%.3f s\n", ValidCount, used_time) ;
+		System.out.printf ("%d files loaded in\t%.3f s\n", MapInfo.getInstance ().Table.size() , used_time) ;
 	}
 }

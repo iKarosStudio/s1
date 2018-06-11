@@ -22,12 +22,11 @@ public class NpcLoader
 		
 		/* 載入NPC產生清單 by Map */
 		List<String> ErrorList = new ArrayList <String> () ;
-		for (int[] Info : MapInfo.INFO) {
-			if (Info[MapLoader.OFFSET_MAPID] > MapLoader.MAPID_LIMIT) {
-				break;
-			}
+		//for (int[] Info : MapInfo.INFO) {
+		MapInfo.getInstance ().Table.forEach ((Integer map_id, int[] Info)->{
+			if (map_id > MapLoader.MAPID_LIMIT) return;
 			
-			String spawnlist_npc_q = String.format ("SELECT * FROM spawnlist_npc WHERE mapid=\'%d\';", Info[MapLoader.OFFSET_MAPID]) ;
+			String spawnlist_npc_q = String.format ("SELECT * FROM spawnlist_npc WHERE mapid=\'%d\';", map_id) ;
 			ResultSet spawnlist_rs = Db.Query (spawnlist_npc_q) ;
 			try {
 				while (spawnlist_rs.next () ) {
@@ -54,7 +53,7 @@ public class NpcLoader
 						Npc.location.Heading = Heading;
 						
 						Asg.addNpc (Npc) ;
-						ValidCount ++;
+						//ValidCount ++;
 					} else {
 						String msg = String.format ("\tNpc Template NOT EXIST, UUID:%d/Template:%d/Location:%s", 
 							Uuid,
@@ -67,7 +66,7 @@ public class NpcLoader
 			} catch (Exception e) {
 				e.printStackTrace () ;
 			}
-		}
+		}) ;
 		
 		long t_ends = System.currentTimeMillis () ;
 		float used_time = (float) (t_ends - t_starts) / 1000;

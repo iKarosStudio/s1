@@ -23,8 +23,8 @@ public class DynamicObject extends ObjectInstance
 	
 	public String Name = null;
 	public String Title = null;
-	public QualityParameters BasicParameter;
-	public QualityParameters SkillParameter;
+	public CombatStatus BasicParameter;
+	public CombatStatus SkillParameter;
 	
 	public int Lawful;
 	

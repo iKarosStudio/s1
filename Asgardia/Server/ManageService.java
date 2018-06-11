@@ -23,9 +23,8 @@ public class ManageService extends Thread
 	 */
 	public void run () {		
 		while (true) {
-			
-			String t = String.format ("Cpu:%2.4f%% 執行緒:%d 使用記憶體:%1.1f MB",
-				osmb.getProcessCpuLoad (),
+			String t = String.format ("CPU:%2.1f%% 執行緒:%d 使用記憶體:%1.1f MB",
+				osmb.getProcessCpuLoad () * 100,
 				mana.getThreadCount (),
 				(float) World.UsedMemory / (1024 * 1024)
 			) ;
@@ -39,8 +38,10 @@ public class ManageService extends Thread
 				
 			} catch (SocketTimeoutException e) {
 				//it's ok
-				System.out.println (t) ;
-			} catch (Exception e) {e.printStackTrace () ;}
+				//System.out.println (t) ;
+			} catch (Exception e) {
+				e.printStackTrace () ;
+			}
 		}
 	}
 	

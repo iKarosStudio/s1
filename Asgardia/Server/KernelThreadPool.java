@@ -7,7 +7,7 @@ public class KernelThreadPool
 {
 	private static KernelThreadPool instance;
 	
-	private Executor Pool;
+	private ExecutorService Pool;
 	private ScheduledExecutorService KernelPool;
 	
 	public static KernelThreadPool getInstance () {
@@ -20,10 +20,9 @@ public class KernelThreadPool
 	private KernelThreadPool () {
 		System.out.print ("Kernel  thread pool initializing...") ;
 		
-		Pool = Executors.newCachedThreadPool () ;
-		
+		Pool = Executors.newCachedThreadPool () ;	
 		KernelPool = Executors.newScheduledThreadPool (
-			200, //Size
+			20, //Size
 			new PriorityThreadFactory ("KernelService", Thread.NORM_PRIORITY) //ThreadFactory
 		) ;
 		
@@ -35,11 +34,12 @@ public class KernelThreadPool
 			Pool.execute (Foo) ;
 			
 		} else {
+			System.out.println ("???") ;
 			Thread thread = new Thread (Foo) ;
 			thread.start () ;
-			//thread.setDaemon ();
 		}
 	}
+	
 	
 	public ScheduledFuture<?> ScheduleAtFixedRate (Runnable Foo, long InitDelay, long Period) {
 		return KernelPool.scheduleAtFixedRate (Foo, InitDelay, Period, TimeUnit.MILLISECONDS) ;

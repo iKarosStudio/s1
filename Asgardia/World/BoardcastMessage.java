@@ -14,7 +14,7 @@ public class BoardcastMessage extends Thread implements Runnable
 	
 	public void run () {
 		String BoardcastMessage = String.format ("循環廣播訊息測試") ;
-		System.out.println ("[伺服器廣播]" + BoardcastMessage) ;
+		//System.out.println ("[伺服器廣播]" + BoardcastMessage) ;
 		world.BoardcastToAll (new SystemMessage (BoardcastMessage).getRaw () ) ;
 	}
 	

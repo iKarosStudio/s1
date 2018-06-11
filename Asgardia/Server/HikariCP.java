@@ -46,6 +46,18 @@ public class HikariCP
 		}
 	}
 	
+	public String getUrl () {
+		return Ds.getJdbcUrl () ;
+	}
+	
+	public String getUser () {
+		return Ds.getUsername () ;
+	}
+	
+	public String getPassword () {
+		return Ds.getPassword () ;
+	}
+	
 	public ResultSet Query (String Cmd) {
 		ResultSet rs = null;
 		try { 

@@ -18,6 +18,7 @@ import Asgardia.World.Objects.Template.*;
 public class MonsterInstance extends DynamicObject
 {
 	public String NameId; 
+	public int Size;
 	
 	/* 
 	 * 0:Stop
@@ -56,8 +57,22 @@ public class MonsterInstance extends DynamicObject
 	 */
 	public ConcurrentHashMap<Integer, Integer> HateList;
 	
-	public MonsterAiKernel AiController;
+	public MonsterAiKernel Aikernel;
 	//public MoveTask Move;
+	
+	public void ToggleAi () {
+		if (Aikernel == null) {
+			Aikernel = new MonsterAiKernel (this) ;
+		} else {
+			//Clear timeout counter
+			
+			if (Aikernel.isAiRunning) {
+				return;
+			} else {
+				MonsterAiQueue.getInstance ().getQueue ().offer (Aikernel) ;
+			}
+		}
+	}
 	
 	public MonsterInstance (NpcTemplate n, Location loc) {
 		Uuid = n.Uuid;
@@ -67,13 +82,18 @@ public class MonsterInstance extends DynamicObject
 		
 		Level = n.Level;
 		Exp = n.Exp;
+		Size = n.Size;
 		
-		location = loc;
+		location.MapId = loc.MapId;
+		location.x = loc.x;
+		location.y = loc.y;
+		location.Heading = loc.Heading;
 		UpdateCurrentMap () ;
 		
-		BasicParameter = new QualityParameters () ;
+		BasicParameter = new CombatStatus () ;
 		BasicParameter.MaxHp = n.BasicParameter.MaxHp;
 		BasicParameter.MaxMp = n.BasicParameter.MaxMp;
+		Hp = BasicParameter.MaxHp; Mp = BasicParameter.MaxMp;
 		BasicParameter.Ac = n.BasicParameter.Ac;
 		
 		MoveInterval = n.MoveInterval;
@@ -83,7 +103,7 @@ public class MonsterInstance extends DynamicObject
 		
 		Items = new ConcurrentHashMap<Integer, ItemInstance> () ;
 		
-		AiController = new MonsterAiKernel (this) ;
+		//Aikernel = new MonsterAiKernel (this) ;
 	}
 	
 	public synchronized void MoveToHeading (int heading) {

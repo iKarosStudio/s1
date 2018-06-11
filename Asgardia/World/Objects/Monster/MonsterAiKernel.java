@@ -16,24 +16,27 @@ public class MonsterAiKernel extends TimerTask implements Runnable
 	
 	
 	private static TimerPool SchedulePool;
-	Random r = new Random (System.currentTimeMillis () ) ;
+	private static Random r = new Random (System.currentTimeMillis () ) ;
 	AsgardiaMap Map;
 	MonsterInstance Mob;
 	
+	public boolean isAiRunning = false;
+	public int TimeoutCounter = 0;
+	
 	public void run () {
 		try {
-			while (Mob.Hp > 0) {
-				if (!AiKernel () ) {
-					break;
-				}
-				Thread.sleep (Configurations.MONSTER_AI_UPDATE_RATE) ;
-			}
+			//System.out.printf ("ai %d go\n", Mob.Uuid) ;
+			
+			Ai () ;
+			
+			//Thread.sleep (Configurations.MONSTER_AI_UPDATE_RATE) ;
 			
 			/*
 			 * 死亡狀態處理
 			 */
 				
 		} catch (Exception e) {
+			System.out.printf ("map:%d\n", Map.MapId) ;
 			e.printStackTrace () ;
 		}
 	}
@@ -42,27 +45,24 @@ public class MonsterAiKernel extends TimerTask implements Runnable
 		Mob = mob;
 		Map = Mob.Map;
 		if (SchedulePool == null) {
-			SchedulePool = new TimerPool (4) ;
+			//SchedulePool = new TimerPool (4) ;
 		}
 	}
 	
-	
-	public void Start () {
-		KernelThreadPool.getInstance ().execute (this) ;
-	}
-	
-	public void Stop () {
-		this.cancel () ;
-	}
-	
-	public boolean AiKernel () {
-		//System.out.printf ("ai kernel mob:%s(%d)->", Mob.Name, Mob.Uuid) ;
-		
+	public boolean Ai () {
+
 		try {
+			while (isAiRunning) {
+				//System.out.println ("確保AI線性處理") ;
+				Thread.sleep (300) ;
+			}
+			
+			//System.out.printf ("ai kernel mob:%s(0x%08X)->\n", Mob.Name, Mob.Uuid) ;
+			
+			isAiRunning = true;
 			if (Mob.ActionStatus == STOP) {
 				Thread.sleep (10000) ;
 			} else if (Mob.ActionStatus == IDLE) {
-				
 				Mob.MoveToHeading (r.nextInt (8) ) ;
 				Thread.sleep (Mob.MoveInterval) ;
 				
@@ -83,8 +83,13 @@ public class MonsterAiKernel extends TimerTask implements Runnable
 			} else {
 				System.out.printf ("UNKNOWN AI STATUS MOB:%s(%d)\n", Mob.Name, Mob.Uuid) ;
 			}
+			isAiRunning = false;
+			
 		} catch (Exception e) {
+			isAiRunning = false;
+			System.out.printf ("%s -> map:%d(%d,%d)\n", Mob.Name, Mob.location.MapId, Mob.location.x, Mob.location.y) ;
 			e.printStackTrace () ;
+			System.exit (999) ;
 		}
 		
 		return true;

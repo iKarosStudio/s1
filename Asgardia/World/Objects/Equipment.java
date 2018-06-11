@@ -40,6 +40,10 @@ public class Equipment
 	private SessionHandler Handle;
 	private ItemInstance[] _Equip = null;
 	
+	public ItemInstance[] getEquipmentList () {
+		return _Equip;
+	}
+	
 	public Equipment (SessionHandler handle) {
 		Handle = handle;
 		_Equip = new ItemInstance[12] ;
@@ -163,11 +167,5 @@ public class Equipment
 			
 			System.out.printf ("裝備 %s\n", a.getName () ) ;
 		}
-		/*
-		Handle.SendPacket (new NodeStatus (Handle.getPc () ).getRaw () ) ;//0x59
-		Handle.SendPacket (new NodeEquipmentAc (Handle.getPc () ).getRaw () ) ; //0x55
-		Handle.SendPacket (new NodeStatus (Handle.getPc () ).getRaw () ) ;//0x59
-		Handle.SendPacket (new ReportMatkMrst (Handle).getRaw () ) ;
-		*/
 	}
 }

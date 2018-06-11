@@ -9,9 +9,9 @@ import Asgardia.Server.*;
 import Asgardia.Server.ServerProcess.*;
 import Asgardia.Server.Utility.*;
 import Asgardia.World.Map.*;
-import Asgardia.World.Map.MonsterGenerator;
 import Asgardia.World.Npc.*;
 import Asgardia.World.Objects.*;
+import Asgardia.World.Objects.Monster.*;
 
 public class Asgardia extends Thread
 {
@@ -74,6 +74,8 @@ public class Asgardia extends Thread
 			/*
 			 * Load maps
 			 */
+			MonsterAiQueue.getInstance () ;
+			MonsterAiExecutor.getInstance () ;
 			new MapLoader (instance) ;
 			
 			/*
@@ -91,7 +93,7 @@ public class Asgardia extends Thread
 			/*
 			 * Generate monster
 			 */
-			System.out.printf ("Generate Monster...") ;
+			System.out.printf ("Generate Monster, Generator interval:%.1f Sec...", (float)Configurations.MONSTER_GENERATOR_UPDATE_RATE/1000) ;
 			Maps.forEach ((Integer map_id, AsgardiaMap map)->{
 				map.MobGenerator = new MonsterGenerator (map) ;
 				KernelThreadPool.getInstance ().ScheduleAtFixedRate (map.MobGenerator, 1000, Configurations.MONSTER_GENERATOR_UPDATE_RATE) ;

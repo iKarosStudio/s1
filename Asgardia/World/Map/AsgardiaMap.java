@@ -12,7 +12,7 @@ import Asgardia.World.*;
 import Asgardia.World.Npc.*;
 import Asgardia.World.Objects.*;
 import Asgardia.World.Objects.Items.*;
-import Asgardia.World.Objects.Monster.MonsterInstance;
+import Asgardia.World.Objects.Monster.*;
 
 /*
  * 讀取的地圖實例
@@ -64,6 +64,7 @@ public class AsgardiaMap
 	 * 怪物實體
 	 */
 	public ConcurrentHashMap<Integer, MonsterInstance> Monsters;
+	public MonsterAiDistributor AiDistributor;
 	
 	/*
 	 * 寵物, 召喚怪物實體
@@ -93,7 +94,8 @@ public class AsgardiaMap
 		GndItems = new ConcurrentHashMap<Integer, ItemInstance> () ;
 		Doors = new ConcurrentHashMap<Integer, DoorInstance> () ;
 		Monsters = new ConcurrentHashMap<Integer, MonsterInstance> () ;
-		
+		AiDistributor = new MonsterAiDistributor (this) ;
+		AiDistributor.Start () ;
 		//
 	}
 	
@@ -112,8 +114,9 @@ public class AsgardiaMap
 	/*
 	 * 檢查p(x, y)->heading p'(x', y')是否可通過
 	 */
-	public boolean isNextTileAccessible (int x, int y, int heading) {
+	public boolean isNextTileAccessible (int x, int y, int heading) {		
 		byte Next = getHeadingTile (x, y, heading) ;
+
 		
 		/*
 		 * 檢查動態物件佔有
@@ -181,20 +184,44 @@ public class AsgardiaMap
 	
 	public byte getHeadingTile (int x, int y, int heading) {
 		if (heading == 0) {
+			if (y == StartY) {
+				return 0;
+			}
 			return getTile (x, y-1) ;
 		} else if (heading == 1) {
+			if ((y == StartY) || (x == EndX)) {
+				return 0;
+			}
 			return getTile (x+1, y-1) ;
 		} else if (heading == 2) {
+			if (x == EndX) {
+				return 0;
+			}
 			return getTile (x+1, y) ;
 		} else if (heading == 3) {
+			if ((x == EndX) || (y == EndY)) {
+				return 0;
+			}
 			return getTile (x+1, y+1) ;
 		} else if (heading == 4) {
+			if (y == EndY) {
+				return 0;
+			}
 			return getTile (x, y+1) ;
 		} else if (heading == 5) {
+			if ((y == EndY) || (x == StartX)) {
+				return 0;
+			}
 			return getTile (x-1, y+1) ;
 		} else if (heading == 6) {
+			if (x == StartX) {
+				return 0;
+			}
 			return getTile (x-1, y) ;
 		} else if (heading == 7) {
+			if ((x == StartX) || (y == StartY)) {
+				return 0;
+			}
 			return getTile (x-1, y-1) ;
 		} else {
 			return 0;
@@ -279,8 +306,11 @@ public class AsgardiaMap
 	/*
 	 * 未來考慮取得視線內MonsterInstance物件改由MonsterSpawnList內登記的Mobs取得所有怪物物件的參考
 	 */
+	static int mob_counter = 0;
 	public void addMonster (MonsterInstance m) {
+		mob_counter ++;
 		Monsters.put (m.Uuid, m) ;
+		//System.out.printf ("add %d monsters\n", mob_counter) ;
 	}
 	
 	public long getMonsterAmount () {

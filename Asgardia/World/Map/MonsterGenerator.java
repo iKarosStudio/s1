@@ -9,8 +9,6 @@ import Asgardia.Types.*;
 import Asgardia.Server.*;
 import Asgardia.Server.Utility.*;
 import Asgardia.World.*;
-import Asgardia.World.Npc.*;
-import Asgardia.World.Objects.*;
 import Asgardia.World.Objects.Monster.MonsterInstance;
 import Asgardia.World.Objects.Template.*;
 
@@ -46,16 +44,15 @@ public class MonsterGenerator extends Thread implements Runnable
 					/*
 					 * 產生怪物持有道具
 					 */
+					List<MonsterDropList> mdl = DropList.get (msl.NpcTemplateId) ;
 					/*
-					List mdl = DropList.get (msl.NpcTemplateId) ;
 					if (mdl != null) {
 						//
 					}*/
 					
 					Map.addMonster (Mob) ;
 					msl.Mobs.add (Mob) ;
-					Mob.ActionStatus = 1; /* 生怪後的初始狀態 */
-					Mob.AiController.Start () ;
+					Mob.ActionStatus = 0; /* 生怪後的初始狀態 */
 				}
 			});
 		} catch (Exception e) {
@@ -102,6 +99,23 @@ public class MonsterGenerator extends Thread implements Runnable
 				if (msl.MovementDistance < 1) {
 					msl.MovementDistance = Configurations.DEFAULT_MOVEMENT_RANGE;
 				}
+				
+				/*
+				 * 確認生怪座標有在地圖範圍內
+				 */	
+				int[] MapSizeInfo = MapInfo.getInstance ().Table.get (msl.MapId) ;
+				if ((msl.LocX < MapSizeInfo[0]) ||
+					(msl.LocX > MapSizeInfo[1]) ||
+					(msl.LocY < MapSizeInfo[2]) ||
+					(msl.LocY > MapSizeInfo[3])) {
+					
+					System.out.printf ("MSL ERR, CHECK->id:%d name:%s location(%d:%d,%d)\n",
+						msl.ListId,
+						CacheData.NpcCache.get (msl.NpcTemplateId).Name,
+						msl.MapId, msl.LocX, msl.LocY) ;
+					continue;
+					
+				} 
 				
 				SpawnList.put (msl.ListId, msl) ;
 				

@@ -9,6 +9,7 @@ package Asgardia;
 
 import java.util.logging.*;
 import java.util.Scanner;
+import java.lang.management.ManagementFactory;
 
 import Asgardia.Gui.*;
 import Asgardia.Config.*;
@@ -94,6 +95,8 @@ public class Main {
 		if (Configurations.CASINO) {
 			System.out.println ("實作Casino系統") ;
 		}
+		
+		System.out.printf ("PID:%s\n", ManagementFactory.getRuntimeMXBean().getName ().split ("@")[0] ) ;
 		
 		/*
 		 * 本地端控制台

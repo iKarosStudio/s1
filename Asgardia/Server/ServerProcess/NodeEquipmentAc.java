@@ -11,7 +11,7 @@ public class NodeEquipmentAc
 	
 	public NodeEquipmentAc (PcInstance pc) {
 		builder.WriteByte (ServerOpcodes.NODE_DEF) ;
-		builder.WriteByte (-50) ;
+		builder.WriteByte (pc.getAc () ) ; //Ac
 		builder.WriteByte (0) ; //fire
 		builder.WriteByte (0) ; //water
 		builder.WriteByte (0) ; //wind

@@ -2,6 +2,7 @@ package Asgardia.World.Objects.Template;
 
 import Asgardia.Server.*;
 import Asgardia.World.Objects.Dynamic.DynamicObject;
+import Asgardia.World.Objects.Dynamic.CombatStatus;
 import Asgardia.World.Objects.Template.*;
 
 /*
@@ -16,7 +17,7 @@ public class NpcTemplate extends DynamicObject
 	public String Family;
 	public String Note;
 	public String NpcType;
-	
+	public int Size; /* 0:small 1:large */
 	public int Exp;
 	
 	/*
@@ -66,7 +67,7 @@ public class NpcTemplate extends DynamicObject
 		Note = note;
 		NpcType = impl ;
 		Gfx = gfxid;
-		BasicParameter = new QualityParameters () ;
+		BasicParameter = new CombatStatus () ;
 		BasicParameter.Str = str; BasicParameter.Con = con; BasicParameter.Dex = dex;
 		BasicParameter.Wis = wis; BasicParameter.Cha = 0  ; BasicParameter.Intel = intel;
 		BasicParameter.DefWater = weak_water; BasicParameter.DefWind = weak_wind;
@@ -76,6 +77,11 @@ public class NpcTemplate extends DynamicObject
 		
 		Level = level;
 		Exp = exp;
+		if (size.equalsIgnoreCase ("small") ) {
+			Size = 0;
+		} else {
+			Size = 1;
+		}
 		
 		MoveInterval = passispeed;
 		AttackInterval = atkspeed;

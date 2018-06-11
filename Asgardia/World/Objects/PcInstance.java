@@ -13,6 +13,7 @@ import Asgardia.World.Map.*;
 import Asgardia.World.Npc.*;
 import Asgardia.World.Skills.*;
 import Asgardia.World.Objects.Dynamic.DynamicObject;
+import Asgardia.World.Objects.Dynamic.CombatStatus;
 import Asgardia.World.Objects.Items.*;
 import Asgardia.World.Objects.Monster.MonsterInstance;
 import Asgardia.World.Objects.RoutineTasks.*;
@@ -42,6 +43,8 @@ public class PcInstance extends DynamicObject implements Runnable
 	public ConcurrentHashMap<Integer, PetInstance> Pet = null;
 	//private ConcurrentHashMap<Integer, SlaveMonster> SummonMonster = null;
 	
+	//private ConcurrentHashMap<Integer, SlaveMonster> SummonMonster = null;
+	
 	/* Buff/Debuff 效果計時 */
 	public SkillEffectTimer SkillTimer = null;
 	
@@ -62,7 +65,7 @@ public class PcInstance extends DynamicObject implements Runnable
 	public int ClanId = 0;
 	public String ClanName = null;
 	
-	QualityParameters EquipPara;
+	CombatStatus EquipPara;
 	
 	public int Sex = 0; /* 0:Male 1:Female */
 	public int Type = 0; /* 0:Royal 1:Knight 2:Elf 3:Mage 4:Darkelf */
@@ -78,7 +81,7 @@ public class PcInstance extends DynamicObject implements Runnable
 	public PcInstance () {
 		//建立角色用
 		//pseudo instance
-		BasicParameter = new QualityParameters () ;
+		BasicParameter = new CombatStatus () ;
 		
 		PcInsight = new ConcurrentHashMap<Integer, PcInstance> () ;
 		NpcInsight = new ConcurrentHashMap<Integer, NpcInstance> () ;
@@ -140,9 +143,9 @@ public class PcInstance extends DynamicObject implements Runnable
 				Gfx = rs.getInt ("Class") ;
 				TempGfx = Gfx;
 				
-				BasicParameter = new QualityParameters () ;
-				EquipPara = new QualityParameters () ;
-				SkillParameter = new QualityParameters () ;
+				BasicParameter = new CombatStatus () ;
+				EquipPara = new CombatStatus () ;
+				SkillParameter = new CombatStatus () ;
 				
 				BasicParameter.Str = rs.getInt ("Str") ;
 				BasicParameter.Con = rs.getInt ("Con") ;
@@ -350,6 +353,14 @@ public class PcInstance extends DynamicObject implements Runnable
 	
 	public int getMr () {
 		return BasicParameter.Mr + EquipPara.Mr + SkillParameter.Mr;
+	}
+	
+	public int getHitModify () {
+		return BasicParameter.HitModify + EquipPara.HitModify + SkillParameter.HitModify;
+	}
+	
+	public int getBowHitModify () {
+		return BasicParameter.BowHitModify + EquipPara.BowHitModify + SkillParameter.BowHitModify;
 	}
 	
 	public int getDirection (int x, int y) {
@@ -765,8 +776,36 @@ public class PcInstance extends DynamicObject implements Runnable
 	 * 套用裝備加乘效果到腳色素質
 	 */
 	public void ApplyEquipmentEffects () {
-		//
+		
+		CombatStatus cb = new CombatStatus () ;
+		
+		for (ItemInstance e : equipment.getEquipmentList () ) {
+			if (e != null) {
+				cb.Ac += e.Ac;
+				cb.Str += e.AddStr; cb.Dex += e.AddDex; cb.Con += e.AddCon;
+				cb.Wis += e.AddWis; cb.Cha += e.AddCha; cb.Intel += e.AddInt;
+				cb.Sp += e.AddSp; cb.Mr += e.Mdef;
+				cb.MaxHp += e.AddHp; cb.MaxMp += e.AddMp;
+				cb.Hpr += e.AddHpr; cb.Mpr += e.AddMpr;
+				cb.DefFire += e.DefenseFire; cb.DefWater += e.DefenseWater;
+				cb.DefWind += e.DefenseWind; cb.DefEarth += e.DefenseEarth;
+				
+				cb.DmgModify += e.DmgModifier;
+				cb.HitModify += e.HitModifier;
+				cb.BowHitModify += e.BowHitRate;
+				//cb.SpModify
+				cb.DmgReduction += e.DamegeReduction;
+				cb.WeightReduction += e.WeightReduction;
+			}
+		}
+		
+		EquipPara = cb;
+		Handle.SendPacket (new NodeEquipmentAc (this).getRaw () ) ;
 	}
+	
+	/*
+	 * 套用敏捷到素質加成
+	 */
 	
 	public void UpdateOnlineStatus (boolean isOnline) {
 		HikariCP Db = Handle.getDbHandle () ;

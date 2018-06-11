@@ -1,7 +1,15 @@
-package Asgardia.World.Objects.Template;
+package Asgardia.World.Objects.Dynamic;
 
-public class QualityParameters
+public class CombatStatus
 {
+	/*
+	 * Str:力量
+	 * Dex:敏捷
+	 * Con:體質
+	 * Wis:精神
+	 * Cha:魅力
+	 * Intel:智力
+	 */
 	public int Str, Dex, Con, Wis, Cha, Intel;
 	public int Sp, Mr;
 	public int Ac;
@@ -16,4 +24,11 @@ public class QualityParameters
 	 * 傷害減免修正
 	 * 負重減免修正
 	 */
+	public int DmgModify;
+	public int HitModify;
+	public int SpModify;
+	public int BowHitModify;
+	
+	public int DmgReduction;
+	public int WeightReduction;
 }
