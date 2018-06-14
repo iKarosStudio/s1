@@ -70,7 +70,7 @@ public class NpcLoader
 		
 		long t_ends = System.currentTimeMillis () ;
 		float used_time = (float) (t_ends - t_starts) / 1000;
-		System.out.printf ("%d npcs loaded in\t%.3f s\n", ValidCount, used_time) ;
+		System.out.printf ("loaded in\t%.3f s\n", used_time) ;
 		
 		if (ErrorList.size () > 0) {
 			System.out.printf ("[***WARN!***] %d NPC LOAD FAIL:\n", ErrorList.size () ) ;

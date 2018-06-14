@@ -90,6 +90,6 @@ public class MapLoader
 		long t_ends = System.currentTimeMillis () ;
 		
 		float used_time = (float) (t_ends - t_starts) / 1000;
-		System.out.printf ("%d files loaded in\t%.3f s\n", MapInfo.getInstance ().Table.size() , used_time) ;
+		System.out.printf ("loaded in\t%.3f s\n", used_time) ;
 	}
 }

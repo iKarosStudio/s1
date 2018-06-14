@@ -25,6 +25,7 @@ public class MonsterGenerator extends Thread implements Runnable
 	public void run () {
 		try {
 			SpawnList.forEach ((Integer u, MonsterSpawnList msl)->{
+				
 				//while (msl.Mobs.size () < msl.Count) {
 				//if (msl.Mobs.size () < msl.Count) {
 				if (msl.Mobs.size () < 1) {
@@ -50,6 +51,7 @@ public class MonsterGenerator extends Thread implements Runnable
 						//
 					}*/
 					
+					//System.out.println ("gen " + Mob.hashCode () ) ;
 					Map.addMonster (Mob) ;
 					msl.Mobs.add (Mob) ;
 					Mob.ActionStatus = 0; /* 生怪後的初始狀態 */
@@ -60,12 +62,17 @@ public class MonsterGenerator extends Thread implements Runnable
 		}
 	}
 	
-	
 	public MonsterGenerator (AsgardiaMap map) {
 		Map = map;
 		SpawnList = new ConcurrentHashMap<Integer, MonsterSpawnList> () ;
 		DropList  = new ConcurrentHashMap<Integer, List<MonsterDropList>> () ;
 		UpdateSpawnList () ;
+	}
+	
+	public void removeMonster (MonsterInstance m) {
+		SpawnList.forEach ((Integer u, MonsterSpawnList msl)->{
+			msl.Mobs.remove (m) ;
+		});
 	}
 	
 	public void UpdateSpawnList () {

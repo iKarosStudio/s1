@@ -16,7 +16,7 @@ public class Configurations
 	public static boolean CASINO = false;
 	public static int MONSTER_GENERATOR_UPDATE_RATE = 1000;
 	public static int MONSTER_AI_UPDATE_RATE = 1000;
-	public static int DEFAULT_MOVEMENT_RANGE=0;
+	public static int DEFAULT_MOVEMENT_RANGE = 0;
 	
 	public static final boolean DISPLAY_CHAT = true;
 	public static final boolean LOG_CHAT = false;

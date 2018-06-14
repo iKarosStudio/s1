@@ -2,6 +2,7 @@ package Asgardia.World.Skills;
 
 import java.util.*;
 
+import Asgardia.Server.ServerProcess.*;
 import Asgardia.World.Objects.*;
 import Asgardia.World.Objects.Monster.*;
 import Asgardia.World.Objects.Items.*;
@@ -25,26 +26,33 @@ public class CommonAttack
 		if (src.equipment.getWeapon () == null) {
 			System.out.printf ("%s 使用%s對 %s(%d) 攻擊", src.Name, "空手", dest.Name, dest.Uuid) ;
 			
-			if (isPc2NpcHit (src, dest) ) {
-				dmg = CalcPc2NpcDmg (src, dest) ;
-				System.out.printf ("命中! 造成%d傷害\n", dmg) ;
-			} else {
-				System.out.printf ("未命中!\n") ;
-			}
-			
 		} else {
 			System.out.printf ("%s 使用%s對 %s(%d) 攻擊", src.Name, src.equipment.getWeapon ().getName (), dest.Name, dest.Uuid) ;
+		}
+		
+		
+		if (isPc2NpcHit (src, dest) ) {
+			dmg = CalcPc2NpcDmg (src, dest) ;
+			dest.ToggleHateList (src, dmg) ;
 			
-			if (isPc2NpcHit (src, dest) ) {
-				dmg = CalcPc2NpcDmg (src, dest) ;
-				System.out.printf ("命中! 造成%d傷害\n", dmg) ;
-			} else {
-				System.out.printf ("未命中!\n") ;
-			}
+			System.out.printf ("命中! 造成%d傷害\n", dmg) ;
+			dest.BoardcastPcInsight (new NodeAction (2, dest.Uuid, dest.location.Heading).getRaw () ) ;
+		} else {
+			System.out.printf ("未命中!\n") ;
 		}
 		
 		dest.Hp -= dmg;
 		System.out.printf ("%s HP:%d/%d\n", dest.Name, dest.Hp, dest.BasicParameter.MaxHp) ;
+		
+		if (dest.Hp < 1 || dest.isDead) {
+			byte[] die = new NodeAction (8, dest.Uuid, dest.location.Heading).getRaw () ;
+			
+			//轉移經驗值與道具
+			dest.TransferExp (src) ;
+			dest.TransferItems () ;
+			
+			dest.BoardcastPcInsight (die) ;
+		}
 	}
 	
 	/*
@@ -116,9 +124,9 @@ public class CommonAttack
 		if (HitRate < 5) {
 			HitRate = 5;
 		}
-		System.out.printf ("Pc->Npc HR:%d %%\n", HitRate) ;
-		int Rate = rnd.nextInt (100) + 1;
 		
+		int Rate = rnd.nextInt (100) + 1;
+		System.out.printf ("Pc->Npc 命中率:%d %% /%d\n", HitRate, Rate) ;
 		return Rate < HitRate;
 	}
 	
@@ -126,12 +134,68 @@ public class CommonAttack
 		ItemInstance Weapon = src.equipment.getWeapon () ;
 		int WeaponMaxDmg = 0;
 		int WeaponDmg = 0;
+		int Str = src.getStr () ;
+		int Dex = src.getDex () ;
+		
+		/*
+		 * 有傷害無效化技能先行處理 return 0;
+		 */
+		
+		
 		if (Weapon != null) {
 			if (dest.Size == 0) { //小型怪
 				WeaponMaxDmg = Weapon.DmgSmall;
 			} else { //大型怪
 				WeaponMaxDmg = Weapon.DmgLarge;
 			}
+			
+			/*
+			 * 套用武器加成效果
+			 */
+			WeaponMaxDmg += Weapon.Enchant;
+			
+			/*
+			 * 套用力量/敏捷加乘效果
+			 */
+			if ((Weapon.MinorType == WEAPON_TYPE_ARROW) || (Weapon.MinorType == WEAPON_TYPE_GAUNTLET) ) {
+				//遠程武器
+				if (Dex > 35) {
+					WeaponMaxDmg += DEX_DMG_OFFSET[35];
+				} else {
+					WeaponMaxDmg += DEX_DMG_OFFSET[Dex];
+				}
+				
+				if (src.isElf () ) {
+					WeaponMaxDmg += src.Level / 10;
+				}
+				
+				if (src.isDarkElf () ) {
+					//
+				}
+				
+			} else {
+				//進戰武器
+				if (Str > 50) {
+					WeaponMaxDmg += STR_DMG_OFFSET[50];
+				} else {
+					WeaponMaxDmg += STR_DMG_OFFSET[Str];
+				}
+				
+				/*
+				 * 套用職業加乘效果
+				 */
+				if (src.isKnight () ) {
+					WeaponMaxDmg += src.Level / 10;
+				}
+				
+				if (src.isDarkElf () ) {
+					//
+				}
+			}
+					
+			/*
+			 * 套用材質加乘效果
+			 */
 			
 			/*
 			 * 雙刀1/3機率打最大傷害 特效#3671
@@ -146,6 +210,10 @@ public class CommonAttack
 			 */
 			
 			/*
+			 * 有擬似魔法武器+2
+			 */
+			
+			/*
 			 * 有烈焰之魂(Soul of Flame)近戰武器 取最高傷害
 			 */
 			
@@ -157,6 +225,14 @@ public class CommonAttack
 		
 		
 		return WeaponDmg;
+	}
+	
+	public int CalcNpc2PcDmg (MonsterInstance src, PcInstance dest) {
+		return 0;
+	}
+	
+	public int CalcPc2PcDmg (PcInstance src, PcInstance dest) {
+		return 0;
 	}
 	
 	/*
@@ -193,4 +269,18 @@ public class CommonAttack
 			 6,  7,  8,  9, 10, 11, 12, 13, 14, 15, //20~29
 			16, 17, 18, 19, 20, 21, 22, 23, 24, 25, //30~39
 			26}; //40
+	
+	private static final int[] STR_DMG_OFFSET = {
+			-2, -2, -2, -2, -2, -2, -2, -2, -2, -1, //0~9
+			-1,  0,  0,  1,  1,  2,  2,  3,  3,  4, //10~19
+			 4,  5,  5,  6,  6,  6,  7,  7,  7,  8, //20~29
+			 8,  9,  9, 10, 11, 12, 12, 12, 12, 13, //30~39
+			13, 13, 13, 14, 14, 14, 14, 15, 15, 16, //40~49
+			17} ;
+	
+	private static final int[] DEX_DMG_OFFSET = {
+			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, //0~9
+			0, 0, 0, 0, 1, 2, 3, 4, 4, 4, //10~19
+			4, 5, 5, 5, 6, 6, 6, 7, 7, 7, //20~29
+			8, 8, 8, 9, 9, 10} ; //30~35
 }

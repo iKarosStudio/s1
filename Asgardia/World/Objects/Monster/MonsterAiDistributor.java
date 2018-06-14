@@ -3,6 +3,7 @@ package Asgardia.World.Objects.Monster;
 import java.util.concurrent.*;
 
 import Asgardia.Server.*;
+import Asgardia.Server.ServerProcess.*;
 import Asgardia.World.Map.*;
 
 /*
@@ -24,17 +25,31 @@ public class MonsterAiDistributor implements Runnable
 			
 			//被動模式
 			if (m.Aikernel != null) {
-				if (m.Aikernel.TimeoutCounter < 60) {
+				if (m.Aikernel.TimeoutCounter < 60) { //500ms * 60 = 30s
 					m.Aikernel.TimeoutCounter++;
 				} else {
 					m.Aikernel = null;
 				}
+				
 			}
 			
-			if (m.Hp < 1) {
-				m.isDead = true;
+			if (m.isDead) {
+				if (m.Aikernel.DeadTimeCounter < 20) { //500ms * 20 = 10s
+					m.Aikernel.DeadTimeCounter++;
+				} else {
+					System.out.printf ("清除%s(%d)屍體\n", m.Name, m.Uuid) ;
+					m.BoardcastPcInsight (new RemoveObject (m.Uuid).getRaw () ) ;
+					Map.removeMonster (m) ;
+					Map.MobGenerator.removeMonster (m) ;
+				}
+			} else {
+				if (m.Hp < 1) {
+					m.isDead = true;
+				}
 			}
 		});
+		
+		//clear dead monster
 	}
 	
 	public MonsterAiDistributor (AsgardiaMap map) {

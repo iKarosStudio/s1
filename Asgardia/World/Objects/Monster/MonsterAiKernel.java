@@ -22,6 +22,7 @@ public class MonsterAiKernel extends TimerTask implements Runnable
 	
 	public boolean isAiRunning = false;
 	public int TimeoutCounter = 0;
+	public int DeadTimeCounter = 0;
 	
 	public void run () {
 		try {

@@ -761,9 +761,9 @@ public class PcInstance extends DynamicObject implements Runnable
 
 	public void Attack (int uuid, int x, int y) {
 		
-		if (Map.Monsters.containsKey (uuid) ) {
+		if (Map.Monsters.containsKey (uuid) ) { //Attack monster
 			new CommonAttack (this, Map.Monsters.get (uuid) ) ;
-		} else if (Map.Pcs.containsKey (uuid) ) {
+		} else if (Map.Pcs.containsKey (uuid) ) { //Attack other pc
 			//
 		}
 	}

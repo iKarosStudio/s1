@@ -4,6 +4,7 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import Asgardia.Types.*;
+import Asgardia.Config.*;
 import Asgardia.Server.ServerProcess.*;
 import Asgardia.World.*;
 import Asgardia.World.Map.*;
@@ -58,21 +59,6 @@ public class MonsterInstance extends DynamicObject
 	public ConcurrentHashMap<Integer, Integer> HateList;
 	
 	public MonsterAiKernel Aikernel;
-	//public MoveTask Move;
-	
-	public void ToggleAi () {
-		if (Aikernel == null) {
-			Aikernel = new MonsterAiKernel (this) ;
-		} else {
-			//Clear timeout counter
-			
-			if (Aikernel.isAiRunning) {
-				return;
-			} else {
-				MonsterAiQueue.getInstance ().getQueue ().offer (Aikernel) ;
-			}
-		}
-	}
 	
 	public MonsterInstance (NpcTemplate n, Location loc) {
 		Uuid = n.Uuid;
@@ -151,6 +137,39 @@ public class MonsterInstance extends DynamicObject
 	public void SetAttactTarget (int uuid) {
 	}
 	
+	public void BoardcastPcInsight (byte[] Data) {
+		List<PcInstance> pcs = Map.getPcInstance (location.x, location.y) ;			
+		for (PcInstance p : pcs) {
+			p.getHandler ().SendPacket (Data) ;
+		}
+	}
+	
+	public void ToggleAi () {
+		if (Aikernel == null) {
+			Aikernel = new MonsterAiKernel (this) ;
+		} else {
+			//Clear timeout counter
+			
+			if (Aikernel.isAiRunning) {
+				return;
+			} else {
+				MonsterAiQueue.getInstance ().getQueue ().offer (Aikernel) ;
+			}
+		}
+	}
+	
+	public void ToggleHateList (PcInstance p, int dmg) {
+		//
+	}
+	
+	public void TransferExp (PcInstance p) {
+		System.out.printf ("Exp:%d * Rate:%d = %d\n", Exp, Configurations.RateExp, Exp * Configurations.RateExp) ;
+	}
+	
+	public void TransferItems () {
+		//道具由hatelist中開始轉移
+	}
+	
 	public boolean isStoped () {
 		return ActionStatus == 0;
 	}
@@ -166,5 +185,6 @@ public class MonsterInstance extends DynamicObject
 	public boolean isDead () {
 		return ActionStatus == 3;
 	}
+	
 	
 }
