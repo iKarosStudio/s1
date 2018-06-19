@@ -9,12 +9,15 @@ import Asgardia.Types.*;
 import Asgardia.Server.*;
 import Asgardia.Server.Utility.*;
 import Asgardia.World.*;
+import Asgardia.World.Objects.Items.*;
 import Asgardia.World.Objects.Monster.MonsterInstance;
 import Asgardia.World.Objects.Template.*;
 
 public class MonsterGenerator extends Thread implements Runnable
 {
 	AsgardiaMap Map;
+	
+	static Random random = new Random (System.currentTimeMillis () ) ;
 	
 	/* <K, V> = <spawnlist主鍵, 產生參數> */
 	ConcurrentHashMap<Integer, MonsterSpawnList> SpawnList = null;
@@ -25,7 +28,6 @@ public class MonsterGenerator extends Thread implements Runnable
 	public void run () {
 		try {
 			SpawnList.forEach ((Integer u, MonsterSpawnList msl)->{
-				
 				//while (msl.Mobs.size () < msl.Count) {
 				//if (msl.Mobs.size () < msl.Count) {
 				if (msl.Mobs.size () < 1) {
@@ -46,15 +48,36 @@ public class MonsterGenerator extends Thread implements Runnable
 					 * 產生怪物持有道具
 					 */
 					List<MonsterDropList> mdl = DropList.get (msl.NpcTemplateId) ;
-					/*
-					if (mdl != null) {
-						//
-					}*/
+					//if (mdl != null) {
+					if (false) {
+						for (MonsterDropList i : mdl) {		
+							
+							int DropRate = random.nextInt (1000000) * Configurations.RateDropItem;
+							if (DropRate < i.Posibility) {
+								ItemInstance s = new ItemInstance (
+									0, //init uuid
+									i.ItemId,
+									0, //owner char uuid
+									i.Min + random.nextInt (i.Max),
+									0, //enchant
+									0, //dura
+									100, //charge
+									false, //is_equi
+									false) ; //is_identi
+							
+								/* 金幣倍率修正 */
+								if (s.ItemId == 40308) {
+									s.Count *= Configurations.RateDropGold;
+								}
+								
+								Mob.Items.put (s.ItemId, s) ;
+							}
+						}
+					}
 					
-					//System.out.println ("gen " + Mob.hashCode () ) ;
 					Map.addMonster (Mob) ;
 					msl.Mobs.add (Mob) ;
-					Mob.ActionStatus = 0; /* 生怪後的初始狀態 */
+					Mob.ActionStatus = 1; /* 生怪後的初始狀態 */
 				}
 			});
 		} catch (Exception e) {

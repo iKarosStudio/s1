@@ -101,6 +101,13 @@ public class Asgardia extends Thread
 			System.out.printf ("success\n") ;
 			
 			/*
+			 * Generate Element Stone
+			 */
+			if (Maps.containsKey (4) ) {
+				System.out.println ("Generate Element Stone") ;
+			}
+			
+			/*
 			 * Monster AI controller
 			 */
 			
@@ -193,8 +200,7 @@ public class Asgardia extends Thread
 	
 	public synchronized void removePc (PcInstance Pc) {
 		try {
-			AsgardiaMap m = Maps.get (Pc.location.MapId) ;
-			m.removePc (Pc) ;
+			Maps.get (Pc.location.MapId).removePc (Pc) ;
 			Pc.UpdateOnlineStatus (false) ;
 			OnlinePcs --;
 			System.out.printf ("角色:%s(UUID:0x%08X) 離開世界\n", Pc.Name, Pc.Uuid) ;

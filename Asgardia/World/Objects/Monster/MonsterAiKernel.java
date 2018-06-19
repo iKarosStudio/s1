@@ -26,8 +26,7 @@ public class MonsterAiKernel extends TimerTask implements Runnable
 	
 	public void run () {
 		try {
-			//System.out.printf ("ai %d go\n", Mob.Uuid) ;
-			
+			//System.out.printf ("ai %d :", Mob.Uuid) ;
 			Ai () ;
 			
 			//Thread.sleep (Configurations.MONSTER_AI_UPDATE_RATE) ;
@@ -37,7 +36,7 @@ public class MonsterAiKernel extends TimerTask implements Runnable
 			 */
 				
 		} catch (Exception e) {
-			System.out.printf ("map:%d\n", Map.MapId) ;
+			System.out.printf ("ai uuid : %d\n", Mob.Uuid) ;
 			e.printStackTrace () ;
 		}
 	}
@@ -54,20 +53,31 @@ public class MonsterAiKernel extends TimerTask implements Runnable
 
 		try {
 			while (isAiRunning) {
-				//System.out.println ("確保AI線性處理") ;
+				System.out.println ("確保AI線性處理") ;
 				Thread.sleep (300) ;
 			}
 			
 			//System.out.printf ("ai kernel mob:%s(0x%08X)->\n", Mob.Name, Mob.Uuid) ;
 			
 			isAiRunning = true;
+			
 			if (Mob.ActionStatus == STOP) {
-				Thread.sleep (10000) ;
+				Thread.sleep (500) ;
+				
 			} else if (Mob.ActionStatus == IDLE) {
 				Mob.MoveToHeading (r.nextInt (8) ) ;
 				Thread.sleep (Mob.MoveInterval) ;
 				
+				Thread.sleep (r.nextInt (3000) ) ; //0~3S隨機停頓
+				
 			} else if (Mob.ActionStatus == ATTACK) {
+				if (Mob.TargetPc == null) {
+					Mob.ActionStatus = 1;
+				} else {
+					Mob.AttackPc (Mob.TargetPc) ;
+					Thread.sleep (Mob.AttackInterval) ;
+				}
+				
 				/* pseudo code-
 				 * MoveToTarget (x, y)
 				 * 	h=SetDirectiotn (x, y)
@@ -79,7 +89,6 @@ public class MonsterAiKernel extends TimerTask implements Runnable
 				
 			} else if (Mob.ActionStatus == DEAD) {
 				//
-				return false;
 				
 			} else {
 				System.out.printf ("UNKNOWN AI STATUS MOB:%s(%d)\n", Mob.Name, Mob.Uuid) ;

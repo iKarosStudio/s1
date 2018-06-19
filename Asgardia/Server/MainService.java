@@ -3,8 +3,6 @@ package Asgardia.Server;
 import java.net.*;
 import java.lang.Thread;
 import java.util.logging.*;
-import javax.swing.*;
-
 import Asgardia.Config.Configurations;
 
 public class MainService extends Thread
@@ -72,10 +70,8 @@ public class MainService extends Thread
 		} catch (Exception e) {
 			System.out.printf ("fail\n") ;
 			System.out.printf ("[!] TCP/IP Listening fault->%s\n", e.getMessage () ) ;
-			JOptionPane.showMessageDialog (null,"檢查"+Configurations.SERVER_PORT+"端口是否占用\n" + e.getMessage (), "綁定監聽端口失敗", JOptionPane.ERROR_MESSAGE) ;
 			e.printStackTrace () ;
 			System.exit (666) ;
-			
 		}
 	}
 

@@ -25,31 +25,37 @@ public class MonsterAiDistributor implements Runnable
 			
 			//被動模式
 			if (m.Aikernel != null) {
+				/*
+				 * 太久沒有被玩家觸發, 主動停止並清除AI核心節省系統資源
+				 */
 				if (m.Aikernel.TimeoutCounter < 60) { //500ms * 60 = 30s
 					m.Aikernel.TimeoutCounter++;
 				} else {
+					System.out.printf ("%s 清除AI KERNEL\n", m.Name) ;
+					m.Aikernel.cancel () ;
 					m.Aikernel = null;
 				}
 				
 			}
 			
-			if (m.isDead) {
-				if (m.Aikernel.DeadTimeCounter < 20) { //500ms * 20 = 10s
+			if (m.isDead () ) {
+				if (m.Aikernel.DeadTimeCounter < 2) { //500ms * 20 = 10s
 					m.Aikernel.DeadTimeCounter++;
+					System.out.printf ("%s Dead counter : %d\n", m.Name, m.Aikernel.DeadTimeCounter) ;
 				} else {
 					System.out.printf ("清除%s(%d)屍體\n", m.Name, m.Uuid) ;
 					m.BoardcastPcInsight (new RemoveObject (m.Uuid).getRaw () ) ;
+					
+					m.Aikernel.cancel () ;
+					m.Aikernel = null;
+					
 					Map.removeMonster (m) ;
 					Map.MobGenerator.removeMonster (m) ;
 				}
 			} else {
-				if (m.Hp < 1) {
-					m.isDead = true;
-				}
+				//System.out.printf ("%s 死亡時間檢查\n", m.Name) ;
 			}
 		});
-		
-		//clear dead monster
 	}
 	
 	public MonsterAiDistributor (AsgardiaMap map) {

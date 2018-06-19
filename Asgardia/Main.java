@@ -54,6 +54,14 @@ public class Main {
 		 */
 		//ConfigurationLoader config_loader = ConfigurationLoader.getInstance () ;
 		ConfigurationLoader.getInstance () ;
+		
+		System.out.println ("Exp Rate:" + Configurations.RateExp) ;
+		System.out.println ("Drop Item Rate:" + Configurations.RateDropItem) ;
+		System.out.println ("Drop Gold Rate:" + Configurations.RateDropGold) ;
+		
+		/*
+		 * 系統執行緒池建立
+		 */
 		KernelThreadPool.getInstance () ;
 		ServiceThreadPool.getInstance () ;
 		

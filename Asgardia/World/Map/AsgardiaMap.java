@@ -306,11 +306,8 @@ public class AsgardiaMap
 	/*
 	 * 未來考慮取得視線內MonsterInstance物件改由MonsterSpawnList內登記的Mobs取得所有怪物物件的參考
 	 */
-	static int mob_counter = 0;
 	public void addMonster (MonsterInstance m) {
-		mob_counter ++;
 		Monsters.put (m.Uuid, m) ;
-		//System.out.printf ("add %d monsters\n", mob_counter) ;
 	}
 	
 	public long getMonsterAmount () {

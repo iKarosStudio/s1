@@ -23,6 +23,10 @@ public class CommonAttack
 	 */
 	public CommonAttack (PcInstance src, MonsterInstance dest) {
 		int dmg = 0;
+		if (dest.Hp < 1) {
+			return;
+		}
+		
 		if (src.equipment.getWeapon () == null) {
 			System.out.printf ("%s 使用%s對 %s(%d) 攻擊", src.Name, "空手", dest.Name, dest.Uuid) ;
 			
@@ -35,14 +39,39 @@ public class CommonAttack
 			dmg = CalcPc2NpcDmg (src, dest) ;
 			dest.ToggleHateList (src, dmg) ;
 			
-			System.out.printf ("命中! 造成%d傷害\n", dmg) ;
+			System.out.printf ("命中! 造成%3d傷害\n", dmg) ;
+			
+			//
+			
+			
+			
+			
+			
+			
+			
+			
 			dest.BoardcastPcInsight (new NodeAction (2, dest.Uuid, dest.location.Heading).getRaw () ) ;
 		} else {
 			System.out.printf ("未命中!\n") ;
 		}
 		
+		/*
+		 * 接受傷害
+		 */
+		/*
 		dest.Hp -= dmg;
-		System.out.printf ("%s HP:%d/%d\n", dest.Name, dest.Hp, dest.BasicParameter.MaxHp) ;
+		if (dest.Hp < 1) {
+			dest.ActionStatus = 3; //AI:DEAD
+			dest.isDead = true;
+		}
+		*/
+		
+		dest.ToggleHateList (src, dmg) ;
+		
+		if (dest.TargetPc == null) {
+			dest.ActionStatus = 2;
+			dest.TargetPc = src;
+		}
 		
 		if (dest.Hp < 1 || dest.isDead) {
 			byte[] die = new NodeAction (8, dest.Uuid, dest.location.Heading).getRaw () ;
@@ -126,7 +155,7 @@ public class CommonAttack
 		}
 		
 		int Rate = rnd.nextInt (100) + 1;
-		System.out.printf ("Pc->Npc 命中率:%d %% /%d\n", HitRate, Rate) ;
+		System.out.printf ("Pc->Npc 命中率:%2d%%/%2d ", HitRate, Rate) ;
 		return Rate < HitRate;
 	}
 	
@@ -148,11 +177,6 @@ public class CommonAttack
 			} else { //大型怪
 				WeaponMaxDmg = Weapon.DmgLarge;
 			}
-			
-			/*
-			 * 套用武器加成效果
-			 */
-			WeaponMaxDmg += Weapon.Enchant;
 			
 			/*
 			 * 套用力量/敏捷加乘效果
@@ -217,7 +241,7 @@ public class CommonAttack
 			 * 有烈焰之魂(Soul of Flame)近戰武器 取最高傷害
 			 */
 			
-			WeaponDmg = 1 + rnd.nextInt (WeaponMaxDmg) ;
+			WeaponDmg = 1 + rnd.nextInt (WeaponMaxDmg) + Weapon.Enchant;
 			
 		} else {
 			WeaponDmg = 1;

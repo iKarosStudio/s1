@@ -3,6 +3,7 @@ package Asgardia.Server.Utility;
 import java.math.*;
 
 import Asgardia.Types.*;
+import Asgardia.World.*;
 
 /*
  * 雜項計算功能
@@ -11,6 +12,17 @@ public class Utility
 {
 	public static void Test () {
 		System.out.println ("utility test") ;
+	}
+	
+	public static String getItemNameById (int item_id) {
+		if (CacheData.ItemCache.containsKey (item_id) ) {
+			return CacheData.ItemCache.get (item_id).Name;
+		} else if (CacheData.WeaponCache.containsKey (item_id) ) {
+			return CacheData.WeaponCache.get (item_id).Name;
+		} else if (CacheData.ArmorCache.containsKey (item_id) ) {
+			return CacheData.ArmorCache.get (item_id).Name;
+		}
+		return null;
 	}
 	
 	/*

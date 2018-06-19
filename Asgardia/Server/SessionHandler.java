@@ -122,8 +122,11 @@ public class SessionHandler extends Thread implements Runnable
 				if (!Account.ActivePc.exit) {
 					Account.ActivePc.Offline () ;
 				}
+				Account.ActivePc = null;
+				
 				Account.UpdateLastLoginTime () ;
 				Sock.close () ;
+				//Db.Disconnect () ;
 				System.out.printf ("IP:%s(Host:%s) 連線中斷\n", IP, HostName) ;
 			} catch (Exception e) {
 				e.printStackTrace () ;

@@ -5,6 +5,7 @@ import java.util.concurrent.*;
 
 import Asgardia.Types.*;
 import Asgardia.Config.*;
+import Asgardia.Server.Utility.*;
 import Asgardia.Server.ServerProcess.*;
 import Asgardia.World.*;
 import Asgardia.World.Map.*;
@@ -43,7 +44,7 @@ public class MonsterInstance extends DynamicObject
 	
 	
 	/*
-	 * 怪物持有道具
+	 * 怪物持有道具 <K, V> = <itemid, item>
 	 */
 	public ConcurrentHashMap<Integer, ItemInstance> Items = null;
 	
@@ -56,7 +57,10 @@ public class MonsterInstance extends DynamicObject
 	 * 仇恨清單
 	 *  <K, V> = <仇恨對象UUID, 打擊次數>
 	 */
+	private int HateListTotal = 0;
 	public ConcurrentHashMap<Integer, Integer> HateList;
+	public PcInstance TargetPc = null;
+	//TargetPet
 	
 	public MonsterAiKernel Aikernel;
 	
@@ -88,8 +92,6 @@ public class MonsterInstance extends DynamicObject
 		MinorSkillInterval = n.MinorSkillInterval;
 		
 		Items = new ConcurrentHashMap<Integer, ItemInstance> () ;
-		
-		//Aikernel = new MonsterAiKernel (this) ;
 	}
 	
 	public synchronized void MoveToHeading (int heading) {
@@ -137,6 +139,36 @@ public class MonsterInstance extends DynamicObject
 	public void SetAttactTarget (int uuid) {
 	}
 	
+	public void AttackPc (PcInstance p) {
+		System.out.printf ("%s 嘗試攻擊 %s, ", Name, TargetPc.Name) ;
+		location.Heading = getDirection (p.location.x, p.location.y) ;
+		
+		/*
+		 * 更新攻擊距離
+		 */
+		if (getDistance (p.location.x, p.location.y) > 1) {
+			MoveToHeading (location.Heading) ;
+			return;
+		}
+		
+		/*
+		 * 顯示攻擊動作
+		 */
+		
+		byte[] action_packet = new NodeAction (1, Uuid, location.Heading).getRaw () ;
+		BoardcastPcInsight (action_packet) ;
+		
+		/*
+		 * 命中與傷害運算
+		 */
+	}
+	
+	public void AttackPet () {
+	}
+	
+	public void TakeDamage (int dmg) {
+	}
+	
 	public void BoardcastPcInsight (byte[] Data) {
 		List<PcInstance> pcs = Map.getPcInstance (location.x, location.y) ;			
 		for (PcInstance p : pcs) {
@@ -148,26 +180,74 @@ public class MonsterInstance extends DynamicObject
 		if (Aikernel == null) {
 			Aikernel = new MonsterAiKernel (this) ;
 		} else {
-			//Clear timeout counter
-			
+			//Clear timeout counter			
 			if (Aikernel.isAiRunning) {
+				/*
+				 * 同步問題, AI工作位睡眠結束就被執行
+				 */
 				return;
+				
 			} else {
+				/*
+				 * AI工作加入Queue等候執行
+				 */
 				MonsterAiQueue.getInstance ().getQueue ().offer (Aikernel) ;
 			}
 		}
 	}
 	
 	public void ToggleHateList (PcInstance p, int dmg) {
-		//
+		HateListTotal ++;
+		if (HateList == null) {
+			HateList = new ConcurrentHashMap<Integer, Integer> () ;
+		}
+		
+		if (HateList.containsKey (p.Uuid) ) {
+			int hate = HateList.get (p.Uuid) + 1;
+			HateList.put (p.Uuid, hate) ;
+		} else {
+			HateList.put (p.Uuid, 1) ;
+		}
+		
 	}
 	
 	public void TransferExp (PcInstance p) {
+		
+		HateList.forEach ((Integer pc, Integer h)->{
+			PcInstance recv = Map.getPc (pc) ;
+			
+			System.out.printf ("hatelist->%s : %d\n", recv.Name, h) ;			
+		}) ;
+		
 		System.out.printf ("Exp:%d * Rate:%d = %d\n", Exp, Configurations.RateExp, Exp * Configurations.RateExp) ;
+		Exp = 0; //clear value
+	}
+	
+	public void TransferLawful () {
+		//
 	}
 	
 	public void TransferItems () {
-		//道具由hatelist中開始轉移
+		
+		Items.forEach ((Integer u, ItemInstance i)->{
+			HateList.forEach ((Integer p, Integer h)->{
+				PcInstance recv = Map.getPc (p) ;
+				
+				System.out.printf ("hatelist->%s : %d\n", recv.Name, h) ;
+				
+				i.Uuid = UuidGenerator.Next () ;
+				i.OwnerId = recv.Uuid;
+				recv.addItem (i) ;
+				
+				String[] ServerMessage = {Name, i.getName () } ;
+				byte[] Msg = new ServerMessage (143, ServerMessage).getRaw () ;
+				//超過20E金幣丟msgid:166
+				recv.getHandler ().SendPacket (Msg) ;
+				
+			}) ;
+			
+			Items.remove (u) ;
+		});		
 	}
 	
 	public boolean isStoped () {

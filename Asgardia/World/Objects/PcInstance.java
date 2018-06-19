@@ -17,7 +17,6 @@ import Asgardia.World.Objects.Dynamic.CombatStatus;
 import Asgardia.World.Objects.Items.*;
 import Asgardia.World.Objects.Monster.MonsterInstance;
 import Asgardia.World.Objects.RoutineTasks.*;
-import Asgardia.World.Objects.Template.*;
 
 /*
  * 玩家腳色實例(Players)
@@ -363,31 +362,6 @@ public class PcInstance extends DynamicObject implements Runnable
 		return BasicParameter.BowHitModify + EquipPara.BowHitModify + SkillParameter.BowHitModify;
 	}
 	
-	public int getDirection (int x, int y) {
-		byte Dir = 0;
-		
-		//int Dist = Utility.getDistance (PosX, PosY, x, y) ;
-		
-		//if (Dist < 2) {
-			if (location.x == x && location.y == y) {
-				return location.Heading;
-			} else {
-				if ( (x != location.x) && (y != location.y) ) {
-					Dir |= 0x01;
-				}
-				
-				if ( ((x > location.x) && !(y < location.y)) || ((x < location.x) && !(y > location.y)) ) {
-					Dir |= 0x02;
-				}
-				
-				if ( ((x == location.x) && (y > location.y)) || (x < location.x) ) {
-					Dir |= 0x04;
-				}
-			}
-		//}
-		return Dir & 0x0FF;
-	}
-	
 	public List<PcInstance> getPcInsight () {
 		List<PcInstance> Results = Map.getPcInstance (location.x, location.y) ;
 		return Results;
@@ -701,6 +675,9 @@ public class PcInstance extends DynamicObject implements Runnable
 			
 			Map.addGndItem (drop) ;
 		}
+		
+		/* 更新負重 */
+		Handle.SendPacket (new NodeStatus (this).getRaw () ) ;
 	}
 	
 	public boolean isFacing (int uuid) {

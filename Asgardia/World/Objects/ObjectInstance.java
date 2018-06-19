@@ -76,4 +76,29 @@ public class ObjectInstance
 		return (int) Math.sqrt ( (dx*dx) + (dy*dy) ) ;
 	}
 	*/
+	
+	public int getDirection (int x, int y) {
+		byte Dir = 0;
+		
+		//int Dist = Utility.getDistance (PosX, PosY, x, y) ;
+		
+		//if (Dist < 2) {
+			if (location.x == x && location.y == y) {
+				return location.Heading;
+			} else {
+				if ( (x != location.x) && (y != location.y) ) {
+					Dir |= 0x01;
+				}
+				
+				if ( ((x > location.x) && !(y < location.y)) || ((x < location.x) && !(y > location.y)) ) {
+					Dir |= 0x02;
+				}
+				
+				if ( ((x == location.x) && (y > location.y)) || (x < location.x) ) {
+					Dir |= 0x04;
+				}
+			}
+		//}
+		return Dir & 0x0FF;
+	}
 }

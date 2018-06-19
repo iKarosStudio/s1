@@ -17,7 +17,7 @@ public class MonsterAiExecutor implements Runnable
 		Queue<Runnable> q = AiQueue.getQueue () ;
 		
 		while (isExecuting) {
-			try {;
+			try {
 				if (!q.isEmpty () ) {
 					//System.out.printf ("queue size:%d\n", q.size () ) ;
 					Pool.execute (q.poll () ) ;
@@ -41,8 +41,8 @@ public class MonsterAiExecutor implements Runnable
 	
 	public MonsterAiExecutor () {
 		//Pool = Executors.newCachedThreadPool ();
-		Pool = Executors.newFixedThreadPool (2500) ;
-		//Pool = Executors.newWorkStealingPool (2000) ;
+		//Pool = Executors.newFixedThreadPool (2500) ;
+		Pool = Executors.newWorkStealingPool (2000) ;
 		
 		AiQueue = MonsterAiQueue.getInstance () ;
 		

@@ -28,7 +28,15 @@ public class DynamicObject extends ObjectInstance
 	
 	public int Lawful;
 	
-	public boolean isDead = false;
+	private boolean isDead = false;
 	public int Hp = 1;
 	public int Mp = 1;
+	
+	public boolean isDead () {
+		return isDead;
+	}
+	
+	public synchronized void setDead (boolean d) {
+		isDead = d;
+	}
 }
