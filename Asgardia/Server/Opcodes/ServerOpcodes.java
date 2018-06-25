@@ -34,6 +34,7 @@ public class ServerOpcodes
 	public static final int NODE_DEF = 85;
 	public static final int DISCONNECT = 88; /*強制客戶端離線*/
 	public static final int NODE_STATUS = 89;
+	public static final int UPDATE_EXP = 91;
 	public static final int NPC_RESULT = 92;
 	public static final int LOGIN_RESULT = 95;
 	public static final int CHAR_CREATE_RESULT = 98;

@@ -5,14 +5,15 @@ import java.util.*;
 import Asgardia.Config.*;
 import Asgardia.Types.*;
 import Asgardia.Server.*;
+import Asgardia.Server.ServerProcess.*;
 import Asgardia.World.Map.AsgardiaMap;
 
 public class MonsterAiKernel extends TimerTask implements Runnable
 {
-	public static final int STOP = 0;
-	public static final int IDLE = 1;
-	public static final int ATTACK = 2;
-	public static final int DEAD = 3;
+	public static final int ACTION_STOP = 0;
+	public static final int ACTION_IDLE = 1;
+	public static final int ACTION_ATTACK = 2;
+	public static final int ACTION_DEAD = 3;
 	
 	
 	private static TimerPool SchedulePool;
@@ -25,16 +26,36 @@ public class MonsterAiKernel extends TimerTask implements Runnable
 	public int DeadTimeCounter = 0;
 	
 	public void run () {
-		try {
-			//System.out.printf ("ai %d :", Mob.Uuid) ;
-			Ai () ;
-			
-			//Thread.sleep (Configurations.MONSTER_AI_UPDATE_RATE) ;
+		try {			
+			/*
+			 * 清空AI移除計時器
+			 */
+			TimeoutCounter = 0;
 			
 			/*
-			 * 死亡狀態處理
+			 * 死亡檢查
 			 */
-				
+			
+			if (!Mob.isDead () ) {
+				if (Mob.Hp < 1) {
+					byte[] die = new NodeAction (8, Mob.Uuid, Mob.location.Heading).getRaw () ;
+					
+					//轉移經驗值與道具
+					Mob.TransferExp (Mob.TargetPc) ;
+					Mob.TransferItems () ;
+					
+					Mob.BoardcastPcInsight (die) ;
+					
+					Mob.setDead (true) ;
+					Mob.ActionStatus = 3;
+				}
+			}
+			
+			/*
+			 * 執行AI動作
+			 */
+			Ai () ;
+			
 		} catch (Exception e) {
 			System.out.printf ("ai uuid : %d\n", Mob.Uuid) ;
 			e.printStackTrace () ;
@@ -51,43 +72,33 @@ public class MonsterAiKernel extends TimerTask implements Runnable
 	
 	public boolean Ai () {
 
-		try {
-			while (isAiRunning) {
-				System.out.println ("確保AI線性處理") ;
-				Thread.sleep (300) ;
-			}
-			
+		try {			
 			//System.out.printf ("ai kernel mob:%s(0x%08X)->\n", Mob.Name, Mob.Uuid) ;
 			
 			isAiRunning = true;
 			
-			if (Mob.ActionStatus == STOP) {
+			if (Mob.ActionStatus == ACTION_STOP) {
 				Thread.sleep (500) ;
 				
-			} else if (Mob.ActionStatus == IDLE) {
+			} else if (Mob.ActionStatus == ACTION_IDLE) {
 				Mob.MoveToHeading (r.nextInt (8) ) ;
 				Thread.sleep (Mob.MoveInterval) ;
 				
 				Thread.sleep (r.nextInt (3000) ) ; //0~3S隨機停頓
 				
-			} else if (Mob.ActionStatus == ATTACK) {
+			} else if (Mob.ActionStatus == ACTION_ATTACK) {
 				if (Mob.TargetPc == null) {
-					Mob.ActionStatus = 1;
+					if (Mob.Agro) {
+						//find target
+					} else {
+						Mob.ActionStatus = ACTION_IDLE;
+					}
 				} else {
 					Mob.AttackPc (Mob.TargetPc) ;
 					Thread.sleep (Mob.AttackInterval) ;
 				}
 				
-				/* pseudo code-
-				 * MoveToTarget (x, y)
-				 * 	h=SetDirectiotn (x, y)
-				 * 		MoveTo (h)
-				 *			D=getDistance (target)
-				 *		d<2->Attack
-				 *		d>=2 MovetoTarget
-				 */
-				
-			} else if (Mob.ActionStatus == DEAD) {
+			} else if (Mob.ActionStatus == ACTION_DEAD) {
 				//
 				
 			} else {

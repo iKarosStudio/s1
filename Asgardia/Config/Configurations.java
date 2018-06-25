@@ -30,4 +30,18 @@ public class Configurations
 	
 	public static int RateMaxWeight = 1;
 	public static int RateMaxPetWeight = 1;
+	
+	public static int MAX_HP_ROYAL = 1000;
+	public static int MAX_MP_ROYAL = 1000;
+	public static int MAX_HP_KNIGHT = 1000;
+	public static int MAX_MP_KNIGHT = 1000;
+	public static int MAX_HP_ELF = 1000;
+	public static int MAX_MP_ELF = 1000;
+	public static int MAX_HP_MAGE = 1000;
+	public static int MAX_MP_MAGE = 1000;
+	public static int MAX_HP_DARKELF = 1000;
+	public static int MAX_MP_DARKELF = 1000;
+	
+	
+	
 }

@@ -48,8 +48,7 @@ public class MonsterGenerator extends Thread implements Runnable
 					 * 產生怪物持有道具
 					 */
 					List<MonsterDropList> mdl = DropList.get (msl.NpcTemplateId) ;
-					//if (mdl != null) {
-					if (false) {
+					if (mdl != null) {
 						for (MonsterDropList i : mdl) {		
 							
 							int DropRate = random.nextInt (1000000) * Configurations.RateDropItem;

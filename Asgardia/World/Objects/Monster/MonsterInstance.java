@@ -42,6 +42,8 @@ public class MonsterInstance extends DynamicObject
 	public int MajorSkillInterval = 0;
 	public int MinorSkillInterval = 0;
 	
+	public boolean Agro; /* 是否主動 */
+	
 	
 	/*
 	 * 怪物持有道具 <K, V> = <itemid, item>
@@ -62,7 +64,11 @@ public class MonsterInstance extends DynamicObject
 	public PcInstance TargetPc = null;
 	//TargetPet
 	
+	/*
+	 * AI動作核心
+	 */
 	public MonsterAiKernel Aikernel;
+	
 	
 	public MonsterInstance (NpcTemplate n, Location loc) {
 		Uuid = n.Uuid;
@@ -90,6 +96,8 @@ public class MonsterInstance extends DynamicObject
 		AttackInterval = n.AttackInterval;
 		MajorSkillInterval = n.MajorSkillInterval;
 		MinorSkillInterval = n.MinorSkillInterval;
+		
+		Agro = n.Agro;
 		
 		Items = new ConcurrentHashMap<Integer, ItemInstance> () ;
 	}
@@ -140,7 +148,7 @@ public class MonsterInstance extends DynamicObject
 	}
 	
 	public void AttackPc (PcInstance p) {
-		System.out.printf ("%s 嘗試攻擊 %s, ", Name, TargetPc.Name) ;
+		//System.out.printf ("%s 嘗試攻擊 %s, ", Name, TargetPc.Name) ;
 		location.Heading = getDirection (p.location.x, p.location.y) ;
 		
 		/*
@@ -166,7 +174,20 @@ public class MonsterInstance extends DynamicObject
 	public void AttackPet () {
 	}
 	
-	public void TakeDamage (int dmg) {
+	synchronized public void TakeDamage (int dmg) {		
+		if (Hp > dmg) {
+			Hp -= dmg;
+		} else {
+			/*
+			try {
+				Aikernel.wait () ;
+			} catch (Exception e) {e.printStackTrace () ; }
+			*/
+			Hp = 0;
+			setDead (true) ;
+			ActionStatus = 3;
+			System.out.printf ("%s 死了!\n", Name) ;
+		}
 	}
 	
 	public void BoardcastPcInsight (byte[] Data) {
@@ -212,15 +233,17 @@ public class MonsterInstance extends DynamicObject
 	}
 	
 	public void TransferExp (PcInstance p) {
+		int MonsterExp = Exp * Configurations.RateExp;
+		
+		System.out.printf ("%s 經驗值轉移:\n", Name) ;
 		
 		HateList.forEach ((Integer pc, Integer h)->{
 			PcInstance recv = Map.getPc (pc) ;
+			recv.Exp += MonsterExp * h / HateListTotal;
 			
-			System.out.printf ("hatelist->%s : %d\n", recv.Name, h) ;			
+			System.out.printf ("\tHateList->%s 分到 %d經驗值\n", recv.Name, MonsterExp * h / HateListTotal) ;
+			recv.getHandler ().SendPacket (new UpdateExp (recv).getRaw () ) ;
 		}) ;
-		
-		System.out.printf ("Exp:%d * Rate:%d = %d\n", Exp, Configurations.RateExp, Exp * Configurations.RateExp) ;
-		Exp = 0; //clear value
 	}
 	
 	public void TransferLawful () {
@@ -229,12 +252,17 @@ public class MonsterInstance extends DynamicObject
 	
 	public void TransferItems () {
 		
+		System.out.printf ("%s 道具轉移(Total:%d):\n", Name, HateListTotal) ;
+		
 		Items.forEach ((Integer u, ItemInstance i)->{
 			HateList.forEach ((Integer p, Integer h)->{
 				PcInstance recv = Map.getPc (p) ;
 				
-				System.out.printf ("hatelist->%s : %d\n", recv.Name, h) ;
+				System.out.printf ("\tHatelist->%s : %d 分到 %s\n", recv.Name, h, i.getName () ) ;
 				
+				/*
+				 * 道具真實UUID
+				 */
 				i.Uuid = UuidGenerator.Next () ;
 				i.OwnerId = recv.Uuid;
 				recv.addItem (i) ;

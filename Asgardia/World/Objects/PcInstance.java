@@ -652,7 +652,7 @@ public class PcInstance extends DynamicObject implements Runnable
 				Handle.SendPacket (new ItemUpdateStatus(item).getRaw () );
 			} else {
 				drop = new ItemInstance (
-					UuidGenerator.Next (),
+					item.Uuid, /* 保持原道具UUID */
 					item.ItemId,
 					0, //char uuid
 					item.Count,
@@ -674,6 +674,8 @@ public class PcInstance extends DynamicObject implements Runnable
 			drop.location.MapId = location.MapId;
 			
 			Map.addGndItem (drop) ;
+		} else {
+			/* error */
 		}
 		
 		/* 更新負重 */

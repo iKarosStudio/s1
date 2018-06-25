@@ -84,10 +84,11 @@ public class ObjectUpdate extends TimerTask implements Runnable
 		Mobs = null;
 		
 		Pc.MonsterInsight.forEach ((Integer u, MonsterInstance m)->{
+			/*
 			if (m.isDead () ) {
 				return;
 			}
-			
+			*/
 			if (!Pc.isInsight (m) ) {
 				Pc.removeMonsterInsight (m) ;
 				Handle.SendPacket (new RemoveObject (m.Uuid).getRaw () ) ;

@@ -27,7 +27,6 @@ public class DynamicObject extends ObjectInstance
 	public CombatStatus SkillParameter;
 	
 	public int Lawful;
-	
 	private boolean isDead = false;
 	public int Hp = 1;
 	public int Mp = 1;
@@ -36,7 +35,7 @@ public class DynamicObject extends ObjectInstance
 		return isDead;
 	}
 	
-	public synchronized void setDead (boolean d) {
+	public void setDead (boolean d) {
 		isDead = d;
 	}
 }

@@ -39,9 +39,9 @@ public class MonsterAiDistributor implements Runnable
 			}
 			
 			if (m.isDead () ) {
-				if (m.Aikernel.DeadTimeCounter < 2) { //500ms * 20 = 10s
+				if (m.Aikernel.DeadTimeCounter < 10) { //500ms * 20 = 10s
 					m.Aikernel.DeadTimeCounter++;
-					System.out.printf ("%s Dead counter : %d\n", m.Name, m.Aikernel.DeadTimeCounter) ;
+					//System.out.printf ("%s Dead counter : %d\n", m.Name, m.Aikernel.DeadTimeCounter) ;
 				} else {
 					System.out.printf ("清除%s(%d)屍體\n", m.Name, m.Uuid) ;
 					m.BoardcastPcInsight (new RemoveObject (m.Uuid).getRaw () ) ;

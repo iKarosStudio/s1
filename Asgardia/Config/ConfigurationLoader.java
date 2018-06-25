@@ -30,6 +30,18 @@ public class ConfigurationLoader
 			Configurations.RateMaxWeight = Integer.valueOf (p.getProperty ("RATE_MAX_WEIGHT") ) ;
 			Configurations.RateMaxPetWeight = Integer.valueOf (p.getProperty ("RATE_PET_MAX_WEIGHT") ) ;
 			
+			Configurations.MAX_HP_ROYAL = Integer.valueOf (p.getProperty ("MAXHP_ROYAL") ) ;
+			Configurations.MAX_MP_ROYAL = Integer.valueOf (p.getProperty ("MAXMP_ROYAL") ) ;
+			Configurations.MAX_HP_KNIGHT =Integer.valueOf (p.getProperty ("MAXHP_KNIGHT") ) ;
+			Configurations.MAX_MP_KNIGHT =Integer.valueOf (p.getProperty ("MAXMP_KNIGHT") ) ;
+			Configurations.MAX_HP_ELF   = Integer.valueOf (p.getProperty ("MAXHP_ELF") ) ;
+			Configurations.MAX_MP_ELF   = Integer.valueOf (p.getProperty ("MAXMP_ELF") ) ;
+			Configurations.MAX_HP_MAGE  = Integer.valueOf (p.getProperty ("MAXHP_MAGE") ) ;
+			Configurations.MAX_MP_MAGE  = Integer.valueOf (p.getProperty ("MAXMP_MAGE") ) ; 
+			Configurations.MAX_HP_DARKELF=Integer.valueOf (p.getProperty ("MAXHP_DARKELF") ) ;
+			Configurations.MAX_MP_DARKELF=Integer.valueOf (p.getProperty ("MAXMP_DARKELF") ) ;
+			
+			
 			p.load (new java.io.FileInputStream ("configs/server.properties") ) ;
 			Configurations.USE_GUI = Boolean.valueOf (p.getProperty ("UseLocalGui") ) ;
 			Configurations.SIGHT_RAGNE = Integer.valueOf (p.getProperty ("SightRange") ) ;

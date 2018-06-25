@@ -182,8 +182,7 @@ public class NodePacket
 		Builder.WriteDoubleWord (Npc.Uuid) ;
 		
 		Builder.WriteWord (Npc.Gfx) ; //get gfx
-		if (Npc.isDead) {
-		//showDead
+		if (Npc.isDead () ) {
 			Builder.WriteByte (8) ;
 		} else {
 			Builder.WriteByte (0) ;//weapon 0:hand 4:sword

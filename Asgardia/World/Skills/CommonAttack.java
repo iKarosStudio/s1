@@ -23,64 +23,63 @@ public class CommonAttack
 	 */
 	public CommonAttack (PcInstance src, MonsterInstance dest) {
 		int dmg = 0;
-		if (dest.Hp < 1) {
+		
+		if (dest.isDead () ) {
 			return;
 		}
 		
+		
+		/*
 		if (src.equipment.getWeapon () == null) {
 			System.out.printf ("%s 使用%s對 %s(%d) 攻擊", src.Name, "空手", dest.Name, dest.Uuid) ;
 			
 		} else {
 			System.out.printf ("%s 使用%s對 %s(%d) 攻擊", src.Name, src.equipment.getWeapon ().getName (), dest.Name, dest.Uuid) ;
 		}
+		*/
 		
-		
+		/*
+		 * 命中檢查
+		 */
 		if (isPc2NpcHit (src, dest) ) {
+			/*
+			 * 傷害計算
+			 */
 			dmg = CalcPc2NpcDmg (src, dest) ;
 			dest.ToggleHateList (src, dmg) ;
 			
 			System.out.printf ("命中! 造成%3d傷害\n", dmg) ;
+			dest.TakeDamage (dmg) ;
 			
-			//
-			
-			
-			
-			
-			
-			
-			
-			
+			/*
+			 * 設定反擊
+			 */
+			if (dest.TargetPc == null) {
+				dest.Aikernel.cancel () ;
+				dest.ActionStatus = 2;
+				dest.TargetPc = src;
+			}
+			/*
+			 * 挨打動作
+			 */
 			dest.BoardcastPcInsight (new NodeAction (2, dest.Uuid, dest.location.Heading).getRaw () ) ;
+			
+			
+			if (dest.isDead () ) {
+				byte[] die = new NodeAction (8, dest.Uuid, dest.location.Heading).getRaw () ;
+				
+				//轉移經驗值與道具
+				dest.TransferExp (dest.TargetPc) ;
+				dest.TransferItems () ;
+				
+				dest.BoardcastPcInsight (die) ;
+				dest.setDead (true) ;
+				dest.ActionStatus = 3;
+			}
+				
+			
 		} else {
 			System.out.printf ("未命中!\n") ;
-		}
-		
-		/*
-		 * 接受傷害
-		 */
-		/*
-		dest.Hp -= dmg;
-		if (dest.Hp < 1) {
-			dest.ActionStatus = 3; //AI:DEAD
-			dest.isDead = true;
-		}
-		*/
-		
-		dest.ToggleHateList (src, dmg) ;
-		
-		if (dest.TargetPc == null) {
-			dest.ActionStatus = 2;
-			dest.TargetPc = src;
-		}
-		
-		if (dest.Hp < 1 || dest.isDead) {
-			byte[] die = new NodeAction (8, dest.Uuid, dest.location.Heading).getRaw () ;
-			
-			//轉移經驗值與道具
-			dest.TransferExp (src) ;
-			dest.TransferItems () ;
-			
-			dest.BoardcastPcInsight (die) ;
 		}
 	}
 	

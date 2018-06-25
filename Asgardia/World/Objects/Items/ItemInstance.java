@@ -150,6 +150,7 @@ public class ItemInstance extends StaticObject
 			HitModifier = w.HitModifier; DmgModifier = w.DmgModifier; MagicDmgModifier = w.MagicDmgModifier;
 			CanBeDmg = w.CanBeDmg;
 			isTwoHanded = w.isTwohandedWeapon () ;
+			Stackable = false;
 			Detail = ParseWeaponDetail () ;
 			
 		} else if (CacheData.ArmorCache.containsKey (ItemId) ) {
@@ -181,6 +182,7 @@ public class ItemInstance extends StaticObject
 			ResistStone = a.RegistStone;
 			ResistSleep = a.RegistSleep;
 			ResistFreeze = a.RegistFreeze;
+			Stackable = false;
 			Detail = ParseArmorDetail () ;
 			
 		} else {

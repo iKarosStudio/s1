@@ -28,6 +28,9 @@ public class NpcTemplate extends DynamicObject
 	public int MajorSkillInterval;
 	public int MinorSkillInterval;
 	
+	//主動怪物
+	public boolean Agro;
+	
 	public NpcTemplate () {
 		//System.out.println ("警告 不該被呼叫") ;
 	}
@@ -87,5 +90,7 @@ public class NpcTemplate extends DynamicObject
 		AttackInterval = atkspeed;
 		MajorSkillInterval = atk_magic_speed;
 		MinorSkillInterval = sub_magic_speed;
+		
+		Agro = (agro > 0) ? true:false;
 	}
 }

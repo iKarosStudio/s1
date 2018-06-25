@@ -1,6 +1,7 @@
 package Asgardia.Server.Utility;
 
-import java.math.*;
+
+import java.util.Random;
 
 import Asgardia.Types.*;
 import Asgardia.World.*;
@@ -10,9 +11,8 @@ import Asgardia.World.*;
  */
 public class Utility
 {
-	public static void Test () {
-		System.out.println ("utility test") ;
-	}
+	private static Random random = new Random (System.currentTimeMillis () ) ;
+	
 	
 	public static String getItemNameById (int item_id) {
 		if (CacheData.ItemCache.containsKey (item_id) ) {
@@ -48,5 +48,21 @@ public class Utility
 		Location nextLocation = new Location (0, px, py, heading) ;
 		
 		return nextLocation;
+	}
+	
+	/*
+	 * 計算升級增加血量
+	 */
+	public static int calcIncreaseHp (int type, int con) {
+		
+		return 0;
+	}
+	
+	/*
+	 * 計算升級增加魔量
+	 */
+	public static int calcIncreaseMp (int type, int wis) {
+		
+		return 0;
 	}
 }
