@@ -154,9 +154,13 @@ public class PcInstance extends DynamicObject implements Runnable
 				BasicParameter.Intel = rs.getInt ("Intel") ;
 				
 				//load bounes parameters
+				BasicParameter.Ac = Utility.calcAcBonusFromDex (Level, getBaseDex () ) ;
+				BasicParameter.Mr = Utility.calcMr (Type, Level, getBaseWis () ) ;
+				BasicParameter.Sp = Utility.calcSp (Type, Level, getBaseIntel () ) ;
+				
 				
 				Satiation = rs.getInt ("Food") ;
-				BasicParameter.Ac = rs.getInt ("Ac") ;
+				//BasicParameter.Ac = rs.getInt ("Ac") ;
 				Status = rs.getInt ("Status") ;
 				Status |= 4;
 				
@@ -211,10 +215,16 @@ public class PcInstance extends DynamicObject implements Runnable
 			Handle.SendPacket (new ReportHeldItem(Item).getRaw () ) ;
 			
 			Item.forEach ((Integer u, ItemInstance i)->{
+				/*
+				 * 套用武器效果
+				 */
 				if ((i.MajorType == 1) && (i.IsEquipped) ) {
 					equipment.setWeapon (i) ;
 				}
 				
+				/*
+				 * 套用防具效果
+				 */
 				if ((i.MajorType == 2) && (i.IsEquipped) ) {
 					equipment.setArmor (i) ;
 				}
@@ -314,52 +324,104 @@ public class PcInstance extends DynamicObject implements Runnable
 		return BasicParameter.Ac + EquipPara.Ac + SkillParameter.Ac;
 	}
 	
+	public int getBaseAc () {
+		return BasicParameter.Ac;
+	}
+	
 	public int getStr () {
 		return BasicParameter.Str + EquipPara.Str + SkillParameter.Str;
+	}
+	
+	public int getBaseStr () {
+		return BasicParameter.Str;
 	}
 	
 	public int getCon () {
 		return BasicParameter.Con + EquipPara.Con + SkillParameter.Con;
 	}
 	
+	public int getBaseCon () {
+		return BasicParameter.Con;
+	}
+	
 	public int getDex () {
 		return BasicParameter.Dex + EquipPara.Dex + SkillParameter.Dex;
+	}
+	
+	public int getBaseDex () {
+		return BasicParameter.Dex;
 	}
 	
 	public int getWis () {
 		return BasicParameter.Wis + EquipPara.Wis + SkillParameter.Wis;
 	}
 	
+	public int getBaseWis () {
+		return BasicParameter.Wis;
+	}
+	
 	public int getCha () {
 		return BasicParameter.Cha + EquipPara.Cha + SkillParameter.Cha;
+	}
+	
+	public int getBaseCha () {
+		return BasicParameter.Cha;
 	}
 	
 	public int getIntel () {
 		return BasicParameter.Intel + EquipPara.Intel + SkillParameter.Intel;
 	}
 	
+	public int getBaseIntel () {
+		return BasicParameter.Intel;
+	}
+	
 	public int getMaxHp () {
 		return BasicParameter.MaxHp + EquipPara.MaxHp + SkillParameter.MaxHp;
+	}
+	
+	public int getBaseMaxHp () {
+		return BasicParameter.MaxHp;
 	}
 	
 	public int getMaxMp () {
 		return BasicParameter.MaxMp + EquipPara.MaxMp + SkillParameter.MaxMp;
 	}
 	
+	public int getBaseMaxMp () {
+		return BasicParameter.MaxMp;
+	}
+	
 	public int getSp () {
 		return BasicParameter.Sp + EquipPara.Sp + SkillParameter.Sp;
+	}
+	
+	public int getBaseSp () {
+		return BasicParameter.Sp;
 	}
 	
 	public int getMr () {
 		return BasicParameter.Mr + EquipPara.Mr + SkillParameter.Mr;
 	}
 	
+	public int getBaseMr () {
+		return BasicParameter.Mr;
+	}
+	
 	public int getHitModify () {
 		return BasicParameter.HitModify + EquipPara.HitModify + SkillParameter.HitModify;
 	}
 	
+	public int getBaseHitModify () {
+		return BasicParameter.HitModify;
+	}
+	
 	public int getBowHitModify () {
 		return BasicParameter.BowHitModify + EquipPara.BowHitModify + SkillParameter.BowHitModify;
+	}
+	
+	public int getBaseBowHitModify () {
+		return BasicParameter.BowHitModify;
 	}
 	
 	public List<PcInstance> getPcInsight () {
@@ -560,10 +622,6 @@ public class PcInstance extends DynamicObject implements Runnable
 	
 	public synchronized void removeItem (ItemInstance item) {
 		removeItem (item.Uuid, item.Count) ;
-	}
-	
-	public synchronized void removeItem (int uuid) {
-		removeItem (uuid, 0xFFFFFFFF) ;
 	}
 	
 	public synchronized void removeItem (int uuid, int amount) {

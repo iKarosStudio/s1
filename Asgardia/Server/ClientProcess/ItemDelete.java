@@ -12,9 +12,11 @@ public class ItemDelete
 		
 		int uuid = reader.ReadDoubleWord () ;
 		
+		System.out.printf ("delete item:%d\n", uuid) ;
+		
 		ItemInstance i = Pc.FindItemByUuid (uuid) ;
 		if (i != null) {
-			Pc.removeItem (uuid) ;
+			Pc.removeItem (i) ;
 		}
 	}
 }

@@ -11,6 +11,7 @@ import java.util.logging.*;
 import java.util.Scanner;
 import java.lang.management.ManagementFactory;
 
+import Asgardia.Blockchain.*;
 import Asgardia.Gui.*;
 import Asgardia.Config.*;
 import Asgardia.Server.*;
@@ -45,19 +46,21 @@ public class Main {
 	 * 主進入點
 	 */
 	public static void main (String[] args) throws InterruptedException {
-		ShowSlog () ;
+		//ShowSlog () ;
 		System.out.printf ("Kernel Author:%s\n", Configurations.AUTHOR) ;
 		System.out.printf ("OS:%s-%s\n", System.getProperty ("os.name"), System.getProperty ("os.arch" ) ) ;
 		
 		/*
 		 * 載入參數設定
 		 */
-		//ConfigurationLoader config_loader = ConfigurationLoader.getInstance () ;
 		ConfigurationLoader.getInstance () ;
 		
-		System.out.println ("Exp Rate:" + Configurations.RateExp) ;
-		System.out.println ("Drop Item Rate:" + Configurations.RateDropItem) ;
-		System.out.println ("Drop Gold Rate:" + Configurations.RateDropGold) ;
+		/*
+		 * 建立本地端BTC金流
+		 */
+		if (Configurations.USE_BLOCKCHAIN) {
+			BlockchainMain.getInstance () ;
+		}
 		
 		/*
 		 * 系統執行緒池建立
@@ -104,6 +107,14 @@ public class Main {
 			System.out.println ("實作Casino系統") ;
 		}
 		
+		/*
+		 * Display Server Rates
+		 */
+		/*
+		System.out.println ("Exp Rate:" + Configurations.RateExp) ;
+		System.out.println ("Drop Item Rate:" + Configurations.RateDropItem) ;
+		System.out.println ("Drop Gold Rate:" + Configurations.RateDropGold) ;
+		*/
 		System.out.printf ("PID:%s\n", ManagementFactory.getRuntimeMXBean().getName ().split ("@")[0] ) ;
 		
 		/*

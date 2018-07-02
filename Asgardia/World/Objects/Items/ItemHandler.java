@@ -37,7 +37,6 @@ public class ItemHandler
 		} else if (i.MajorType == 2) {
 			Pc.EquipArmor (i.Uuid) ;
 			
-			
 		} else {
 			System.out.printf ("%s 使用不明道具 %d\n", p.Name, i.Uuid) ;
 		}

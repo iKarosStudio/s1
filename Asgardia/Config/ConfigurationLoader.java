@@ -43,6 +43,7 @@ public class ConfigurationLoader
 			
 			
 			p.load (new java.io.FileInputStream ("configs/server.properties") ) ;
+			Configurations.USE_BLOCKCHAIN = Boolean.valueOf (p.getProperty ("UseBlockchain") ) ;
 			Configurations.USE_GUI = Boolean.valueOf (p.getProperty ("UseLocalGui") ) ;
 			Configurations.SIGHT_RAGNE = Integer.valueOf (p.getProperty ("SightRange") ) ;
 			Configurations.CASINO = Boolean.valueOf (p.getProperty ("CasinoSystem") ) ;

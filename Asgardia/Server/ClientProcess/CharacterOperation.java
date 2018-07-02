@@ -36,11 +36,12 @@ public class CharacterOperation
 			/*
 			 * 載入角色記憶座標
 			 */
-			//
 			
 			Pc.LoadItem () ;
+			Pc.ApplyEquipmentEffects () ;
 			//load skills
 			Pc.LoadBuff () ;
+			
 			
 			/*
 			byte[] config = new SendClientConfig (Handle).getRaw () ;

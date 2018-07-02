@@ -111,12 +111,16 @@ public class AsgardiaMap
 		}
 	}
 	
+	public boolean isAccessible (int x, int y) {
+		byte t = getTile (x, y) ;
+		return (t & 0x80) > 0;
+	}
+	
 	/*
 	 * 檢查p(x, y)->heading p'(x', y')是否可通過
 	 */
 	public boolean isNextTileAccessible (int x, int y, int heading) {		
 		byte Next = getHeadingTile (x, y, heading) ;
-
 		
 		/*
 		 * 檢查動態物件佔有
@@ -138,7 +142,6 @@ public class AsgardiaMap
 			} else if (heading == 6) {
 				return isXAxisAccessible (Next) ;
 				
-				//
 			} else if (heading == 1) {
 				byte[] side = getHeadingSideTile (x, y, heading) ;
 				return isYAxisAccessible (side[0]) || isXAxisAccessible (side[1]) ;
@@ -179,7 +182,15 @@ public class AsgardiaMap
 	}
 	
 	public byte getTile (int x, int y) {
-		return Tile[x - StartX][y - StartY];
+		byte t = 0;
+		try {
+			t = Tile[x - StartX][y - StartY];
+		} catch (Exception e) {
+			System.out.printf ("(%d, %d) : %s\n", x, y, e.toString () ) ;
+			t = 0;
+		}
+		
+		return t;
 	}
 	
 	public byte getHeadingTile (int x, int y, int heading) {

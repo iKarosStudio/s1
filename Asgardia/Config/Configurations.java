@@ -11,6 +11,7 @@ public class Configurations
 	public static final int SERVER_PORT = 2000;
 	
 	/* 系統設定 */
+	public static boolean USE_BLOCKCHAIN = false;
 	public static boolean USE_GUI = false;
 	public static int SIGHT_RAGNE = 10;
 	public static boolean CASINO = false;

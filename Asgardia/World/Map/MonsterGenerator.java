@@ -28,12 +28,40 @@ public class MonsterGenerator extends Thread implements Runnable
 	public void run () {
 		try {
 			SpawnList.forEach ((Integer u, MonsterSpawnList msl)->{
-				//while (msl.Mobs.size () < msl.Count) {
+				while (msl.Mobs.size () < msl.Count) {
 				//if (msl.Mobs.size () < msl.Count) {
-				if (msl.Mobs.size () < 1) {
+				//if (msl.Mobs.size () < 1) {
 					NpcTemplate Temp = CacheData.NpcCache.get (msl.NpcTemplateId) ;
-					Location SpawnLoc = new Location (msl.MapId, msl.LocX, msl.LocY, msl.Heading) ;
 					
+					/*
+					 * 定點生怪
+					 */
+					//Location SpawnLoc = new Location (msl.MapId, msl.LocX, msl.LocY, msl.Heading) ;
+					
+					/*
+					 * 區域生怪
+					 */
+					int x = 0, y = 0;
+					int dx = msl.LocX2 - msl.LocX1;
+					int dy = msl.LocY2 - msl.LocY1;
+					if (dx < 1) {
+						dx = 1;
+					}
+					if (dy < 1) {
+						dy = 1;
+					}
+					
+					/*
+					 * 確保怪物不會生在非行動區域
+					 */
+					do {
+						x = msl.LocX1 + random.nextInt (dx) ;
+						y = msl.LocY1 + random.nextInt (dy) ;
+						if (x == 0 || y == 0) {
+							x = msl.LocX; y = msl.LocY;
+						}
+					} while (!Map.isNextTileAccessible (x, y, msl.Heading) ) ;
+					Location SpawnLoc = new Location (msl.MapId, x, y, msl.Heading) ;
 					/*
 					 * 製作怪物實體
 					 */
@@ -235,6 +263,9 @@ public class MonsterGenerator extends Thread implements Runnable
 			LocX2 = locx2; LocY2 = locy2;
 			Heading = heading;
 			MinRespawnDelay = min_respawn_delay;
+			if (MinRespawnDelay < 60) {
+				MinRespawnDelay = 60;
+			}
 			MaxRespawnDelay = max_respawn_delay;
 			RespawnScreen = respawn_screen;
 			MovementDistance = movement_distance;

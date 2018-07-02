@@ -28,13 +28,15 @@ public class ExpMonitor extends TimerTask implements Runnable
 		try {
 			//System.out.printf ("%s Level:%d Exp:%d/%d\n", Pc.Name, Pc.Level, Pc.Exp, EXP_REQUEST_TABLE[Pc.Level]) ;
 			
-			while (!((EXP_REQUEST_TABLE[Pc.Level] - Pc.Exp) > 0) ) {
-				Pc.Exp -= EXP_REQUEST_TABLE[Pc.Level] ;
+			while (Pc.Exp >= EXP_REQUEST_TABLE[Pc.Level] ) {
 				Pc.Level ++;
 				
 				//升級事項
-				Pc.BasicParameter.MaxHp += Utility.calcIncreaseHp (Pc.Type, Pc.BasicParameter.Con) ;
-				Pc.BasicParameter.MaxMp += Utility.calcIncreaseMp (Pc.Type, Pc.BasicParameter.Wis) ;
+				Pc.BasicParameter.MaxHp += Utility.calcIncreaseHp (Pc.Type, Pc.Hp, Pc.getBaseMaxHp (), Pc.getBaseCon () ) ;
+				Pc.BasicParameter.MaxMp += Utility.calcIncreaseMp (Pc.Type, Pc.Mp, Pc.getBaseMaxMp (), Pc.getBaseWis () ) ;
+				Pc.BasicParameter.Ac += Utility.calcAcBonusFromDex (Pc.Level, Pc.getBaseDex () ) ;
+				Pc.BasicParameter.Mr += Utility.calcMr (Pc.Type, Pc.Level, Pc.getBaseWis () ) ;
+				Pc.BasicParameter.Sp += Utility.calcSp (Pc.Type, Pc.Level, Pc.getBaseIntel () ) ;
 				
 				//重新計算SP/MR
 				
@@ -43,7 +45,8 @@ public class ExpMonitor extends TimerTask implements Runnable
 			}
 			
 			if (ToggleSave) {
-				Handle.SendPacket (new NodePacket(Pc).getRaw () ) ;
+				Handle.SendPacket (new NodeStatus(Pc).getRaw () ) ;
+				Handle.SendPacket (new UpdateExp(Pc).getRaw () ) ;
 				DatabaseCmds.SavePc (Pc);
 				ToggleSave = false;
 			}
@@ -62,7 +65,10 @@ public class ExpMonitor extends TimerTask implements Runnable
 		t.cancel () ;
 	}
 	
-	/* 0-99等級需求經驗值表 */
+	/* 
+	 * 0-99等級需求經驗值表 
+	 * 經驗值的量為到當前等級所累積的總和, 並不是所需要的量
+	 * */
 	private static final int EXP_REQUEST_TABLE[] = {
 			0, 125, 300, 500, 750, //0-4
 			1296, 2401, 4096, 6581, 10000, //5-9

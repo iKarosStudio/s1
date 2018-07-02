@@ -154,7 +154,6 @@ public class CommonAttack
 		}
 		
 		int Rate = rnd.nextInt (100) + 1;
-		System.out.printf ("Pc->Npc 命中率:%2d%%/%2d ", HitRate, Rate) ;
 		return Rate < HitRate;
 	}
 	
