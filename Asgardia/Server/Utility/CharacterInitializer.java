@@ -103,8 +103,8 @@ public class CharacterInitializer
 			}
 			
 		}
-		pc.Hp = pc.BasicParameter.MaxHp;
-		pc.Mp = pc.BasicParameter.MaxMp;
+		pc.Hp = pc.BasicParameter.MaxHp ;
+		pc.Mp = pc.BasicParameter.MaxMp ;
 		
 		/*
 		 * 寫入資料庫

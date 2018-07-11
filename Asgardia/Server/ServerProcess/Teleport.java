@@ -41,8 +41,13 @@ public class Teleport
 		
 		Pc.removeAllInsight () ;
 		
+		//update Skills
+		//Pc.SkillTimer.UpdateSkillEffects () ;
+		
 		Handle.SendPacket (mapid_packet) ;
 		Handle.SendPacket (pc_packet) ;
+		Handle.SendPacket (new UpdatePcGfx (Pc.Uuid, Pc.getWeaponGfx () ).getRaw () ) ;
+		
 		Pc.BoardcastPcInsight (pc_packet) ;
 	}
 }

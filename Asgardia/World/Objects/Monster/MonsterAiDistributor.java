@@ -31,7 +31,6 @@ public class MonsterAiDistributor implements Runnable
 				if (m.Aikernel.TimeoutCounter < 60) { //500ms * 60 = 30s
 					m.Aikernel.TimeoutCounter++;
 				} else {
-					System.out.printf ("%s 清除AI KERNEL\n", m.Name) ;
 					m.Aikernel.cancel () ;
 					m.Aikernel = null;
 				}
@@ -41,9 +40,8 @@ public class MonsterAiDistributor implements Runnable
 			if (m.isDead () ) {
 				if (m.Aikernel.DeadTimeCounter < 10) { //500ms * 20 = 10s
 					m.Aikernel.DeadTimeCounter++;
-					//System.out.printf ("%s Dead counter : %d\n", m.Name, m.Aikernel.DeadTimeCounter) ;
 				} else {
-					System.out.printf ("清除%s(%d)屍體\n", m.Name, m.Uuid) ;
+					//System.out.printf ("清除%s(%d)屍體\n", m.Name, m.Uuid) ;
 					m.BoardcastPcInsight (new RemoveObject (m.Uuid).getRaw () ) ;
 					
 					m.Aikernel.cancel () ;
@@ -52,8 +50,6 @@ public class MonsterAiDistributor implements Runnable
 					Map.removeMonster (m) ;
 					Map.MobGenerator.removeMonster (m) ;
 				}
-			} else {
-				//System.out.printf ("%s 死亡時間檢查\n", m.Name) ;
 			}
 		});
 	}

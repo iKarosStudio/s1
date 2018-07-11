@@ -8,6 +8,7 @@ import Asgardia.Config.*;
 import Asgardia.Server.Utility.*;
 import Asgardia.Server.ServerProcess.*;
 import Asgardia.World.*;
+import Asgardia.World.Skills.*;
 import Asgardia.World.Map.*;
 import Asgardia.World.Objects.Items.*;
 import Asgardia.World.Objects.PcInstance;
@@ -148,7 +149,7 @@ public class MonsterInstance extends DynamicObject
 	}
 	
 	public void AttackPc (PcInstance p) {
-		//System.out.printf ("%s 嘗試攻擊 %s, ", Name, TargetPc.Name) ;
+		System.out.printf ("%s 嘗試攻擊 %s, ", Name, TargetPc.Name) ;
 		location.Heading = getDirection (p.location.x, p.location.y) ;
 		
 		/*
@@ -169,6 +170,9 @@ public class MonsterInstance extends DynamicObject
 		/*
 		 * 命中與傷害運算
 		 */
+		if (isInsight (p) ) {
+			new CommonAttack (this, p) ;
+		}
 	}
 	
 	public void AttackPet () {

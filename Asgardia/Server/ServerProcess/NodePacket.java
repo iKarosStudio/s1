@@ -30,19 +30,28 @@ public class NodePacket
 	public NodePacket (PcInstance Node) {
 		int status = STATUS_PC;	
 		
+		if (Node.BraveSpeed == 1) {
+			status |= STATUS_BRAVE;
+		}
+		
+		//Check Invisible
+		//Check FastMove
+		//Check Ghost
+		
 		Builder.WriteByte (ServerOpcodes.NODE_PACK);
 		Builder.WriteWord (Node.location.x) ;
 		Builder.WriteWord (Node.location.y) ;
 		Builder.WriteDoubleWord (Node.Uuid) ;
 		
 		Builder.WriteWord (Node.TempGfx) ; //get gfx
-		//if (isDead) {
-		//showDead
-		//} else {
+		if (Node.isDead () ) {
+			Builder.WriteByte (8) ;
+		} else {
 			Builder.WriteByte (Node.getWeaponGfx () ) ; //武器外型修正
-		//}
+		}
 		Builder.WriteByte (Node.location.Heading) ;
 		Builder.WriteByte (10) ; //light
+		
 		Builder.WriteByte (Node.MoveSpeed) ; //move speed;
 		
 		Builder.WriteDoubleWord (Node.Exp) ;
@@ -76,11 +85,11 @@ public class NodePacket
 		Builder.WriteDoubleWord (Npc.Uuid) ;
 		
 		Builder.WriteWord (Npc.Gfx) ; //get gfx
-		//if (isDead) {
-		//showDead
-		//} else {
+		if (Npc.isDead () ) {
+			Builder.WriteByte (8) ;
+		} else {
 			Builder.WriteByte (0) ;//weapon 0:hand 4:sword
-		//}
+		}
 		Builder.WriteByte (Npc.location.Heading) ;
 		Builder.WriteByte (10) ; //light
 		Builder.WriteByte (Npc.MoveSpeed) ; //move speed;
@@ -185,7 +194,7 @@ public class NodePacket
 		if (Npc.isDead () ) {
 			Builder.WriteByte (8) ;
 		} else {
-			Builder.WriteByte (0) ;//weapon 0:hand 4:sword
+			Builder.WriteByte (0) ;
 		}
 		Builder.WriteByte (Npc.location.Heading) ;
 		Builder.WriteByte (10) ; //light

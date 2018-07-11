@@ -19,25 +19,18 @@ public class HpMonitor extends TimerTask implements Runnable
 	public HpMonitor (PcInstance Pc) {
 		this.Pc = Pc;
 		Handle = Pc.getHandler () ;
-		TaskInterval = 1000;
+		TaskInterval = 100;
 	}
 	
 	public void run () {
 		
-		
-		
 		int div10 = 0;
 		try {
-			if (div10 < 0) {
-				div10++;
-			} else {
-				if (Pc.Hp < Pc.getMaxHp () ) {
-					Pc.Hp++;
-					Handle.SendPacket (new NodeStatus (Pc).getRaw () ) ;
-					//todo:敘述生命值藥用NodeStatus
-				}
-				div10 = 0;
-			}
+			//if (Pc.getHp < Pc.getMaxHp () ) {
+				//Pc.Hp++;
+				Handle.SendPacket (new NodeStatus (Pc).getRaw () ) ;
+				//todo:敘述生命值藥用NodeStatus
+			//}
 		} catch (Exception e) {
 			e.printStackTrace () ;
 			//System.out.printf ("HP Monitor %s\n", e.toString () ) ;

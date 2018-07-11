@@ -12,6 +12,7 @@ import Asgardia.World.*;
 import Asgardia.World.Map.*;
 import Asgardia.World.Npc.*;
 import Asgardia.World.Skills.*;
+import Asgardia.World.Skills.CommonSkill.*;
 import Asgardia.World.Objects.Dynamic.DynamicObject;
 import Asgardia.World.Objects.Dynamic.CombatStatus;
 import Asgardia.World.Objects.Items.*;
@@ -32,7 +33,6 @@ public class PcInstance extends DynamicObject implements Runnable
 	/* 角色裝備參考 */
 	public Equipment equipment = null;
 	
-	
 	/* 視界內物件 */
 	public ConcurrentHashMap<Integer, PcInstance> PcInsight = null;
 	public ConcurrentHashMap<Integer, NpcInstance> NpcInsight = null;
@@ -41,11 +41,12 @@ public class PcInstance extends DynamicObject implements Runnable
 	public ConcurrentHashMap<Integer, DoorInstance> DoorInsight = null;
 	public ConcurrentHashMap<Integer, PetInstance> Pet = null;
 	//private ConcurrentHashMap<Integer, SlaveMonster> SummonMonster = null;
-	
-	//private ConcurrentHashMap<Integer, SlaveMonster> SummonMonster = null;
-	
+
 	/* Buff/Debuff 效果計時 */
 	public SkillEffectTimer SkillTimer = null;
+	
+	/* 藥水延遲  <K, V> = <道具編號, 上一個時間戳記> */
+	private ConcurrentHashMap<Integer, Long> ItemDelay = null;
 	
 	public SystemTick Tick;
 	public PcRoutineTasks RoutineTask;
@@ -88,6 +89,8 @@ public class PcInstance extends DynamicObject implements Runnable
 		GndItemInsight = new ConcurrentHashMap<Integer, ItemInstance> () ;
 		DoorInsight = new ConcurrentHashMap<Integer, DoorInstance> () ;
 		
+		ItemDelay = new ConcurrentHashMap<Integer, Long> () ;
+		
 		equipment = new Equipment (Handle) ;
 	}
 	
@@ -102,6 +105,8 @@ public class PcInstance extends DynamicObject implements Runnable
 		//Item = new ConcurrentHashMap () ;
 		//Pet = new ConcurrentHashMap () ;
 		//SummonMonster = new ConcurrentHashMap () ;
+		
+		ItemDelay = new ConcurrentHashMap<Integer, Long> () ;
 		
 		equipment = new Equipment (Handle) ;
 	}
@@ -536,6 +541,24 @@ public class PcInstance extends DynamicObject implements Runnable
 		}
 	}
 	
+	public long getItemDelay (int item_id, long now_time) {
+		long res;
+		if (ItemDelay.containsKey (item_id) ) {
+			res = now_time - ItemDelay.get (item_id) ;
+		} else {
+			res = Long.MAX_VALUE;
+		}
+		return res;
+	}
+	
+	public void setItemDelay (int item_id, long now_time) {
+		ItemDelay.put (item_id, now_time) ;
+	}
+	
+	public void clearItemDelay (int item_id) {
+		//
+	}
+	
 	public boolean CanRecognizePc (PcInstance p) {
 		return PcInsight.containsValue (p) ;
 	}
@@ -660,11 +683,10 @@ public class PcInstance extends DynamicObject implements Runnable
 		ItemInstance i = FindItemByUuid (uuid) ;
 		if ((i != null) && CanUseEquipment (i) ) {
 			equipment.setArmor (i) ;
+			ApplyEquipmentEffects () ;
 		} else {
-			//
+			//Show message
 		}
-		
-		ApplyEquipmentEffects () ;
 	}
 	
 	public void pickItem (int uuid, int count, int x, int y) {
@@ -805,6 +827,16 @@ public class PcInstance extends DynamicObject implements Runnable
 		}
 	}
 	
+	synchronized public void TakeDamage (int dmg) {
+		if (Hp > dmg) {
+			Hp -= dmg;
+		} else {
+			Hp = 0;
+			setDead (true) ;
+			System.out.printf ("%s 往生了!\n", Name) ;
+		}
+	}
+	
 	public void SaveItem () {
 		//
 	}
@@ -839,10 +871,6 @@ public class PcInstance extends DynamicObject implements Runnable
 		EquipPara = cb;
 		Handle.SendPacket (new NodeEquipmentAc (this).getRaw () ) ;
 	}
-	
-	/*
-	 * 套用敏捷到素質加成
-	 */
 	
 	public void UpdateOnlineStatus (boolean isOnline) {
 		HikariCP Db = Handle.getDbHandle () ;

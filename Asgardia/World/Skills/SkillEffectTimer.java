@@ -41,6 +41,20 @@ public class SkillEffectTimer extends TimerTask implements Runnable
 		}
 	}
 	
+	public void UpdateSkillEffects () {
+		Effect.forEach ((Integer skill_id, SkillEffect s)->{
+			if (skill_id == SkillId.STATUS_HASTE) {
+				byte[] Data = new SkillHaste (Pc.Uuid, Pc.MoveSpeed, s.RemainTime).getRaw () ;
+				Handle.SendPacket (Data);
+			} else if (skill_id == SkillId.STATUS_BRAVE) {
+				byte[] Data = new SkillBrave (Pc.Uuid, Pc.BraveSpeed, s.RemainTime).getRaw () ;
+				Handle.SendPacket (Data);
+			} else {
+				//
+			}
+		}) ;
+	}
+	
 	public void Start () {
 		timer.scheduleAtFixedRate (this, 0, 1000) ; //1S interval
 	}

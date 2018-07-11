@@ -87,11 +87,30 @@ public class CommonAttack
 	 * 怪物對玩家
 	 */
 	public CommonAttack (MonsterInstance src, PcInstance dest) {
+		int dmg = 0;
+		
+		if (dest.isDead () ) {
+			return;
+		}
+		
+		if (isNpc2PcHit (src, dest) ) {
+			dmg = CalcNpc2PcDmg (src, dest) ;
+			System.out.printf ("命中! 造成%d傷害\n", dmg) ;
+			
+			dest.TakeDamage (dmg) ;
+			byte[] action_code = new NodeAction (2, dest.Uuid, dest.location.Heading).getRaw () ;
+			dest.getHandler ().SendPacket (action_code) ;
+			dest.BoardcastPcInsight (action_code) ;
+		} else {
+			System.out.printf ("未命中!\n") ;
+		}
 	}
 	
 	/*
 	 * 怪物(寵物, 怪物)對怪物
 	 */
+	public CommonAttack (PetInstance src, MonsterInstance dest) {
+	}
 	
 	/*
 	 * 玩家對玩家
@@ -155,6 +174,44 @@ public class CommonAttack
 		
 		int Rate = rnd.nextInt (100) + 1;
 		return Rate < HitRate;
+	}
+	
+	/*
+	 * 算NPC2PC命中率
+	 */
+	public boolean isNpc2PcHit (MonsterInstance src, PcInstance dest) {
+		int HitRate = 0;
+		
+		HitRate = src.Level * 10; // * 2 * 5
+		HitRate -= dest.getAc () * 5;
+		
+		/*
+		 * 寵物命中修正*2
+		 */
+		
+		/*
+		 * Npc Hit rate修正
+		 */
+		
+		/*
+		 * 有暗影閃避(Uncanny dodge)命中-20
+		 */
+		
+		if (HitRate < src.Level) {
+			HitRate = src.Level;
+		}
+		
+		if (HitRate < 5) {
+			HitRate = 5;
+		}
+		
+		if (HitRate > 95) {
+			HitRate = 95;
+		}
+		
+		int p = rnd.nextInt (100) + 1;
+		System.out.printf ("Hit: %d/%d\n", HitRate, p) ;
+		return p < HitRate;
 	}
 	
 	public int CalcPc2NpcDmg (PcInstance src, MonsterInstance dest) {
@@ -250,7 +307,37 @@ public class CommonAttack
 	}
 	
 	public int CalcNpc2PcDmg (MonsterInstance src, PcInstance dest) {
-		return 0;
+		int dmg = 5 * (src.Level / 10) ;
+		dmg += rnd.nextInt (src.Level - dmg + 5) ;
+		dmg += src.BasicParameter.Str;
+		dmg = dmg >>> 1;
+		dmg++;
+		
+		/*
+		 * 職業傷害減免
+		 */
+		int ac = Math.min (0, dest.getAc () ) ;
+		if (dest.isRoyal () ) {
+			dmg += rnd.nextInt (ac / 3 + 1) ;
+		} else if (dest.isKnight () ) {
+			dmg += rnd.nextInt (ac / 2 + 1) ;
+		} else if (dest.isElf () ) {
+			dmg += rnd.nextInt (ac / 4 + 1) ;
+		} else if (dest.isMage () ) {
+			dmg += rnd.nextInt (ac / 5 + 1) ;
+		} else if (dest.isDarkElf () ) {
+			dmg += rnd.nextInt (ac / 4 + 1) ;
+		}
+		
+		/*
+		 * 壞物 傷害/2
+		 */
+		
+		/*
+		 * 反擊屏障
+		 */
+		
+		return dmg;
 	}
 	
 	public int CalcPc2PcDmg (PcInstance src, PcInstance dest) {

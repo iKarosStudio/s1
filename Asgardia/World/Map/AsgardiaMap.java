@@ -30,6 +30,8 @@ public class AsgardiaMap
 	public final int SizeX;
 	public final int SizeY;
 	
+	private Random random = new Random (System.currentTimeMillis () ) ;
+	
 	/*
 	 * 生怪控制器, 數量邏輯控制
 	 */
@@ -312,6 +314,17 @@ public class AsgardiaMap
 	
 	public void removeDoor (DoorInstance d) {
 		Doors.remove (d.Uuid) ;
+	}
+	
+	public Location getRandomLocation () {
+		Location dest = new Location (MapId, 0, 0, 0) ;
+		
+		do {
+			dest.x = StartX + random.nextInt (SizeX) ;
+			dest.y = StartY + random.nextInt (SizeY) ;
+		} while (getTile (dest.x, dest.y) == 0) ;
+		
+		return dest;
 	}
 	
 	/*

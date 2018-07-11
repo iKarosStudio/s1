@@ -31,6 +31,23 @@ public class DynamicObject extends ObjectInstance
 	public int Hp = 1;
 	public int Mp = 1;
 	
+	/*
+	public synchronized void setHp (int hp) {
+		Hp = hp;
+	}
+	
+	public int getHp () {
+		return Hp;
+	}
+	
+	public synchronized void setMp (int mp) {
+		Mp = mp;
+	}
+	
+	public int getMp () {
+		return Mp;
+	}*/
+	
 	public boolean isDead () {
 		return isDead;
 	}

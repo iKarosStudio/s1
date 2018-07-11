@@ -131,7 +131,7 @@ public class DatabaseCmds
 	
 	public static ResultSet DoorSpawinlist (int mapid) {
 		String q = String.format ("SELECT * FROM spawnlist_door WHERE mapid=\'%d\';", mapid) ;
-		return Db.Query (q) ;		
+		return Db.Query (q) ;
 	}
 	
 	public static ResultSet MobSpawnlist (int mapid) {
