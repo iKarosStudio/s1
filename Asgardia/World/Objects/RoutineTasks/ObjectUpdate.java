@@ -23,6 +23,9 @@ public class ObjectUpdate extends TimerTask implements Runnable
 	}
 	
 	public void run () {
+		/*
+		 * 更新視界各類物件
+		 */
 		Pc () ;
 		Monster () ;
 		Npc () ;
@@ -139,7 +142,7 @@ public class ObjectUpdate extends TimerTask implements Runnable
 	}
 	
 	public void Start () {
-		t.scheduleAtFixedRate (this, 0, 300) ; //1000ms interval
+		t.scheduleAtFixedRate (this, 200, 500) ; //1000ms interval
 	}
 	
 	public void Stop () {

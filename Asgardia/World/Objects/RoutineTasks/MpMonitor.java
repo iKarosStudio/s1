@@ -2,7 +2,8 @@ package Asgardia.World.Objects.RoutineTasks;
 
 import java.util.*;
 
-import Asgardia.Server.SessionHandler;
+import Asgardia.Server.*;
+import Asgardia.Server.ServerProcess.*;
 import Asgardia.World.Objects.*;
 
 public class MpMonitor extends TimerTask implements Runnable
@@ -17,19 +18,19 @@ public class MpMonitor extends TimerTask implements Runnable
 	public MpMonitor (PcInstance Pc) {
 		this.Pc = Pc;
 		Handle = Pc.getHandler () ;
-		TaskInterval = 100;
+		TaskInterval = 1000;
 	}
 	
 	public void run () {
 		try {
-			//
+			Handle.SendPacket (new MpUpdate (Pc.Mp, Pc.getMaxMp () ).getRaw () ) ;
 		} catch (Exception e) {
 			System.out.printf ("MP Monitor %s\n", e.toString () ) ;
 		}
 	}
 	
 	public void Start () {
-		t.scheduleAtFixedRate (this, 0, TaskInterval) ;
+		t.scheduleAtFixedRate (this, 1000, TaskInterval) ;
 	}
 	
 	public void Stop () {

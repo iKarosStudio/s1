@@ -16,7 +16,6 @@ public class DoorTouch
 		int uuid = reader.ReadDoubleWord () ;
 		
 		DoorInstance door = Pc.DoorInsight.get (uuid) ;
-		System.out.printf ("door %d (%5d, %5d)\n", uuid, x, y) ;
 		
 		if (door.KeyId == 0) {
 			if (door.isOpened) {

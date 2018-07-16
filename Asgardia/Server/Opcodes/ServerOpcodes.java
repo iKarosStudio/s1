@@ -5,6 +5,7 @@ public class ServerOpcodes
 	public static final int OBJ_ACTION = 3;
 	public static final int ITEM_UPDATE_STATUS = 6;
 	public static final int SKILL_BUY_RESULT = 17;
+	public static final int HP_UPDATE = 19;
 	public static final int NEW_CHARACTER_PACK = 22;
 	public static final int ITEM_INSERT = 24;
 	public static final int MAP_ID = 27;
@@ -48,6 +49,7 @@ public class ServerOpcodes
 	public static final int CHAR_TITLE = 109;
 	public static final int CHAR_AMOUNT = 117;
 	public static final int CHAR_LIST = 118;
+	public static final int MP_UPDATE = 119;
 	public static final int ITEM_REMOVE = 120;
 	public static final int ITEM_UPDATE_BLESS = 121;
 	public static final int WEATHER = 122;
