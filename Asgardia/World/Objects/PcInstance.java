@@ -13,6 +13,7 @@ import Asgardia.World.Map.*;
 import Asgardia.World.Npc.*;
 import Asgardia.World.Skills.*;
 import Asgardia.World.Skills.CommonSkill.*;
+import Asgardia.World.Objects.Template.*;
 import Asgardia.World.Objects.Dynamic.DynamicObject;
 import Asgardia.World.Objects.Dynamic.CombatStatus;
 import Asgardia.World.Objects.Items.*;
@@ -176,7 +177,6 @@ public class PcInstance extends DynamicObject implements Runnable
 				
 				PkCount = rs.getInt ("PKcount") ;
 				
-				
 				Tick = new SystemTick (this) ;
 				SkillTimer = new SkillEffectTimer (this) ;
 				RoutineTask = new PcRoutineTasks (this) ;
@@ -239,8 +239,30 @@ public class PcInstance extends DynamicObject implements Runnable
 		} catch (Exception e) {e.printStackTrace () ; }
 	}
 	
+	public void LoadSkills () {
+		ResultSet rs = DatabaseCmds.LoadSkills (Uuid) ;
+		int[] skill_value = new int[25];
+		HashMap skill_table = new HashMap () ;
+		try {
+			while (rs.next () ) {
+				int skill_id = rs.getInt ("skill_id") ;
+				SkillTemplate st = CacheData.SkillCache.get (skill_id) ;
+				skill_value[st.SkillLv] |= st.Id;
+			}
+			
+			for (int i = 1; i <= 24; i++) {
+				skill_table.putIfAbsent (i, skill_value[i]) ;
+			}
+			
+			Handle.SendPacket (new SkillTable (Type, skill_table).getRaw () ) ;
+		} catch (Exception e) {
+			e.printStackTrace () ;
+		}
+		System.out.printf ("載入腳色技能\n") ;
+	}
+	
 	public void LoadBuff () {
-		//
+		System.out.printf ("載入腳色Buff效果\n") ;
 	}
 	
 	public List<ItemInstance> FindItem (int ItemId) {
@@ -327,6 +349,10 @@ public class PcInstance extends DynamicObject implements Runnable
 	
 	public int getAc () {
 		return BasicParameter.Ac + EquipPara.Ac + SkillParameter.Ac;
+	}
+	
+	public int getEquipAc () {
+		return EquipPara.Ac;
 	}
 	
 	public int getBaseAc () {
@@ -835,6 +861,10 @@ public class PcInstance extends DynamicObject implements Runnable
 			setDead (true) ;
 			System.out.printf ("%s 往生了!\n", Name) ;
 		}
+	}
+	
+	public void useSkill () {
+		//
 	}
 	
 	public void SaveItem () {

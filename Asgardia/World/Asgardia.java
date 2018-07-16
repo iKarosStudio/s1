@@ -39,7 +39,7 @@ public class Asgardia extends Thread
 	 * 0:下雪
 	 * 1:下雨
 	 *  */
-	public int Weather = 0x13 ;
+	public int Weather = 0x10 ;
 	
 	public void run () {
 		/*
@@ -93,7 +93,7 @@ public class Asgardia extends Thread
 			/*
 			 * Generate monster
 			 */
-			System.out.printf ("Generate Monster, Generator interval:%.1f Sec...", (float)Configurations.MONSTER_GENERATOR_UPDATE_RATE/1000) ;
+			System.out.printf ("Monster generator initialize interval:%.1f Sec...", (float)Configurations.MONSTER_GENERATOR_UPDATE_RATE/1000) ;
 			Maps.forEach ((Integer map_id, AsgardiaMap map)->{
 				map.MobGenerator = new MonsterGenerator (map) ;
 				KernelThreadPool.getInstance ().ScheduleAtFixedRate (map.MobGenerator, 1000, Configurations.MONSTER_GENERATOR_UPDATE_RATE) ;
@@ -104,12 +104,8 @@ public class Asgardia extends Thread
 			 * Generate Element Stone
 			 */
 			if (Maps.containsKey (4) ) {
-				System.out.println ("Generate Element Stone") ;
+				System.out.println ("元素石生產引擎...") ;
 			}
-			
-			/*
-			 * Monster AI controller
-			 */
 			
 			/*
 			 * Start server time
@@ -118,6 +114,7 @@ public class Asgardia extends Thread
 			KernelThreadPool.getInstance ().ScheduleAtFixedRate (Time, 0, 1000) ;
 			
 			//load boss
+			
 			//load special system
 			
 			/*
@@ -192,7 +189,7 @@ public class Asgardia extends Thread
 			m.addPc (Pc) ;
 			Pc.UpdateOnlineStatus (true) ;
 			OnlinePcs ++;
-			System.out.printf ("角色:%s(UUID:0x%08X) 進入世界\n", Pc.Name, Pc.Uuid) ;
+			System.out.printf ("角色:%s[0x%08X] 進入世界\n", Pc.Name, Pc.Uuid) ;
 		} catch (Exception e) {
 			e.printStackTrace () ;
 		}
@@ -203,7 +200,7 @@ public class Asgardia extends Thread
 			Maps.get (Pc.location.MapId).removePc (Pc) ;
 			Pc.UpdateOnlineStatus (false) ;
 			OnlinePcs --;
-			System.out.printf ("角色:%s(UUID:0x%08X) 離開世界\n", Pc.Name, Pc.Uuid) ;
+			System.out.printf ("角色:%s[0x%08X] 離開世界\n", Pc.Name, Pc.Uuid) ;
 		} catch (Exception e) {
 			e.printStackTrace () ;
 		}

@@ -127,7 +127,7 @@ public class SessionHandler extends Thread implements Runnable
 				Account.UpdateLastLoginTime () ;
 				Sock.close () ;
 				//Db.Disconnect () ;
-				System.out.printf ("IP:%s(Host:%s) 連線中斷\n", IP, HostName) ;
+				System.out.printf ("IP:%s [Host:%s] Disconnect\n", IP, HostName) ;
 			} catch (Exception e) {
 				e.printStackTrace () ;
 			}

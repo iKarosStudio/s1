@@ -144,7 +144,7 @@ public class Equipment
 				DatabaseCmds.UpdatePcItem (_Equip[TypeIndex]) ;
 				_Equip[TypeIndex] = null;
 				
-				System.out.printf ("解除裝備 %s\n", a.getName () ) ;
+				//System.out.printf ("解除裝備 %s\n", a.getName () ) ;
 			} else {
 				/*P裝備->A裝備*/
 				_Equip[TypeIndex].IsEquipped = false;
@@ -156,7 +156,7 @@ public class Equipment
 				Handle.SendPacket (new ItemUpdateName (_Equip[TypeIndex]).getRaw () ) ;
 				DatabaseCmds.UpdatePcItem (_Equip[TypeIndex]) ;
 				
-				System.out.printf ("裝備 %s\n", a.getName () ) ;
+				//System.out.printf ("裝備 %s\n", a.getName () ) ;
 			}
 		} else {
 			/*空裝->裝備(A)道具*/
@@ -165,7 +165,7 @@ public class Equipment
 			Handle.SendPacket (new ItemUpdateName (_Equip[TypeIndex]).getRaw () ) ;
 			DatabaseCmds.UpdatePcItem (_Equip[TypeIndex]) ;
 			
-			System.out.printf ("裝備 %s\n", a.getName () ) ;
+			//System.out.printf ("裝備 %s\n", a.getName () ) ;
 		}
 	}
 }

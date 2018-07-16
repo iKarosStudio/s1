@@ -67,6 +67,9 @@ public class MainService extends Thread
 			String ClearOnlineStatus = String.format ("UPDATE characters SET OnlineStatus=\'0\' WHERE OnlineStatus=\'1\';") ;
 			Db.Insert (ClearOnlineStatus) ;
 			
+		} catch (BindException e) {
+			System.out.printf ("bind Port:%d fail\n", Configurations.SERVER_PORT) ;
+			System.exit (666) ;
 		} catch (Exception e) {
 			System.out.printf ("fail\n") ;
 			System.out.printf ("[!] TCP/IP Listening fault->%s\n", e.getMessage () ) ;

@@ -66,6 +66,14 @@ public class DatabaseCmds
 		return Db.Query (q) ;
 	}
 	
+	public static ResultSet LoadSkills (int uuid) {
+		String q = String.format ("SELECT * FROM character_skills WHERE char_obj_id=\'%d\';", uuid) ;
+		return Db.Query (q) ;
+	}
+	
+	public static void SaveSkills (int uuid) {
+	}
+	
 	public static ResultSet LoadTeleportBookmark (int uuid) {
 		String q = String.format ("SELECT * FROM character_teleport WHERE char_id=\'%d\' ORDER BY name ASC", uuid) ;
 		return Db.Query (q) ;
@@ -111,6 +119,10 @@ public class DatabaseCmds
 		Db.Insert (Quere) ;
 	}
 	
+	public static void SavePcEffect (PcInstance p) {
+		//
+	}
+	
 	public static void SavePc (PcInstance p) {
 		String q = String.format ("UPDATE characters SET level=\'%d\',Exp=\'%d\',MaxHp=\'%d\',CurHp=\'%d\',MaxMp=\'%d\',CurMp=\'%d\',Ac=\'%d\',Status=\'%d\',LocX=\'%d\',LocY=\'%d\',Heading=\'%d\',MapID=\'%d\' WHERE objid=\'%d\';",
 				p.Level,
@@ -119,7 +131,7 @@ public class DatabaseCmds
 				p.Hp,
 				p.BasicParameter.MaxMp,
 				p.Mp,
-				p.BasicParameter.Ac,
+				p.getBaseAc () + p.getEquipAc (),
 				p.Status,
 				p.location.x,
 				p.location.y,

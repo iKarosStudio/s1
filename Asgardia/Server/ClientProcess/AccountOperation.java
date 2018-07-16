@@ -126,8 +126,12 @@ public class AccountOperation
 					Builder.WriteByte (ServerOpcodes.CHAR_LIST) ;
 					Builder.WriteString (rs.getString ("char_name") ) ;
 					Builder.WriteString (rs.getString ("Clanname") ) ;
-					Builder.WriteByte (rs.getInt ("Type") ) ; //type
-					Builder.WriteByte (1) ; //sex 0:male, 1:female
+					
+					/* Type - 0:Royal 1:Knight 2:Elf 3:Mage 4:Darkelf */
+					Builder.WriteByte (rs.getInt ("Type") ) ;
+					
+					/* Sex - 0:male, 1:female */
+					Builder.WriteByte (1) ;
 					Builder.WriteWord (rs.getInt ("Lawful") ) ; //lawful
 					Builder.WriteWord (rs.getInt ("CurHP") ) ; //hp
 					Builder.WriteWord (rs.getInt ("CurMP") ) ; //mp

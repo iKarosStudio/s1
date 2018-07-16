@@ -39,7 +39,7 @@ public class CharacterOperation
 			
 			Pc.LoadItem () ;
 			Pc.ApplyEquipmentEffects () ;
-			//load skills
+			Pc.LoadSkills () ;
 			Pc.LoadBuff () ;
 			
 			

@@ -13,6 +13,8 @@ public class ClientOpcodes
 	public static final int CREATE_CHARACTER = 31;
 	public static final int REMOTE_ATTACK = 41;
 	public static final int ITEM_DELETE = 49;
+	public static final int SKILL_BUY = 51;
+	public static final int SKILL_USE = 55;
 	public static final int ITEM_PICK = 59;
 	public static final int REQUEST_NPC = 61;
 	public static final int LIST_CHARACTER = 65;

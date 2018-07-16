@@ -39,6 +39,10 @@ public class PacketHandler
 		case ClientOpcodes.MOVE :
 			new Move (Handle, Data) ;
 			break;
+		
+		case ClientOpcodes.SKILL_USE:
+			new SkillUse (Handle, Data) ;
+			break;
 			
 		case ClientOpcodes.CHANGE_HEADING : 
 			new ChangeHeading (Handle, Data) ;
@@ -75,6 +79,10 @@ public class PacketHandler
 		
 		case ClientOpcodes.REQUEST_NPC:
 			new NpcRequest (Handle, Data) ;
+			break;
+		
+		case ClientOpcodes.SKILL_BUY:
+			new SkillBuy (Handle, Data) ;
 			break;
 		
 		case ClientOpcodes.DOOR_TOUCH:

@@ -32,7 +32,8 @@ public class HpMonitor extends TimerTask implements Runnable
 				//todo:敘述生命值藥用NodeStatus
 			//}
 		} catch (Exception e) {
-			e.printStackTrace () ;
+			Stop () ;
+			//e.printStackTrace () ;
 			//System.out.printf ("HP Monitor %s\n", e.toString () ) ;
 		}
 	}

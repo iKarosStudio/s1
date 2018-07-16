@@ -4,6 +4,7 @@ public class ServerOpcodes
 {
 	public static final int OBJ_ACTION = 3;
 	public static final int ITEM_UPDATE_STATUS = 6;
+	public static final int SKILL_BUY_RESULT = 17;
 	public static final int NEW_CHARACTER_PACK = 22;
 	public static final int ITEM_INSERT = 24;
 	public static final int MAP_ID = 27;
@@ -28,6 +29,7 @@ public class ServerOpcodes
 	public static final int SERVER_MSG = 72;
 	public static final int NODE_PACK = 74;
 	public static final int SKILL_HASTE = 77;
+	public static final int SKILL_TABLE = 78;
 	public static final int SKILL_GFX = 80;
 	public static final int DOOR_DETAIL = 81;
 	public static final int ITEM_LIST = 82;

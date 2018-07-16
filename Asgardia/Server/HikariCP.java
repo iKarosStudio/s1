@@ -31,8 +31,8 @@ public class HikariCP
 				System.out.println ("success") ;
 			}
 		} catch (Exception e) {
-			System.out.printf ("HIKARICP INITIALIZE FAIL\n") ;
 			e.printStackTrace () ;
+			System.out.printf ("Database connect fail, Check hikariCP config\n") ;
 			System.exit (666) ;
 			
 		}

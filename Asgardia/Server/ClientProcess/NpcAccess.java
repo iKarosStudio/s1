@@ -40,6 +40,28 @@ public class NpcAccess
 			return ;
 		}
 		
+		if (Uuid == 70009) { //吉倫
+			String HtmlKey = null;
+			switch (Pc.Type) {
+			case 0: //Roayn
+				HtmlKey = "gerengp1"; break;
+			case 1: //Knight
+				HtmlKey = "gerengk1"; break;
+			case 2: //Elf
+				HtmlKey = "gerenge1"; break;
+			case 3: //Mage
+				HtmlKey = "gerengw3"; break;
+			case 4: //DarkElf
+				HtmlKey = "gerengde1"; break;
+			default:
+				break;
+			}
+			
+			byte[] packet = new NpcAccessResult (Uuid, HtmlKey).getRaw () ;
+			Handle.SendPacket (packet) ;
+			return ;
+		}
+		
 		if (CacheData.NpcTalkDataCache.containsKey (Uuid) ) {
 			NpcTalkData TalkData = CacheData.NpcTalkDataCache.get (Uuid) ;
 			NpcAccessResult Result = new NpcAccessResult (Uuid, TalkData.NormalAction) ;

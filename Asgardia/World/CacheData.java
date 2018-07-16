@@ -23,6 +23,8 @@ public class CacheData
 	public static ConcurrentHashMap<Integer, WeaponTemplate> WeaponCache;
 	public static ConcurrentHashMap<Integer, ArmorTemplate> ArmorCache;
 	
+	public static ConcurrentHashMap<Integer, SkillTemplate> SkillCache;
+	
 	public static ConcurrentHashMap<Integer, NpcShop> ShopCache;
 	
 	public static CacheData getInstance () {
@@ -48,6 +50,9 @@ public class CacheData
 		
 		System.out.print ("\t-> Load items cache data...") ;
 		LoadItemCache () ;
+		
+		System.out.print ("\t-> Load skill cache data...") ;
+		LoadSkillCache () ;
 		
 		System.out.print ("\t-> Load shop cache data...") ;
 		LoadShopCache () ;
@@ -231,6 +236,58 @@ public class CacheData
 			long t_ends = System.currentTimeMillis () ;
 			float used_time = (float) (t_ends - t_starts) / 1000;
 			System.out.printf ("\t\t" + Counter + " items cached in\t%.3f s\n", used_time) ;
+		} catch (Exception e) {
+			e.printStackTrace () ;
+		}
+	}
+	
+	public static void LoadSkillCache () {
+		SkillCache = new ConcurrentHashMap<Integer, SkillTemplate> () ;
+		
+		try {
+			ResultSet rs = Db.Query ("SELECT * FROM skills;") ;
+			int Counter = 0;
+			long t_starts = System.currentTimeMillis () ;
+			while (rs.next () ) {
+				SkillTemplate st = new SkillTemplate (
+					rs.getInt ("skill_id"),
+					rs.getString ("name"),
+					rs.getInt ("skill_level"),
+					rs.getInt ("skill_number"),
+					rs.getInt ("mpConsume"),
+					rs.getInt ("hpConsume"),
+					rs.getInt ("itemConsumeId"),
+					rs.getInt ("itemConsumeCount"),
+					rs.getInt ("reuseDelay"),
+					rs.getInt ("buffDuration"),
+					rs.getString ("target"),
+					rs.getInt ("target_to"),
+					rs.getInt ("damage_value"),
+					rs.getInt ("damage_dice"),
+					rs.getInt ("damage_dice_count"),
+					rs.getInt ("probability_value"),
+					rs.getInt ("probability_dice"),
+					rs.getInt ("attr"),
+					rs.getInt ("actid"),
+					rs.getInt ("type"),
+					rs.getInt ("lawful"),
+					rs.getInt ("ranged"),
+					rs.getInt ("area"),
+					rs.getInt ("through"),
+					rs.getInt ("id"),
+					rs.getString ("nameid"),
+					rs.getInt ("castgfx"),
+					rs.getInt ("sysmsgID_happen"),
+					rs.getInt ("sysmsgID_stop"),
+					rs.getInt ("sysmsgID_fail"),
+					rs.getInt ("arrowType")	) ;
+				
+				SkillCache.put (st.SkillId, st) ;
+				Counter++;
+			}
+			long t_ends = System.currentTimeMillis () ;
+			float used_time = (float) (t_ends - t_starts) / 1000;
+			System.out.printf ("\t\t" + Counter + " skills cached in\t%.3f s\n", used_time) ;
 		} catch (Exception e) {
 			e.printStackTrace () ;
 		}
