@@ -85,6 +85,10 @@ public class PacketHandler
 			new SkillBuy (Handle, Data) ;
 			break;
 		
+		case ClientOpcodes.SKILL_BUY_ORDER:
+			new SkillBuyOrder (Handle, Data) ;
+			break;
+		
 		case ClientOpcodes.DOOR_TOUCH:
 			new DoorTouch(Handle, Data) ;
 			

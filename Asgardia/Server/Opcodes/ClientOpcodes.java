@@ -28,6 +28,7 @@ public class ClientOpcodes
 	public static final int RESTART = 117;
 	public static final int ATTR = 112;
 	public static final int ITEM_DROP = 115;
+	public static final int SKILL_BUY_ORDER = 118;
 	public static final int CHANGE_HEADING = 122;
 	public static final int LOGIN_TO_SERVER = 125;
 	public static final int LOGIN_TO_SERVER_DONE = 127;
