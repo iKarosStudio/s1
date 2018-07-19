@@ -108,7 +108,10 @@ public class PacketHandler
 			new AccountOperation ().Login (Handle, Data) ;
 			break;
 			
-		case ClientOpcodes.LIST_CHARACTER : //common click in l1j
+		case ClientOpcodes.LIST_CHARACTER : 
+			/*
+			 * CommonClick in L1J, 會顯示角色選擇畫面
+			 */
 			new AccountOperation ().ReportCharactersData (Handle, Data) ; 
 			break;
 			
@@ -116,7 +119,7 @@ public class PacketHandler
 			new CharacterOperation ().Create (Handle, Data) ;
 			break;
 			
-		case ClientOpcodes.LOGIN_TO_SERVER : //login char
+		case ClientOpcodes.LOGIN_TO_SERVER : //選定登入角色
 			new CharacterOperation ().Login (Handle, Data) ;
 			break;
 			
@@ -124,7 +127,8 @@ public class PacketHandler
 			new CharacterOperation ().Delete (Handle, Data);
 			break;
 			
-		case ClientOpcodes.LOGIN_TO_SERVER_DONE :
+		case ClientOpcodes.LOGIN_TO_SERVER_DONE : 
+			/* 客戶端回報進入世界完成 */
 			break;
 			
 		case ClientOpcodes.RESTART:

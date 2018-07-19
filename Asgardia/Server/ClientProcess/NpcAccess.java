@@ -7,6 +7,7 @@ import Asgardia.World.Npc.*;
 import Asgardia.World.Objects.*;
 
 /*
+ * 由使用者發起一個NPC(uuid)的內容訪問
  * 參考C_NPCTalk & NpcActionTable
  */
 
@@ -18,7 +19,7 @@ public class NpcAccess
 		PcInstance Pc = Handle.Account.ActivePc;
 		int Uuid = Reader.ReadDoubleWord () ;
 		
-		System.out.printf ("使用者:%s\t訪問NPC UUID:%d\n", Pc.Name, Uuid) ;
+		System.out.printf ("%s 訪問NPC(%d)\n", Pc.Name, Uuid) ;
 		
 		if (Uuid == 70522) { //甘特
 			String HtmlKey = null;
@@ -64,8 +65,14 @@ public class NpcAccess
 		
 		if (CacheData.NpcTalkDataCache.containsKey (Uuid) ) {
 			NpcTalkData TalkData = CacheData.NpcTalkDataCache.get (Uuid) ;
-			NpcAccessResult Result = new NpcAccessResult (Uuid, TalkData.NormalAction) ;
+			NpcAccessResult Result;
+			if (Pc.Lawful > 0) { //中立, 正義
+				Result = new NpcAccessResult (Uuid, TalkData.NormalAction) ;
+			} else { //邪惡
+				Result = new NpcAccessResult (Uuid, TalkData.CaoticAction) ;
+			}
 			Handle.SendPacket (Result.getRaw () ) ;
+			
 		} else {
 			System.out.printf ("找不到NPCID\n") ;
 		}

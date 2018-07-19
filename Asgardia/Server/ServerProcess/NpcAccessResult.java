@@ -1,9 +1,11 @@
 package Asgardia.Server.ServerProcess;
 
-import Asgardia.Server.PacketBuilder;
-import Asgardia.Server.SessionHandler;
+import Asgardia.Server.*;
 import Asgardia.Server.Opcodes.ServerOpcodes;
 
+/*
+ * 告知客戶端NPC含有對話內容的HTML ID編號
+ */
 public class NpcAccessResult
 {
 	private PacketBuilder builder = new PacketBuilder () ;

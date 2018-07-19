@@ -13,7 +13,5 @@ public class SkillBuy
 		int Skill = reader.ReadDoubleWord () ;
 		
 		new SkillBuyList (handle, handle.getPc ().Type) ;
-		
-		System.out.printf ("購買魔法:%d\n", Skill) ;
 	}
 }

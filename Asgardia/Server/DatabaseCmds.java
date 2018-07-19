@@ -71,7 +71,29 @@ public class DatabaseCmds
 		return Db.Query (q) ;
 	}
 	
-	public static void SaveSkills (int uuid) {
+	public static void SaveSkills (int uuid, int skill_id, String skill_name) {
+		try {
+			PreparedStatement ps = Db.con.prepareStatement ("INSERT INTO character_skills SET char_obj_id=?, skill_id=?, skill_name=?") ;
+			ps.setInt (1, uuid) ;
+			ps.setInt (2, skill_id) ;
+			ps.setString (3, skill_name) ;
+			ps.execute () ;
+			
+		} catch (Exception e) {e.printStackTrace () ; }
+	}
+	
+	public static boolean CheckSkill (int uuid, int skill_id) {
+		try {
+			PreparedStatement ps = Db.con.prepareStatement ("SELECT * FROM character_skills WHERE char_obj_id=? AND skill_id=?;") ;
+			ps.setInt (1, uuid) ;
+			ps.setInt (2, skill_id) ;
+			
+			ResultSet rs = ps.executeQuery () ;
+			return rs.next () ;
+		} catch (Exception e) {
+			e.printStackTrace () ;
+		}
+		return false;
 	}
 	
 	public static ResultSet LoadTeleportBookmark (int uuid) {

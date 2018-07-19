@@ -116,10 +116,13 @@ public class SkillBuyOrder
 				}
 			}
 			
+			/* 檢查各等級沒學過的技能並寫入資料庫 */
 			if (L1 != 0) {
 				for (int b = 0; b < 7; b++) {
 					if (((L1 >>> b) & 0x01) > 0) {
-						System.out.printf ("Level1 skill id:%d\n", 1+b) ;
+						if (!DatabaseCmds.CheckSkill (pc.Uuid, 1+b) ) {
+							DatabaseCmds.SaveSkills (pc.Uuid, 1+b, CacheData.SkillCache.get (1+b).Name) ;
+						}
 					}
 				}
 			}
@@ -127,7 +130,9 @@ public class SkillBuyOrder
 			if (L2 != 0) {
 				for (int b = 0; b < 7; b++) {
 					if (((L2 >>> b) & 0x01) > 0) {
-						System.out.printf ("Level2 skill id:%d\n", 9+b) ;
+						if (!DatabaseCmds.CheckSkill (pc.Uuid, 9+b) ) {
+							DatabaseCmds.SaveSkills (pc.Uuid, 9+b, CacheData.SkillCache.get (9+b).Name) ;
+						}
 					}
 				}
 			}
@@ -135,7 +140,9 @@ public class SkillBuyOrder
 			if (L3 != 0) {
 				for (int b = 0; b < 7; b++) {
 					if (((L3 >>> b) & 0x01) > 0) {
-						System.out.printf ("Level3 skill id:%d\n", 17+b) ;
+						if (!DatabaseCmds.CheckSkill (pc.Uuid, 17+b) ) {
+							DatabaseCmds.SaveSkills (pc.Uuid, 17+b, CacheData.SkillCache.get (17+b).Name) ;
+						}
 					}
 				}
 			}
@@ -144,7 +151,7 @@ public class SkillBuyOrder
 			handle.SendPacket (new SkillGfx (pc.Uuid, 224).getRaw () ) ;
 			handle.SendPacket (new SkillTable (pc.Type,s).getRaw () ) ;
 			
-			//扣錢
+			/* 扣錢  */
 			//Pc.removeItemByItemId (40308, Price) ;
 		}
 		
