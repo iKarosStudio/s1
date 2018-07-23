@@ -115,12 +115,17 @@ public class PcInstance extends DynamicObject implements Runnable
 	//參照MysqlCharacterStorage.java (l1j270)
 	public boolean Load (String CharName)
 	{
-		HikariCP db = Handle.getDbHandle () ;
+		boolean Res = false;
+		
+		Connection con = HikariCP.getConnection () ;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
 		
 		try {
-			String q = String.format ("SELECT * FROM characters WHERE char_name=\'%s\'" , CharName) ; 
-			ResultSet rs = db.Query (q) ;
+			ps = con.prepareStatement ("SELECT * FROM characters WHERE char_name=?") ;
+			ps.setString (1, CharName) ;
 			
+			rs = ps.executeQuery () ;
 			if (rs.next () ) {
 				location.MapId = rs.getInt ("MapID") ;
 				location.x = rs.getInt ("LocX") ;
@@ -186,22 +191,25 @@ public class PcInstance extends DynamicObject implements Runnable
 				
 				this.UpdateCurrentMap () ;
 				
-				return true;
+				Res = true;
 				
-			} else {
-				return false;
-			}
-			
+			} 			
 		} catch (Exception e) {
 			System.out.println (e.toString () ) ;
+		} finally {
+			DatabaseUtil.close (rs) ;
+			DatabaseUtil.close (ps) ;
+			DatabaseUtil.close (con) ;
 		}
-		return false;
+		
+		return Res;
 	}
 	
 	public void LoadItem () {
 		Item = new ConcurrentHashMap<Integer, ItemInstance> () ;
-		ResultSet rs = DatabaseCmds.LoadItem (Uuid) ;
+		ResultSet rs = null;
 		try {
+			rs = DatabaseCmds.LoadItem (Uuid) ;
 			while (rs.next () ) {
 				ItemInstance i = new ItemInstance (
 					rs.getInt ("id"),
@@ -236,14 +244,19 @@ public class PcInstance extends DynamicObject implements Runnable
 			});
 			
 			
-		} catch (Exception e) {e.printStackTrace () ; }
+		} catch (Exception e) {
+			e.printStackTrace () ;
+		} finally {
+			DatabaseUtil.close (rs) ;
+		}
 	}
 	
 	public void LoadSkills () {
-		ResultSet rs = DatabaseCmds.LoadSkills (Uuid) ;
+		ResultSet rs = null;
 		int[] skill_value = new int[25];
-		HashMap skill_table = new HashMap () ;
+		HashMap<Integer, Integer> skill_table = new HashMap<Integer, Integer> () ;
 		try {
+			rs = DatabaseCmds.LoadSkills (Uuid) ;
 			while (rs.next () ) {
 				int skill_id = rs.getInt ("skill_id") ;
 				SkillTemplate st = CacheData.SkillCache.get (skill_id) ;
@@ -257,12 +270,13 @@ public class PcInstance extends DynamicObject implements Runnable
 			Handle.SendPacket (new SkillTable (Type, skill_table).getRaw () ) ;
 		} catch (Exception e) {
 			e.printStackTrace () ;
+		} finally {
+			DatabaseUtil.close (rs) ;
 		}
-		System.out.printf ("載入腳色技能\n") ;
 	}
 	
 	public void LoadBuff () {
-		System.out.printf ("載入腳色Buff效果\n") ;
+		System.out.printf ("載入角色Buff效果\n") ;
 	}
 	
 	public List<ItemInstance> FindItem (int ItemId) {
@@ -863,11 +877,15 @@ public class PcInstance extends DynamicObject implements Runnable
 		}
 	}
 	
-	public void useSkill () {
-		//
+	public void useSkill (int target_uuid) {
+		if (target_uuid == 0) {
+			//
+		} else {
+			//
+		}
 	}
 	
-	public void SaveItem () {
+	public void saveItem () {
 		//
 	}
 	
@@ -903,14 +921,19 @@ public class PcInstance extends DynamicObject implements Runnable
 	}
 	
 	public void UpdateOnlineStatus (boolean isOnline) {
-		HikariCP Db = Handle.getDbHandle () ;
-		String Cmd = String.format ("UPDATE characters SET OnlineStatus=\'%d\' where objid=\'%d\';",
-				(isOnline) ? 1:0,
-				Uuid) ;
+		Connection con = HikariCP.getConnection () ;
+		PreparedStatement ps = null;
 		try {
-			Db.Insert (Cmd) ;
+			ps = con.prepareStatement ("UPDATE characters SET OnlineStatus=? WHERE objid=?;") ;
+			ps.setInt (1, (isOnline) ? 1:0) ;
+			ps.setInt (2, Uuid) ;
+			
+			ps.execute () ;			
 		} catch (Exception e) {
 			e.printStackTrace () ;
+		} finally {
+			DatabaseUtil.close (ps) ;
+			DatabaseUtil.close (con) ;
 		}
 	}
 	

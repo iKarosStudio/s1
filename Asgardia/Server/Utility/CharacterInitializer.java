@@ -1,5 +1,7 @@
 package Asgardia.Server.Utility;
 
+import java.sql.*;
+
 import Asgardia.Server.*;
 import Asgardia.Server.ServerProcess.*;
 import Asgardia.World.Objects.*;
@@ -109,8 +111,43 @@ public class CharacterInitializer
 		/*
 		 * 寫入資料庫
 		 */
+		Connection Conn = HikariCP.getConnection ();
+		PreparedStatement ps = null;
 		try {
-			HikariCP Db = Handle.getDbHandle () ;
+			ps = Conn.prepareStatement ("INSERT INTO characters SET account_name=?, objid=?, char_name=?, level=?, Exp=?, MaxHp=?, MaxMp=?, CurHp=?, CurMp=?, Ac=?, Str=?, Con=?, Dex=?, Cha=?, Intel=?, Wis=?, Status=?, Class=?, Sex=?, Type=?, Heading=?, LocX=?, LocY=?, MapID=?, Food=?, Lawful=?, Title=?, ClanID=?, Clanname=?;") ;
+			ps.setString (1, Handle.Account.UserAccount) ;
+			ps.setInt (2, pc.Uuid) ;
+			ps.setString (3, pc.Name) ;
+			ps.setInt (4, pc.Level) ;
+			ps.setInt (5, pc.Exp) ;
+			ps.setInt (6, pc.BasicParameter.MaxHp) ;
+			ps.setInt (7, pc.BasicParameter.MaxMp) ;
+			ps.setInt (8, pc.Hp) ;
+			ps.setInt (9, pc.Mp) ;
+			ps.setInt (10, pc.BasicParameter.Ac) ;
+			ps.setInt (11, pc.BasicParameter.Str) ;
+			ps.setInt (12, pc.BasicParameter.Con) ;
+			ps.setInt (13, pc.BasicParameter.Dex) ;
+			ps.setInt (14, pc.BasicParameter.Cha) ;
+			ps.setInt (15, pc.BasicParameter.Intel) ;
+			ps.setInt (16, pc.BasicParameter.Wis);
+			ps.setInt (17, pc.Status) ;
+			ps.setInt (18, pc.Gfx) ;
+			ps.setInt (19, pc.Sex) ;
+			ps.setInt (20, pc.Type) ;
+			ps.setInt (21, pc.location.Heading) ;
+			ps.setInt (22, pc.location.x) ;
+			ps.setInt (23, pc.location.y) ;
+			ps.setInt (24, pc.location.MapId) ;
+			ps.setInt (25, pc.Satiation) ;
+			ps.setInt (26, pc.Lawful) ;
+			ps.setString (27, pc.Title) ;
+			ps.setInt (28, pc.ClanId) ;
+			ps.setString (29, pc.ClanName) ;
+			
+			ps.execute () ;
+			//HikariCP Db = Handle.getDbHandle () ;
+			/*
 			String create = String.format ("INSERT INTO characters SET account_name=\'%s\', objid=\'%d\', char_name=\'%s\', level=\'%d\', Exp=\'%d\', MaxHp=\'%d\', MaxMp=\'%d\', CurHp=\'%d\', CurMp=\'%d\', Ac=\'%d\', Str=\'%d\', Con=\'%d\', Dex=\'%d\', Cha=\'%d\', Intel=\'%d\', Wis=\'%d\', Status=\'%d\', Class=\'%d\', Sex=\'%d\', Type=\'%d\', Heading=\'%d\', LocX=\'%d\', LocY=\'%d\', MapID=\'%d\', Food=\'%d\', Lawful=\'%d\', Title=\'%s\', ClanID=\'%d\', Clanname=\'%s\';",
 					Handle.Account.UserAccount,
 					pc.Uuid,
@@ -143,12 +180,18 @@ public class CharacterInitializer
 					pc.ClanName
 					) ;
 			Db.Insert (create) ;
+			*/
 			
 			/*
 			 * 給初始道具
 			 */
 			
-		} catch (Exception e) {e.printStackTrace (); }
+		} catch (Exception e) {
+			e.printStackTrace ();
+		} finally {
+			DatabaseUtil.close (ps) ;
+			DatabaseUtil.close (Conn) ;
+		}
 		
 		/*
 		 * 更新客戶端角色顯示		

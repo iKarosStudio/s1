@@ -87,7 +87,17 @@ public class SessionHandler extends Thread implements Runnable
 			Out.write (Raw) ;
 			Out.flush () ;
 			
-		} catch (Exception e) {	e.printStackTrace () ;}
+		} catch (Exception e) {	
+			try {
+				Out.close () ;
+				System.out.printf ("Send Packet Exception! Close ") ;
+				System.out.print (Out) ;
+				System.out.printf (" Output flow\n") ;
+			} catch (Exception p) {
+				//
+			}
+			//e.printStackTrace () ;
+		}
 	}
 	
 	/*

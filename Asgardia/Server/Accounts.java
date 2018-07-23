@@ -29,11 +29,12 @@ public class Accounts extends SessionHandler
 	 * 載入帳號
 	 */
 	public int Load () {
-		HikariCP Db = Session.getDbHandle () ;
-		 
+		ResultSet rs = null;
+		ResultSet online = null;
+	
 		int LoginResult = 0;
 		try {
-			ResultSet rs = DatabaseCmds.LoadAccount (UserAccount) ;
+			rs = DatabaseCmds.LoadAccount (UserAccount) ;
 			
 			if (!rs.next () ) {
 				System.out.println ("Account:" + UserAccount + " NOT EXISTS.") ;
@@ -47,14 +48,16 @@ public class Accounts extends SessionHandler
 					LoginResult = AccountOperation.ACCOUNT_PASSWORD_ERROR;
 				}
 				
-				
-				ResultSet online = DatabaseCmds.CheckOnlineCharacters (UserAccount) ;
+				online  = DatabaseCmds.CheckOnlineCharacters (UserAccount) ;
 				if (online.next () ) {
 					LoginResult = AccountOperation.ACCOUNT_IN_USE;
 				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace () ;
+		} finally {
+			DatabaseUtil.close (rs) ;
+			DatabaseUtil.close (online) ;
 		}
 		return LoginResult;
 	}

@@ -19,18 +19,19 @@ public class MapLoader
 	
 	public MapLoader (Asgardia Handle) 
 	{
-		//int x = 0;
-		//int y = 0;
-		//int ValidCount = 0;
-		
+
 		/*
 		 * 載入伺服器地圖檔案
 		 */
 		System.out.printf ("Load map files...") ;
 		
 		long t_starts = System.currentTimeMillis () ;
-		//for (int[] Info : MapInfo.INFO) {
+
 		MapInfo.getInstance ().Table.forEach ((Integer map_id, int[] Info)->{
+			Connection con = HikariCP.getConnection () ;
+			PreparedStatement ps = null;
+			ResultSet rs = null;
+			
 			try {
 				if (map_id > MAPID_LIMIT) return ;
 				
@@ -72,19 +73,23 @@ public class MapLoader
 				/*
 				 * 讀取地圖傳送點並新增
 				 */
-				HikariCP Db = HikariCP.getInstance () ;
-				String ReqTpTable = String.format ("SELECT * FROM dungeon WHERE src_mapid=\'%d\';", map.MapId) ;
-				ResultSet Tps = Db.Query (ReqTpTable) ;
 				
-				while (Tps.next () ) {
-					Location Dest = new Location (Tps.getInt("new_mapid"), Tps.getInt("new_x"), Tps.getInt ("new_y"), Tps.getInt ("new_heading") ) ;
-					map.addTpLocation (Tps.getInt ("src_x"), Tps.getInt ("src_y"), Dest) ;
+				ps = con.prepareStatement ("SELECT * FROM dungeon WHERE src_mapid=?;") ;
+				ps.setInt (1, map.MapId) ;
+				rs = ps.executeQuery () ;
+				
+				while (rs.next () ) {
+					Location Dest = new Location (rs.getInt("new_mapid"), rs.getInt("new_x"), rs.getInt ("new_y"), rs.getInt ("new_heading") ) ;
+					map.addTpLocation (rs.getInt ("src_x"), rs.getInt ("src_y"), Dest) ;
 				}
 				
 				//ValidCount++;
 			} catch (Exception e) {
-				//System.out.println (e.toString () + " x:" + x + " y:" + y) ;
 				e.printStackTrace () ;
+			} finally {
+				DatabaseUtil.close (rs) ;
+				DatabaseUtil.close (ps) ;
+				DatabaseUtil.close (con) ;
 			}
 		}); //end for mapid	
 		long t_ends = System.currentTimeMillis () ;

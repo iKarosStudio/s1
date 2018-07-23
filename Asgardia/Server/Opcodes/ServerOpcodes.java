@@ -3,6 +3,7 @@ package Asgardia.Server.Opcodes;
 public class ServerOpcodes
 {
 	public static final int OBJ_ACTION = 3;
+	public static final int MAP_USE = 5;
 	public static final int ITEM_UPDATE_STATUS = 6;
 	public static final int SKILL_BUY_RESULT = 17;
 	public static final int HP_UPDATE = 19;

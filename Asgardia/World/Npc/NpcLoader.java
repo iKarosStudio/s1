@@ -26,9 +26,15 @@ public class NpcLoader
 		MapInfo.getInstance ().Table.forEach ((Integer map_id, int[] Info)->{
 			if (map_id > MapLoader.MAPID_LIMIT) return;
 			
-			String spawnlist_npc_q = String.format ("SELECT * FROM spawnlist_npc WHERE mapid=\'%d\';", map_id) ;
-			ResultSet spawnlist_rs = Db.Query (spawnlist_npc_q) ;
+			Connection con = HikariCP.getConnection () ;
+			PreparedStatement ps = null;
+			ResultSet rs = null;
+			
 			try {
+				ps = con.prepareStatement ("SELECT * FROM spawnlist_npc WHERE mapid=?;") ;
+				ps.setInt (1, map_id) ;
+				ResultSet spawnlist_rs = ps.executeQuery () ;
+				
 				while (spawnlist_rs.next () ) {
 					int Uuid = spawnlist_rs.getInt ("id") ;
 					String Location = spawnlist_rs.getString ("location") ;
@@ -65,6 +71,10 @@ public class NpcLoader
 				}
 			} catch (Exception e) {
 				e.printStackTrace () ;
+			} finally {
+				DatabaseUtil.close (rs) ;
+				DatabaseUtil.close (ps) ;
+				DatabaseUtil.close (con) ;
 			}
 		}) ;
 		

@@ -63,9 +63,9 @@ public class MainService extends Thread
 			/*
 			 * 清空所有人物上線狀態
 			 */
-			HikariCP Db = HikariCP.getInstance () ;
-			String ClearOnlineStatus = String.format ("UPDATE characters SET OnlineStatus=\'0\' WHERE OnlineStatus=\'1\';") ;
-			Db.Insert (ClearOnlineStatus) ;
+			//HikariCP Db = HikariCP.getInstance () ;
+			//String ClearOnlineStatus = String.format ("UPDATE characters SET OnlineStatus=\'0\' WHERE OnlineStatus=\'1\';") ;
+			//Db.Insert (ClearOnlineStatus) ;
 			
 		} catch (BindException e) {
 			System.out.printf ("bind Port:%d fail\n", Configurations.SERVER_PORT) ;

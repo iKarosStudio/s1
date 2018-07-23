@@ -15,6 +15,11 @@ public class SkillUse
 	public SkillUse (SessionHandler handle, byte[] Data) {
 		reader = new PacketReader (Data) ;
 		pc = handle.getPc () ;
+		
+		if (pc.isDead () ) {
+			return;
+		}
+		
 		try {
 			for (byte d : Data) {
 				System.out.printf ("0x%2X ", d) ;
@@ -31,7 +36,8 @@ public class SkillUse
 				uuid = reader.ReadDoubleWord () ;
 			}
 			
-			System.out.printf ("use skill id:%d target:%d\n", skill_id, uuid) ;
+			pc.useSkill (uuid) ;
+			
 		} catch (Exception e) {
 			e.printStackTrace () ;
 		}

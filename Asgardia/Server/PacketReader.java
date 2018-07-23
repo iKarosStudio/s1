@@ -50,4 +50,20 @@ public class PacketReader
 			return null;
 		}
 	}
+	
+	/*
+	public String ReadTextString () {
+		String Parse = null;
+		try{
+			Parse = new String (Raw, offset, Raw.length - offset, "BIG5");
+			Parse = Parse.substring (0, Parse.indexOf ("\0\0") ) ;
+			offset += Parse.getBytes ("MS950").length + 1;
+			
+			return Parse;
+		} catch (Exception e) {
+			e.printStackTrace () ;
+			return null;
+		}
+	}
+	*/
 }

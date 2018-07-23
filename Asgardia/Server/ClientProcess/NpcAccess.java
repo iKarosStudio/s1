@@ -66,11 +66,12 @@ public class NpcAccess
 		if (CacheData.NpcTalkDataCache.containsKey (Uuid) ) {
 			NpcTalkData TalkData = CacheData.NpcTalkDataCache.get (Uuid) ;
 			NpcAccessResult Result;
-			if (Pc.Lawful > 0) { //中立, 正義
-				Result = new NpcAccessResult (Uuid, TalkData.NormalAction) ;
-			} else { //邪惡
+			if (Pc.Lawful < 0) {//邪惡
 				Result = new NpcAccessResult (Uuid, TalkData.CaoticAction) ;
+			} else {//中立, 正義
+				Result = new NpcAccessResult (Uuid, TalkData.NormalAction) ;
 			}
+			
 			Handle.SendPacket (Result.getRaw () ) ;
 			
 		} else {

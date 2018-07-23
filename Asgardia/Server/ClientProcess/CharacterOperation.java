@@ -41,8 +41,7 @@ public class CharacterOperation
 			Pc.ApplyEquipmentEffects () ;
 			Pc.LoadSkills () ;
 			Pc.LoadBuff () ;
-			
-			
+					
 			/*
 			byte[] config = new SendClientConfig (Handle).getRaw () ;
 			if (config.length > 0) {
@@ -103,9 +102,7 @@ public class CharacterOperation
 	 * 參考C_CreateChar.java
 	 */
 	public void Create (SessionHandler Handle, byte[] Data) {
-		HikariCP Db = Handle.getDbHandle () ;
 		PacketReader Reader = new PacketReader (Data) ;
-		
 		String Name = Reader.ReadString () ;
 		
 		/* 
@@ -130,24 +127,29 @@ public class CharacterOperation
 		int Cha =  Reader.ReadByte () ;
 		int Intel= Reader.ReadByte () ;
 		
+		Connection conn = HikariCP.getConnection ();
+		PreparedStatement ps1 = null;
+		PreparedStatement ps2 = null;
+		ResultSet rs_amount = null;
+		ResultSet rs_idrepeat = null;
+		
 		try {
 			//檢查帳號角色數量
-			String Check = String.format ("SELECT count(*) as cnt FROM characters where account_name=\'%s\';", 
-					Handle.Account.UserAccount) ;
-			ResultSet Result = Db.Query (Check) ;
-			if (Result.next () ) {
-				if (Result.getInt ("cnt") < 4) {
-					//System.out.printf ("帳號角色數量正確:%d\n", Result.getInt ("cnt") ) ;
-				} else {
+			ps1 = conn.prepareStatement ("SELECT count(*) as cnt FROM characters WHERE account_name=?;") ;
+			ps1.setString (1, Handle.Account.UserAccount) ;
+			rs_amount = ps1.executeQuery () ;
+			if (rs_amount.next () ) {
+				if (rs_amount.getInt ("cnt") > 4) {
 					Handle.SendPacket (new CharCreateResult (CharCreateResult.WRONG_AMOUNT).getRaw () ) ;
 					return;
 				}
 			}
 			
 			//檢查重複ID
-			Check = String.format ("SELECT account_name FROM characters WHERE char_name=\'%s\';", Name) ;
-			Result = Db.Query (Check) ;
-			if (Result.next () ) {
+			ps2 = conn.prepareStatement ("SELECT account_name FROM characters WHERE char_name=?;") ;
+			ps2.setString (1, Name) ;
+			rs_idrepeat = ps2.executeQuery () ;
+			if (rs_idrepeat.next () ) {
 				Handle.SendPacket (new CharCreateResult (CharCreateResult.ALREADY_EXIST).getRaw () ) ;
 				return;
 			}
@@ -162,7 +164,15 @@ public class CharacterOperation
 			CharacterInitializer ci = new CharacterInitializer (Handle, Name, Type, Sex, Str, Dex, Con, Wis, Cha, Intel) ;
 			System.out.printf ("Create Character:%s\t From Account:%s @ %s\n", Name, Handle.Account.UserAccount, Handle.getIP () ) ;
 			
-		} catch (Exception e) {e.printStackTrace () ; }
+		} catch (Exception e) {
+			e.printStackTrace () ; 
+		} finally {
+			DatabaseUtil.close (rs_amount) ;
+			DatabaseUtil.close (rs_idrepeat) ;
+			DatabaseUtil.close (ps1) ;
+			DatabaseUtil.close (ps2) ;
+			DatabaseUtil.close (conn) ;
+		}
 		
 	}
 	

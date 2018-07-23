@@ -141,7 +141,7 @@ public class NpcRequest
 		/*
 		 * 更新資料庫
 		 */
-		Pc.SaveItem () ;
+		Pc.saveItem () ;
 		
 		/*
 		 *更新角色狀況

@@ -31,7 +31,8 @@ public class UuidGenerator
 		
 		try {
 			String quere = "select max(id)+1 as nextid from (select id from character_items union all select id from character_teleport union all select id from character_warehouse union all select objid as id from characters union all select clan_id as id from clan_data union all select id from clan_warehouse union all select objid as id from pets) t" ;
-			ResultSet rs = Db.Query (quere) ;
+			PreparedStatement ps = HikariCP.getConnection ().prepareStatement (quere) ;
+			ResultSet rs = ps.executeQuery () ;
 			
 			while (rs.next () ) {
 				int uuid = rs.getInt ("nextid") ;

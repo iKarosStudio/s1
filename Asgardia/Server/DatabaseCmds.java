@@ -12,93 +12,236 @@ public class DatabaseCmds
 
 	
 	public static ResultSet LoadAccount (String user_account) {
-		String q = String.format ("SELECT * FROM accounts WHERE login=\'%s\' LIMIT 1;" , user_account) ;
-		return Db.Query (q) ;
+		Connection con = HikariCP.getConnection ();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		
+		try {
+			ps = con.prepareStatement ("SELECT * FROM accounts WHERE login=? LIMIT 1;") ;
+			ps.setString (1, user_account) ;
+			rs = ps.executeQuery () ;
+		} catch (Exception e) {
+			e.printStackTrace () ; 
+		} finally {
+			//DatabaseUtil.close (rs) ;
+			DatabaseUtil.close (ps) ;
+			DatabaseUtil.close (con) ;
+		}
+		return rs;
 	}
 	
 	public static void CreateAccount (String user_account, String user_pw, String ip, String hostname) {
-		String q = String.format ("INSERT INTO accounts SET login=\'%s\',password=\'%s\',lastactive=\'%s\',access_level=\'0\',ip=\'%s\',host=\'%s\',banned=\'0\';",
-				user_account,
-				user_pw,
-				new Timestamp (System.currentTimeMillis () ),
-				ip,
-				hostname) ;
-		Db.Insert (q) ;
+		Connection con = HikariCP.getConnection ();
+		PreparedStatement ps = null;
+		try {
+			ps = con.prepareStatement ("INSERT INTO accounts set login=?, password=?, lastactive=?, access_level=?, ip=?, host=?, banned=?;") ;
+			ps.setString (1, user_account) ;
+			ps.setString (2, user_pw) ;
+			ps.setTimestamp (3, new Timestamp (System.currentTimeMillis () ) ) ;
+			ps.setString (4, ip) ;
+			ps.setString (5, hostname) ;
+			ps.execute () ;
+			
+		} catch (Exception e) {
+			e.printStackTrace () ;
+		} finally {
+			DatabaseUtil.close (ps) ;
+			DatabaseUtil.close (con) ;
+		}
 	}
 	
 	public static ResultSet CheckOnlineCharacters (String user_account) {
-		String onlinecheck = String.format ("SELECT * FROM characters WHERE account_name=\'%s\' AND OnlineStatus=\'1\';",
-				user_account) ;
-		return Db.Query (onlinecheck) ;
+		Connection con = HikariCP.getConnection ();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		
+		try {
+			ps = con.prepareStatement ("SELECT * FROM characters WHERE account_name=? AND OnlineStatus=?") ;
+			ps.setString (1, user_account) ;
+			ps.setInt (2, 1) ;
+			
+			rs = ps.executeQuery () ;
+		} catch (Exception e) {
+			e.printStackTrace () ;
+		} finally {
+			//DatabaseUtil.close (rs) ;
+			DatabaseUtil.close (ps) ;
+			DatabaseUtil.close (con) ;
+		}
+		return rs;
 	}
 	
 	public static int AccountCharacterAmount (String user_account) {
-		String q = String.format ("SELECT count(*) as cnt FROM characters WHERE account_name=\'%s\'", user_account) ;
-		ResultSet rs = Db.Query (q) ;
+		Connection con = HikariCP.getConnection ();
+		PreparedStatement ps = null;	
+		ResultSet rs = null;
+		int count = 0;
+				
 		try {
+			ps = con.prepareStatement ("SELECT count(*) as cnt FROM characters WHERE account_name=?") ;
+			ps.setString (1, user_account) ;
+			
+			rs = ps.executeQuery () ;
 			if (rs.next () ) {
-				return rs.getInt ("cnt") ;
-			} else {
-				return 0;
+				count = rs.getInt ("cnt") ;
 			}
 		} catch (Exception e) {
 			e.printStackTrace () ;
 			return 0;
+		} finally {
+			DatabaseUtil.close (rs) ;
+			DatabaseUtil.close (ps) ;
+			DatabaseUtil.close (con) ;
 		}
+		
+		return count;
 	}
 	
 	public static ResultSet AccountCharacters (String user_account) {
-		String q = String.format ("SELECT * FROM characters WHERE account_name=\'%s\' ORDER BY objid" , user_account) ;
-		return Db.Query (q) ;
+		Connection con = HikariCP.getConnection () ;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		
+		try {
+			ps = con.prepareStatement ("SELECT * FROM characters WHERE account_name=? ORDER BY objid;") ;
+			ps.setString (1, user_account) ;
+			rs = ps.executeQuery () ;
+		} catch (Exception e) {
+			e.printStackTrace () ;
+		} finally {
+			//DatabaseUtil.close (rs) ;
+			DatabaseUtil.close (ps) ;
+			DatabaseUtil.close (con) ;
+		}
+		
+		return rs;
 	}
 	
 	public static void UpdateAccountLoginTime (String user_account, String ip, String hostname) {
-		String q = String.format ("UPDATE accounts SET ip=\'%s\', host=\'%s\', lastactive=\'%s\' WHERE login=\'%s\';",
-				ip,
-				hostname,
-				new Timestamp (System.currentTimeMillis () ) ,
-				user_account) ;
-		Db.Insert (q) ;
+		Connection con = HikariCP.getConnection ();
+		PreparedStatement ps = null;
+		try {
+			ps = con.prepareStatement ("UPDATE accounts SET ip=?, host=?, lastactive=? WHERE login=?;") ;
+			ps.setString (1, ip);
+			ps.setString (2, hostname);
+			ps.setTimestamp (3, new Timestamp (System.currentTimeMillis () ) ) ;
+			ps.setString (4, user_account);
+			
+			ps.execute () ;
+			
+		} catch (Exception e) {
+			e.printStackTrace () ;
+		} finally {
+			DatabaseUtil.close (ps) ;
+			DatabaseUtil.close (con) ;
+		}
 	}
 	
 	public static ResultSet LoadItem (int uuid) {
-		String q = String.format ("SELECT * FROM character_items WHERE char_id=\'%s\';", uuid) ;
-		return Db.Query (q) ;
+		Connection con = HikariCP.getConnection () ;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		
+		try {
+			ps = con.prepareStatement ("SELECT * FROM character_items WHERE char_id=?;") ;
+			ps.setInt (1, uuid) ;
+			rs = ps.executeQuery () ;
+			
+		} catch (Exception e) {
+			e.printStackTrace () ;
+		} finally {
+			//DatabaseUtil.close (rs) ;
+			DatabaseUtil.close (ps) ;
+			DatabaseUtil.close (con) ;
+		}
+		
+		return rs;
 	}
 	
 	public static ResultSet LoadSkills (int uuid) {
-		String q = String.format ("SELECT * FROM character_skills WHERE char_obj_id=\'%d\';", uuid) ;
-		return Db.Query (q) ;
+		Connection con = HikariCP.getConnection () ;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		
+		try {
+			ps = con.prepareStatement ("SELECT * FROM character_skills WHERE char_obj_id=?;") ;
+			ps.setInt (1, uuid) ;
+			rs = ps.executeQuery () ;
+		} catch (Exception e) {
+			e.printStackTrace () ;
+		} finally {
+			//DatabaseUtil.close (rs) ;
+			DatabaseUtil.close (ps) ;
+			DatabaseUtil.close (con) ;
+		}
+		
+		return rs;		
 	}
 	
 	public static void SaveSkills (int uuid, int skill_id, String skill_name) {
+		Connection con = HikariCP.getConnection () ;
+		PreparedStatement ps = null;
+		
 		try {
-			PreparedStatement ps = Db.con.prepareStatement ("INSERT INTO character_skills SET char_obj_id=?, skill_id=?, skill_name=?") ;
+			ps = con.prepareStatement ("INSERT INTO character_skills SET char_obj_id=?, skill_id=?, skill_name=?") ;
 			ps.setInt (1, uuid) ;
 			ps.setInt (2, skill_id) ;
 			ps.setString (3, skill_name) ;
 			ps.execute () ;
 			
-		} catch (Exception e) {e.printStackTrace () ; }
+		} catch (Exception e) {
+			e.printStackTrace () ;
+		} finally {
+			DatabaseUtil.close (ps) ;
+			DatabaseUtil.close (con) ;
+		}
 	}
 	
 	public static boolean CheckSkill (int uuid, int skill_id) {
+		Connection con = HikariCP.getConnection () ;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		boolean result = false;
+		
 		try {
-			PreparedStatement ps = Db.con.prepareStatement ("SELECT * FROM character_skills WHERE char_obj_id=? AND skill_id=?;") ;
+			ps = con.prepareStatement ("SELECT * FROM character_skills WHERE char_obj_id=? AND skill_id=?;") ;
 			ps.setInt (1, uuid) ;
 			ps.setInt (2, skill_id) ;
 			
-			ResultSet rs = ps.executeQuery () ;
-			return rs.next () ;
+			rs = ps.executeQuery () ;
+			
+			if (rs.next ()) {
+				result = true;
+			}
 		} catch (Exception e) {
 			e.printStackTrace () ;
+		} finally {
+			DatabaseUtil.close (rs) ;
+			DatabaseUtil.close (ps) ;
+			DatabaseUtil.close (con) ;
 		}
-		return false;
+		
+		return result;
 	}
 	
 	public static ResultSet LoadTeleportBookmark (int uuid) {
-		String q = String.format ("SELECT * FROM character_teleport WHERE char_id=\'%d\' ORDER BY name ASC", uuid) ;
-		return Db.Query (q) ;
+		Connection con = HikariCP.getConnection () ;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		
+		try {
+			ps = con.prepareStatement ("SELECT * FROM charater_teleport WHERE char_id=? ORDER BY name ASC;") ;
+			ps.setInt (1, uuid) ;
+			rs = ps.executeQuery () ;
+		} catch (Exception e) {
+			e.printStackTrace () ;
+		} finally {
+			DatabaseUtil.close (rs) ;
+			DatabaseUtil.close (ps) ;
+			DatabaseUtil.close (con) ;
+		}
+		
+		return rs;
 	}
 	
 	public static void SetItemEquip (int uuid, int isEquip) {
@@ -106,39 +249,71 @@ public class DatabaseCmds
 	}
 	
 	public static void InsertPcItem (ItemInstance item) {
-		 String Quere = String.format ("INSERT INTO character_items SET id=\'%d\',item_id=\'%d\',char_id=\'%d\',item_name=\'%s\',count=\'%d\',is_equipped=\'%d\',enchantlvl=\'%d\',is_id=\'%d\',durability=\'%d\',charge_count=\'%d\';",
-					item.Uuid,
-					item.ItemId,
-					item.OwnerId,
-					item.Name,
-					item.Count,
-					(item.IsEquipped) ? 1:0,
-					item.Enchant,
-					(item.IsIdentified) ? 1:0,
-					item.Durability,
-					item.ChargeCount) ;
-		 Db.Insert (Quere) ;
+		Connection con = HikariCP.getConnection () ;
+		PreparedStatement ps = null;
+		
+		try {
+			ps = con.prepareStatement ("INSERT INTO character_items SET id=?, item_id=?, char_id=?, item_name=?, count=?, is_equipped=?, enchantlvl=?, is_id=?, durability=? ,charge_count=?;") ;
+			ps.setInt (1, item.Uuid) ;
+			ps.setInt (2, item.ItemId) ;
+			ps.setInt (3, item.OwnerId) ;
+			ps.setString (4, item.Name) ;
+			ps.setInt (5, item.Count) ;
+			ps.setInt (6, (item.IsEquipped) ? 1:0) ;
+			ps.setInt (7, item.Enchant) ;
+			ps.setInt (8, (item.IsIdentified) ? 1:0) ;
+			ps.setInt (9, item.Durability) ;
+			ps.setInt (10,item.ChargeCount) ;
+			
+			ps.execute () ;
+		} catch (Exception e) {
+			e.printStackTrace () ;
+		} finally {
+			DatabaseUtil.close (ps) ;
+			DatabaseUtil.close (con) ;
+		}
 	}
 	
 	public static void UpdatePcItem (ItemInstance item) {
-		String Quere = String.format ("UPDATE character_items SET item_id=\'%d\',char_id=\'%d\',item_name=\'%s\',count=\'%d\',is_equipped=\'%d\',enchantlvl=\'%d\',is_id=\'%d\',durability=\'%d\',charge_count=\'%d\' where id=\'%d\';",
-				item.ItemId,
-				item.OwnerId,
-				item.Name,
-				item.Count,
-				(item.IsEquipped) ? 1:0,
-				item.Enchant,
-				(item.IsIdentified) ? 1:0,
-				item.Durability,
-				item.ChargeCount,
-				item.Uuid) ;
+		Connection con = HikariCP.getConnection () ;
+		PreparedStatement ps = null;
 		
-		Db.Insert (Quere) ;
+		try {
+			ps = con.prepareStatement ("UPDATE character_items SET item_id=?, char_id=?, item_name=?, count=?, is_equipped=?, enchantlvl=?, is_id=?, durability=? ,charge_count=? where id=?;") ;
+			ps.setInt (1, item.ItemId) ;
+			ps.setInt (2, item.OwnerId) ;
+			ps.setString (3, item.Name) ;
+			ps.setInt (4, item.Count) ;
+			ps.setInt (5, (item.IsEquipped) ? 1:0) ;
+			ps.setInt (6, item.Enchant) ;
+			ps.setInt (7, (item.IsIdentified) ? 1:0) ;
+			ps.setInt (8, item.Durability) ;
+			ps.setInt (9, item.ChargeCount) ;
+			ps.setInt (10,item.Uuid) ;
+			
+			ps.execute () ;
+		} catch (Exception e) {
+			e.printStackTrace () ;
+		} finally {
+			DatabaseUtil.close (ps) ;
+			DatabaseUtil.close (con) ;
+		}
 	}
 	
 	public static void DeletePcItem (ItemInstance item) {
-		String Quere = String.format ("DELETE FROM character_items WHERE id=\'%d\';", item.Uuid) ;
-		Db.Insert (Quere) ;
+		Connection con = HikariCP.getConnection () ;
+		PreparedStatement ps = null;
+		
+		try {
+			ps = con.prepareStatement ("DELETE FROM character_items WHERE id=?;") ;
+			ps.setInt (1, item.Uuid) ;
+			ps.execute () ;
+		} catch (Exception e) {
+			e.printStackTrace () ;
+		} finally {
+			DatabaseUtil.close (ps) ;
+			DatabaseUtil.close (con) ;
+		}
 	}
 	
 	public static void SavePcEffect (PcInstance p) {
@@ -146,36 +321,92 @@ public class DatabaseCmds
 	}
 	
 	public static void SavePc (PcInstance p) {
-		String q = String.format ("UPDATE characters SET level=\'%d\',Exp=\'%d\',MaxHp=\'%d\',CurHp=\'%d\',MaxMp=\'%d\',CurMp=\'%d\',Ac=\'%d\',Status=\'%d\',LocX=\'%d\',LocY=\'%d\',Heading=\'%d\',MapID=\'%d\' WHERE objid=\'%d\';",
-				p.Level,
-				p.Exp,
-				p.BasicParameter.MaxHp,
-				p.Hp,
-				p.BasicParameter.MaxMp,
-				p.Mp,
-				p.getBaseAc () + p.getEquipAc (),
-				p.Status,
-				p.location.x,
-				p.location.y,
-				p.location.Heading,
-				p.location.MapId,
-				p.Uuid) ;
-		Db.Insert (q);
+		Connection con = HikariCP.getConnection () ;
+		PreparedStatement ps = null;
+		
+		try {
+			ps = con.prepareStatement ("UPDATE characters SET level=?, Exp=?, MaxHp=?, CurHp=?, MaxMp=?, CurMp=?, Ac=?, Status=?, LocX=?, LocY=?, Heading=?, MapID=? WHERE objid=?;") ;
+			ps.setInt (1, p.Level) ;
+			ps.setInt (2, p.Exp) ;
+			ps.setInt (3, p.BasicParameter.MaxHp) ;
+			ps.setInt (4, p.Hp) ;
+			ps.setInt (5, p.BasicParameter.MaxMp) ;
+			ps.setInt (6, p.Mp) ;
+			ps.setInt (7, p.getBaseAc () + p.getEquipAc () ) ;
+			ps.setInt (8, p.Status) ;
+			ps.setInt (9, p.location.x) ;
+			ps.setInt (10, p.location.y) ;
+			ps.setInt (11, p.location.Heading) ;
+			ps.setInt (12, p.location.MapId) ;
+			ps.setInt (13, p.Uuid) ;
+			
+			ps.execute () ;
+		} catch (Exception e) {
+			e.printStackTrace () ;
+		} finally {
+			DatabaseUtil.close (ps) ;
+			DatabaseUtil.close (con) ;
+		}
 	}
 	
 	public static ResultSet DoorSpawinlist (int mapid) {
-		String q = String.format ("SELECT * FROM spawnlist_door WHERE mapid=\'%d\';", mapid) ;
-		return Db.Query (q) ;
+		Connection con = HikariCP.getConnection () ;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		
+		try {
+			ps = con.prepareStatement ("SELECT * FROM spawnlist_door WHERE mapid=?;") ;
+			ps.setInt (1, mapid) ;
+			
+			rs = ps.executeQuery () ;
+		} catch (Exception e) {
+			e.printStackTrace () ;
+		} finally {
+			//DatabaseUtil.close (rs) ;
+			DatabaseUtil.close (ps) ;
+			DatabaseUtil.close (con) ;
+		}
+		
+		return rs;
 	}
 	
 	public static ResultSet MobSpawnlist (int mapid) {
-		//String q = String.format ("SELECT * FROM spawnlist WHERE mapid=\'%d\' and id='62000';", mapid) ; //test
-		String q = String.format ("SELECT * FROM spawnlist WHERE mapid=\'%d\';", mapid) ;
-		return Db.Query (q) ;
+		Connection con = HikariCP.getConnection () ;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		
+		try {
+			ps = con.prepareStatement ("SELECT * FROM spawnlist WHERE mapid=?;") ;
+			ps.setInt (1, mapid) ;
+			rs = ps.executeQuery () ;
+		} catch (Exception e) {
+			e.printStackTrace () ;
+		} finally {
+			//DatabaseUtil.close (rs) ;
+			DatabaseUtil.close (ps) ;
+			DatabaseUtil.close (con) ;
+		}
+		
+		return rs;
 	}
 	
 	public static ResultSet MobDroplist (int mob_id) {
-		String q = String.format ("SELECT * FROM droplist WHERE mobId=\'%d\';", mob_id) ;
-		return Db.Query (q) ;
+		Connection con = HikariCP.getConnection () ;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		
+		try {
+			ps = con.prepareStatement ("SELECT * FROM droplist WHERE mobId=?;") ;
+			ps.setInt (1, mob_id) ;
+			rs = ps.executeQuery () ;
+		} catch (Exception e) {
+			e.printStackTrace () ;
+		} finally {
+			//DatabaseUtil.close (rs) ;
+			DatabaseUtil.close (ps) ;
+			DatabaseUtil.close (con) ;
+		}
+		
+		return rs;
 	}
 }

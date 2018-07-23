@@ -102,6 +102,7 @@ public class AccountOperation
 		
 		int CharacterAmount = 0;
 		
+		ResultSet rs = null;
 		try {	
 			/*
 			 * 回報帳號腳色數量
@@ -116,7 +117,7 @@ public class AccountOperation
 			Handle.SendPacket (Builder.GetPacket () ) ;
 
 			if (CharacterAmount > 0) {
-				ResultSet rs = DatabaseCmds.AccountCharacters (Account.UserAccount) ;
+				rs = DatabaseCmds.AccountCharacters (Account.UserAccount) ;
 				
 				/*
 				 * 回報帳號腳色資料
@@ -150,7 +151,9 @@ public class AccountOperation
 				//do nothing
 			}
 		} catch (Exception e) {
-			System.out.println (e.toString () ) ;
+			e.printStackTrace () ;
+		} finally {
+			DatabaseUtil.close (rs) ;
 		}
 	}
 	

@@ -1,7 +1,6 @@
 package Asgardia.Server.ClientProcess;
 
-import static Asgardia.World.Objects.Items.ItemTypeTable.TYPE_POTION;
-import static Asgardia.World.Objects.Items.ItemTypeTable.TYPE_SCROLL;
+import static Asgardia.World.Objects.Items.ItemTypeTable.*;
 
 import Asgardia.Server.*;
 import Asgardia.Server.ServerProcess.*;
@@ -24,22 +23,61 @@ public class ItemUse
 		int ItemUuid = reader.ReadDoubleWord () ;
 		
 		ItemInstance i = Pc.FindItemByUuid (ItemUuid) ;
-		if (i != null) {
-			//廢棄機制
-			//new ItemHandler (Pc, i) ;
-			
+		if (i != null) {			
 			/*
 			 * 使用道具
 			 */
 			if (i.MajorType == 0) {
-				if (i.MinorType == TYPE_POTION) {
+				if (i.MinorType == TYPE_ARROW) {
+					//
+				} else if (i.MinorType == TYPE_WAND) {
+					//
+				} else if (i.MinorType == TYPE_LIGHT) {
+					//
+				} else if (i.MinorType == TYPE_GEM) {
+					//
+				} else if (i.MinorType == TYPE_TOTEM) {
+					//
+				} else if (i.MinorType == TYPE_FIRECRACKER) {
+					//
+				} else if (i.MinorType == TYPE_POTION) {
 					new UsePotion (Pc, i) ;
 					//Pc.removeItem (i.Uuid, 1) ;
+				} else if (i.MinorType == TYPE_FOOD) {
+					//
 				} else if (i.MinorType == TYPE_SCROLL) {
 					int target_uuid = reader.ReadDoubleWord () ;
 					new UseScroll (Pc, i, target_uuid) ;
-				}
-				else { //未知道具 無法使用
+				} else if (i.MinorType == TYPE_QUEST_ITEM) {
+					//
+				} else if (i.MinorType == TYPE_SPELL_BOOK) {
+					//
+				} else if (i.MinorType == TYPE_PET_ITEM) {
+					//
+				} else if (i.MinorType == TYPE_OTHER) {
+					if (i.ItemId == 40310) { //一般信件
+						int MailCode = reader.ReadWord () ;
+						String Receiver = reader.ReadString () ;
+						byte[] Text = reader.ReadRaw () ;
+						
+						System.out.printf ("Mail code:%d\n", MailCode) ;
+						System.out.printf ("To:%s\n", Receiver) ;
+						//
+					}
+					
+					if (i.ItemId == 40311) { //血盟信件
+					}
+					
+					if (i.ItemId >= 40373 && i.ItemId <= 40390) { //使用地圖
+						Handle.SendPacket (new MapUse (i.Uuid, i.ItemId).getRaw () ) ;
+					}
+				} else if (i.MinorType == TYPE_MATERIAL) {
+					//
+				} else if (i.MinorType == TYPE_EVENT) {
+					//
+				} else if (i.MinorType == TYPE_STING) {
+					//
+				} else { //未知道具 無法使用
 					System.out.printf ("%s 使用未知種類道具%d(Type:%d)\n", Pc.Name, i.Uuid, i.MinorType) ;
 				}
 				

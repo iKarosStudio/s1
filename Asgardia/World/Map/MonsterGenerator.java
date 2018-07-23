@@ -178,29 +178,37 @@ public class MonsterGenerator extends Thread implements Runnable
 				
 				int MonsterId = rs.getInt ("npc_templateid") ;
 				ResultSet rs_drop = DatabaseCmds.MobDroplist (MonsterId) ;
-				rs_drop.last () ;
-				int DropListSize = rs_drop.getRow () ;
-				
-				if (DropListSize > 0 && !DropList.containsKey (MonsterId) ) {
-					rs_drop.first () ;
-					List<MonsterDropList> DropTable= new ArrayList<MonsterDropList> () ;
+				try {
+					rs_drop.last () ;
+					int DropListSize = rs_drop.getRow () ;
 					
-					while (rs_drop.next () ) {
-						MonsterDropList mdl = new MonsterDropList (
-							rs_drop.getInt ("mobId"),
-							rs_drop.getInt ("itemId"),
-							rs_drop.getInt ("min"),
-							rs_drop.getInt ("max"),
-							rs_drop.getInt ("chance") ) ;
-						DropTable.add (mdl) ;
+					if (DropListSize > 0 && !DropList.containsKey (MonsterId) ) {
+						rs_drop.first () ;
+						List<MonsterDropList> DropTable= new ArrayList<MonsterDropList> () ;
+						
+						while (rs_drop.next () ) {
+							MonsterDropList mdl = new MonsterDropList (
+								rs_drop.getInt ("mobId"),
+								rs_drop.getInt ("itemId"),
+								rs_drop.getInt ("min"),
+								rs_drop.getInt ("max"),
+								rs_drop.getInt ("chance") ) ;
+							DropTable.add (mdl) ;
+						}
+						DropList.putIfAbsent (MonsterId, DropTable) ;
+						
 					}
-					DropList.putIfAbsent (MonsterId, DropTable) ;
-					
+				} catch (Exception e) {
+					e.printStackTrace () ;
+				} finally {
+					DatabaseUtil.close (rs_drop) ;
 				}
 			} //End of rs.next()
 			
 		} catch (Exception e) {
 			e.printStackTrace () ;
+		} finally {
+			DatabaseUtil.close (rs) ;
 		}
 	}
 	

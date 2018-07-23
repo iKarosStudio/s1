@@ -115,7 +115,7 @@ public class Main {
 		System.out.println ("Drop Item Rate:" + Configurations.RateDropItem) ;
 		System.out.println ("Drop Gold Rate:" + Configurations.RateDropGold) ;
 		*/
-		System.out.printf ("PID:%s\n", ManagementFactory.getRuntimeMXBean().getName ().split ("@")[0] ) ;
+		System.out.printf ("PID %s\n", ManagementFactory.getRuntimeMXBean().getName ().split ("@")[0] ) ;
 		
 		/*
 		 * 本地端控制台

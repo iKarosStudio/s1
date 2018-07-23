@@ -75,7 +75,9 @@ public class CacheData
 		NpcCache = new ConcurrentHashMap<Integer, NpcTemplate> () ;
 		
 		try {
-			ResultSet rs = Db.Query ("SELECT * FROM npc;") ;
+			PreparedStatement ps = HikariCP.getConnection ().prepareStatement ("SELECT * FROM npc;") ;
+			ResultSet rs = ps.executeQuery () ;
+			
 			int Counter = 0;
 			long t_starts = System.currentTimeMillis () ;
 			while (rs.next () ) {
@@ -173,7 +175,9 @@ public class CacheData
 		NpcTalkDataCache = new ConcurrentHashMap<Integer, NpcTalkData> () ;
 
 		try {
-			ResultSet rs = Db.Query ("SELECT * FROM npcaction;") ;
+			PreparedStatement ps = HikariCP.getConnection ().prepareStatement ("SELECT * FROM npcaction;") ;
+			ResultSet rs = ps.executeQuery () ;
+			
 			int Counter = 0;
 			long t_starts = System.currentTimeMillis () ;
 			while (rs.next () ) {
@@ -201,7 +205,9 @@ public class CacheData
 		ItemCache = new ConcurrentHashMap<Integer, ItemTemplate> () ;
 		
 		try {
-			ResultSet rs = Db.Query ("SELECT * FROM etcitem;") ;
+			PreparedStatement ps = HikariCP.getConnection ().prepareStatement ("SELECT * FROM etcitem;") ;
+			ResultSet rs = ps.executeQuery () ;
+			
 			int Counter = 0;
 			long t_starts = System.currentTimeMillis () ;
 			while (rs.next () ) {
@@ -245,7 +251,9 @@ public class CacheData
 		SkillCache = new ConcurrentHashMap<Integer, SkillTemplate> () ;
 		
 		try {
-			ResultSet rs = Db.Query ("SELECT * FROM skills;") ;
+			PreparedStatement ps = HikariCP.getConnection ().prepareStatement ("SELECT * FROM skills;") ;
+			ResultSet rs = ps.executeQuery () ; 
+					
 			int Counter = 0;
 			long t_starts = System.currentTimeMillis () ;
 			while (rs.next () ) {
@@ -297,7 +305,9 @@ public class CacheData
 		ShopCache = new ConcurrentHashMap<Integer, NpcShop> () ;
 		
 		try {
-			ResultSet rs = Db.Query ("SELECT * FROM shop;") ;
+			PreparedStatement ps = HikariCP.getConnection ().prepareStatement ("SELECT * FROM shop;") ;
+			ResultSet rs = ps.executeQuery () ;
+			
 			int Counter = 0;
 			long t_starts = System.currentTimeMillis () ;
 			while (rs.next () ) {
@@ -338,7 +348,9 @@ public class CacheData
 		WeaponCache = new ConcurrentHashMap<Integer, WeaponTemplate> () ;
 		
 		try {
-			ResultSet rs = Db.Query ("SELECT * FROM weapon") ;
+			PreparedStatement ps = HikariCP.getConnection ().prepareStatement ("SELECT * FROM weapon;") ;
+			ResultSet rs = ps.executeQuery () ;
+			
 			int Counter = 0;
 			long t_starts = System.currentTimeMillis () ;
 			while (rs.next () ) {
@@ -401,7 +413,9 @@ public class CacheData
 		ArmorCache = new ConcurrentHashMap<Integer, ArmorTemplate> () ;
 		
 		try {
-			ResultSet rs = Db.Query ("SELECT * FROM armor") ;
+			PreparedStatement ps = HikariCP.getConnection ().prepareStatement ("SELECT * FROM armor;") ;
+			ResultSet rs = ps.executeQuery () ;
+			
 			int Counter = 0;
 			long t_starts = System.currentTimeMillis () ;
 			while (rs.next () ) {

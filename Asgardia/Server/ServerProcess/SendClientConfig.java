@@ -11,7 +11,6 @@ import Asgardia.World.Objects.*;
  */
 public class SendClientConfig
 {
-	HikariCP db;
 	PacketBuilder Builder = new PacketBuilder () ;
 	
 	public SendClientConfig (SessionHandler Handle) {
@@ -19,12 +18,16 @@ public class SendClientConfig
 		int length = 0;
 		byte[] data = null;
 		
-		db = Handle.getDbHandle () ;
-		
-		String q = String.format ("SELECT * FROM character_config WHERE object_id=\'%d\';", Pc.Uuid) ;
-		ResultSet rs = db.Query (q) ;
+		Connection con = HikariCP.getConnection ();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
 		
 		try {
+			ps = con.prepareStatement ("SELECT * FROM character_config WHERE object_id=?;") ;
+			ps.setInt (1, Pc.Uuid) ;
+			
+			rs = ps.executeQuery () ;
+			
 			Builder.WriteByte (ServerOpcodes.FUNCTION_KEY) ;
 			Builder.WriteByte (41) ;
 			if (rs.next () ) {
@@ -40,6 +43,10 @@ public class SendClientConfig
 			}
 		} catch (Exception e) {
 			e.printStackTrace () ;
+		} finally {
+			DatabaseUtil.close (rs) ;
+			DatabaseUtil.close (ps) ;
+			DatabaseUtil.close (con) ;
 		}
 	}
 	

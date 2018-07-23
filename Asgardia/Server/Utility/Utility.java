@@ -52,6 +52,14 @@ public class Utility
 	}
 	
 	/*
+	 * 計算兩點間所有座標
+	 */
+	public static Point[] calcPointsOnPath (Point p1, Point p2) {
+	
+		return null;
+	}
+	
+	/*
 	 * 計算升級增加血量
 	 */
 	public static int calcIncreaseHp (int type, int hp, int max_hp, int con) {
