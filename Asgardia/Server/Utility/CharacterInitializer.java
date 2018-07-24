@@ -146,45 +146,11 @@ public class CharacterInitializer
 			ps.setString (29, pc.ClanName) ;
 			
 			ps.execute () ;
-			//HikariCP Db = Handle.getDbHandle () ;
-			/*
-			String create = String.format ("INSERT INTO characters SET account_name=\'%s\', objid=\'%d\', char_name=\'%s\', level=\'%d\', Exp=\'%d\', MaxHp=\'%d\', MaxMp=\'%d\', CurHp=\'%d\', CurMp=\'%d\', Ac=\'%d\', Str=\'%d\', Con=\'%d\', Dex=\'%d\', Cha=\'%d\', Intel=\'%d\', Wis=\'%d\', Status=\'%d\', Class=\'%d\', Sex=\'%d\', Type=\'%d\', Heading=\'%d\', LocX=\'%d\', LocY=\'%d\', MapID=\'%d\', Food=\'%d\', Lawful=\'%d\', Title=\'%s\', ClanID=\'%d\', Clanname=\'%s\';",
-					Handle.Account.UserAccount,
-					pc.Uuid,
-					pc.Name,
-					pc.Level,
-					pc.Exp,
-					pc.BasicParameter.MaxHp,
-					pc.BasicParameter.MaxMp,
-					pc.Hp,
-					pc.Mp,
-					pc.BasicParameter.Ac,
-					pc.BasicParameter.Str,
-					pc.BasicParameter.Con,
-					pc.BasicParameter.Dex,
-					pc.BasicParameter.Cha,
-					pc.BasicParameter.Intel,
-					pc.BasicParameter.Wis,
-					pc.Status,
-					pc.Gfx, //Class
-					pc.Sex,
-					pc.Type,
-					pc.location.Heading,
-					pc.location.x,
-					pc.location.y,
-					pc.location.MapId,
-					pc.Satiation,
-					pc.Lawful,
-					pc.Title,
-					pc.ClanId,
-					pc.ClanName
-					) ;
-			Db.Insert (create) ;
-			*/
 			
 			/*
 			 * 給初始道具
 			 */
+			//
 			
 		} catch (Exception e) {
 			e.printStackTrace ();

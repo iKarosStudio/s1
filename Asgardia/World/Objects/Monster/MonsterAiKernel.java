@@ -16,7 +16,7 @@ public class MonsterAiKernel extends TimerTask implements Runnable
 	public static final int ACTION_DEAD = 3;
 	
 	
-	private static TimerPool SchedulePool;
+	//private static TimerPool SchedulePool;
 	private static Random r = new Random (System.currentTimeMillis () ) ;
 	AsgardiaMap Map;
 	MonsterInstance Mob;
@@ -65,16 +65,10 @@ public class MonsterAiKernel extends TimerTask implements Runnable
 	public MonsterAiKernel (MonsterInstance mob) {
 		Mob = mob;
 		Map = Mob.Map;
-		if (SchedulePool == null) {
-			//SchedulePool = new TimerPool (4) ;
-		}
 	}
 	
 	public boolean Ai () {
-
 		try {			
-			//System.out.printf ("ai kernel mob:%s(0x%08X)->\n", Mob.Name, Mob.Uuid) ;
-			
 			isAiRunning = true;
 			
 			if (Mob.ActionStatus == ACTION_STOP) {
@@ -84,7 +78,10 @@ public class MonsterAiKernel extends TimerTask implements Runnable
 				Mob.MoveToHeading (r.nextInt (8) ) ;
 				Thread.sleep (Mob.MoveInterval) ;
 				
-				Thread.sleep (r.nextInt (3000) ) ; //0~3S隨機停頓
+				/*
+				 * 0~3S隨機停頓
+				 */
+				Thread.sleep (r.nextInt (3000) ) ;
 				
 			} else if (Mob.ActionStatus == ACTION_ATTACK) {
 				if (Mob.TargetPc == null) {

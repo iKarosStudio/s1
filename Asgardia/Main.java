@@ -8,7 +8,6 @@
 package Asgardia;
 
 import java.util.logging.*;
-import java.util.Scanner;
 import java.lang.management.ManagementFactory;
 
 import Asgardia.Blockchain.*;

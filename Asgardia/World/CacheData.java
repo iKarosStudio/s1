@@ -74,9 +74,13 @@ public class CacheData
 	public static void LoadNpcCache () { 
 		NpcCache = new ConcurrentHashMap<Integer, NpcTemplate> () ;
 		
+		Connection con = HikariCP.getConnection () ;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		
 		try {
-			PreparedStatement ps = HikariCP.getConnection ().prepareStatement ("SELECT * FROM npc;") ;
-			ResultSet rs = ps.executeQuery () ;
+			ps = HikariCP.getConnection ().prepareStatement ("SELECT * FROM npc;") ;
+			rs = ps.executeQuery () ;
 			
 			int Counter = 0;
 			long t_starts = System.currentTimeMillis () ;
@@ -157,6 +161,10 @@ public class CacheData
 			System.out.printf ("\t\t" + Counter + " npc cached in\t%.3f s\n", used_time) ;
 		} catch (Exception e) {
 			e.printStackTrace () ;
+		} finally {
+			DatabaseUtil.close (rs) ;
+			DatabaseUtil.close (ps) ;
+			DatabaseUtil.close (con) ;
 		}
 	}
 	
@@ -173,10 +181,14 @@ public class CacheData
 	
 	public static void LoadNpcTalkDataCache () {
 		NpcTalkDataCache = new ConcurrentHashMap<Integer, NpcTalkData> () ;
-
+		
+		Connection con = HikariCP.getConnection () ;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		
 		try {
-			PreparedStatement ps = HikariCP.getConnection ().prepareStatement ("SELECT * FROM npcaction;") ;
-			ResultSet rs = ps.executeQuery () ;
+			ps = con.prepareStatement ("SELECT * FROM npcaction;") ;
+			rs = ps.executeQuery () ;
 			
 			int Counter = 0;
 			long t_starts = System.currentTimeMillis () ;
@@ -197,6 +209,10 @@ public class CacheData
 			System.out.printf ("\t\t" + Counter + " npc talk cached in\t%.3f s\n", used_time) ;
 		} catch (Exception e) {
 			e.printStackTrace () ;
+		} finally {
+			DatabaseUtil.close (rs) ;
+			DatabaseUtil.close (ps) ;
+			DatabaseUtil.close (con) ;
 		}
 		
 	}
@@ -204,9 +220,13 @@ public class CacheData
 	public static void LoadItemCache () {
 		ItemCache = new ConcurrentHashMap<Integer, ItemTemplate> () ;
 		
+		Connection con = HikariCP.getConnection () ;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		
 		try {
-			PreparedStatement ps = HikariCP.getConnection ().prepareStatement ("SELECT * FROM etcitem;") ;
-			ResultSet rs = ps.executeQuery () ;
+			ps = con.prepareStatement ("SELECT * FROM etcitem;") ;
+			rs = ps.executeQuery () ;
 			
 			int Counter = 0;
 			long t_starts = System.currentTimeMillis () ;
@@ -244,15 +264,23 @@ public class CacheData
 			System.out.printf ("\t\t" + Counter + " items cached in\t%.3f s\n", used_time) ;
 		} catch (Exception e) {
 			e.printStackTrace () ;
+		} finally {
+			DatabaseUtil.close (rs) ;
+			DatabaseUtil.close (ps) ;
+			DatabaseUtil.close (con) ;
 		}
 	}
 	
 	public static void LoadSkillCache () {
 		SkillCache = new ConcurrentHashMap<Integer, SkillTemplate> () ;
 		
+		Connection con = HikariCP.getConnection () ;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		
 		try {
-			PreparedStatement ps = HikariCP.getConnection ().prepareStatement ("SELECT * FROM skills;") ;
-			ResultSet rs = ps.executeQuery () ; 
+			ps = con.prepareStatement ("SELECT * FROM skills;") ;
+			rs = ps.executeQuery () ; 
 					
 			int Counter = 0;
 			long t_starts = System.currentTimeMillis () ;
@@ -298,15 +326,23 @@ public class CacheData
 			System.out.printf ("\t\t" + Counter + " skills cached in\t%.3f s\n", used_time) ;
 		} catch (Exception e) {
 			e.printStackTrace () ;
+		} finally {
+			DatabaseUtil.close (rs) ;
+			DatabaseUtil.close (ps) ;
+			DatabaseUtil.close (con) ;
 		}
 	}
 	
 	public static void LoadShopCache () {
 		ShopCache = new ConcurrentHashMap<Integer, NpcShop> () ;
 		
+		Connection con = HikariCP.getConnection () ;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		
 		try {
-			PreparedStatement ps = HikariCP.getConnection ().prepareStatement ("SELECT * FROM shop;") ;
-			ResultSet rs = ps.executeQuery () ;
+			ps = con.prepareStatement ("SELECT * FROM shop;") ;
+			rs = ps.executeQuery () ;
 			
 			int Counter = 0;
 			long t_starts = System.currentTimeMillis () ;
@@ -341,15 +377,23 @@ public class CacheData
 			
 		} catch (Exception e) {
 			e.printStackTrace () ;
+		} finally {
+			DatabaseUtil.close (rs) ;
+			DatabaseUtil.close (ps) ;
+			DatabaseUtil.close (con) ;
 		}
 	}
 	
 	public static void LoadWeaponCache () {
 		WeaponCache = new ConcurrentHashMap<Integer, WeaponTemplate> () ;
 		
+		Connection con = HikariCP.getConnection () ;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		
 		try {
-			PreparedStatement ps = HikariCP.getConnection ().prepareStatement ("SELECT * FROM weapon;") ;
-			ResultSet rs = ps.executeQuery () ;
+			ps = con.prepareStatement ("SELECT * FROM weapon;") ;
+			rs = ps.executeQuery () ;
 			
 			int Counter = 0;
 			long t_starts = System.currentTimeMillis () ;
@@ -406,15 +450,23 @@ public class CacheData
 			System.out.printf ("\t\t" + Counter + " weapons cached in\t%.3f s\n", used_time) ;
 		} catch (Exception e) {
 			e.printStackTrace () ;
+		} finally {
+			DatabaseUtil.close (rs) ;
+			DatabaseUtil.close (ps) ;
+			DatabaseUtil.close (con) ;
 		}
 	}
 	
 	public static void LoadArmorCache () {
 		ArmorCache = new ConcurrentHashMap<Integer, ArmorTemplate> () ;
 		
+		Connection con = HikariCP.getConnection () ;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		
 		try {
-			PreparedStatement ps = HikariCP.getConnection ().prepareStatement ("SELECT * FROM armor;") ;
-			ResultSet rs = ps.executeQuery () ;
+			ps = con.prepareStatement ("SELECT * FROM armor;") ;
+			rs = ps.executeQuery () ;
 			
 			int Counter = 0;
 			long t_starts = System.currentTimeMillis () ;
@@ -474,6 +526,10 @@ public class CacheData
 			System.out.printf ("\t\t" + Counter + " armors cached in \t%.3f s\n", used_time) ;
 		} catch (Exception e) {
 			e.printStackTrace () ;
+		} finally {
+			DatabaseUtil.close (rs) ;
+			DatabaseUtil.close (ps) ;
+			DatabaseUtil.close (con) ;
 		}
 	}
 }

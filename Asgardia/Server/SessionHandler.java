@@ -122,25 +122,27 @@ public class SessionHandler extends Thread implements Runnable
 				e.printStackTrace () ;
 				break;
 			}
-		}
+		} //while ture
 		
 		/*
 		 * 斷線後該做的事
 		 */
 		if (Account != null) {
 			try {
-				if (!Account.ActivePc.exit) {
+				if (!Account.ActivePc.exit) { //若不是客戶端主動離線
 					Account.ActivePc.Offline () ;
 				}
+				
 				Account.ActivePc = null;
 				
 				Account.UpdateLastLoginTime () ;
 				Sock.close () ;
-				//Db.Disconnect () ;
+				
 				System.out.printf ("IP:%s [Host:%s] Disconnect\n", IP, HostName) ;
 			} catch (Exception e) {
 				e.printStackTrace () ;
 			}
+			Account = null;
 		}
 	}
 	

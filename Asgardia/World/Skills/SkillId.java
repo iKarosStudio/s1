@@ -4,7 +4,7 @@ public class SkillId
 {
 	
 	/*
-	 * Status ID
+	 * Status ICON
 	 */
 	public static final int STATUS_BRAVE = 1000; //勇敢藥水效果
 	public static final int STATUS_HASTE = 1001; //加速藥水效果

@@ -60,6 +60,7 @@ public class AccountOperation
 			 */
 			System.out.printf ("[CREATE ACCOUNT]") ;
 			CreateNewAccount (Handle) ;
+			
 		} else if (LoginResult == ACCOUNT_IN_USE) {
 			/*
 			 * 重複登入
@@ -74,7 +75,7 @@ public class AccountOperation
 			Handle.Account = null;
 		}
 		
-		System.out.printf ("Account :%s Password :%s From %s:%d(Host:%s)\n", UserAccount, UserPassword, IP, Port, HostName) ;
+		System.out.printf ("Account:%s Password:%s From %s:%d(Host:%s)\n", UserAccount, UserPassword, IP, Port, HostName) ;
 	}
 	
 	public void CreateNewAccount (SessionHandler Handle) {
@@ -82,7 +83,9 @@ public class AccountOperation
 	}
 	
 	public void Delete (SessionHandler Handle, byte[] Data) {
-		//not implement yet~
+		/*
+		 * not implement yet
+		 */
 	}
 	
 	public int ReportCharacterAmount (SessionHandler Handle, byte[] Data) {

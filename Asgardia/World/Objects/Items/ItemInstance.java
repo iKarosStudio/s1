@@ -4,6 +4,7 @@ import Asgardia.Server.PacketBuilder;
 import Asgardia.World.*;
 import Asgardia.World.Objects.Static.*;
 import Asgardia.World.Objects.Template.*;
+import Asgardia.World.Skills.SkillEffectTimer;
 
 /*
  * 實體道具物件, 給上座標之後可以被丟在地上
@@ -22,6 +23,8 @@ public class ItemInstance extends StaticObject
 	/* 0:道具 1:武器 2:防具 */
 	public int MajorType = 0;
 	
+	/* Buff/Debuff 效果計時 */
+	public SkillEffectTimer SkillTimer = null;
 	
 	public int MinorType = 0;
 	public int UseType = 0;

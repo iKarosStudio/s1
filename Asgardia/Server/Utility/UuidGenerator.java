@@ -27,12 +27,14 @@ public class UuidGenerator
 	}
 	
 	public UuidGenerator () {
-		HikariCP Db = HikariCP.getInstance () ;
+		Connection con = HikariCP.getConnection ();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
 		
 		try {
-			String quere = "select max(id)+1 as nextid from (select id from character_items union all select id from character_teleport union all select id from character_warehouse union all select objid as id from characters union all select clan_id as id from clan_data union all select id from clan_warehouse union all select objid as id from pets) t" ;
-			PreparedStatement ps = HikariCP.getConnection ().prepareStatement (quere) ;
-			ResultSet rs = ps.executeQuery () ;
+			String quere = "SELECT MAX(id)+1 AS nextid FROM (select id from character_items union all select id from character_teleport union all select id from character_warehouse union all select objid as id from characters union all select clan_id as id from clan_data union all select id from clan_warehouse union all select objid as id from pets) t" ;
+			ps = con.prepareStatement (quere) ;
+			rs = ps.executeQuery () ;
 			
 			while (rs.next () ) {
 				int uuid = rs.getInt ("nextid") ;
@@ -42,13 +44,16 @@ public class UuidGenerator
 				} 
 				Uuid = uuid;
 				
-				
 				System.out.printf ("UUID Generator:0x%08X\n", Uuid) ;
 				System.out.printf ("\t %d UUIDs reaches limit\n", 0xFFFFFFFF - Uuid) ;
 			}
 			
 		} catch (Exception e) {
 			e.printStackTrace () ;
+		} finally {
+			DatabaseUtil.close (rs) ;
+			DatabaseUtil.close (ps) ;
+			DatabaseUtil.close (con) ;
 		}
 	}
 }

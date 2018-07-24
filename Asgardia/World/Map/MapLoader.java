@@ -19,7 +19,10 @@ public class MapLoader
 	
 	public MapLoader (Asgardia Handle) 
 	{
-
+		load (Handle) ;		
+	}
+	
+	public static void load (Asgardia Handle) {
 		/*
 		 * 載入伺服器地圖檔案
 		 */

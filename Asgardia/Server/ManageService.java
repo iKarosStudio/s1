@@ -23,10 +23,13 @@ public class ManageService extends Thread
 	 */
 	public void run () {		
 		while (true) {
+			World.CpuUsage = (float) osmb.getProcessCpuLoad () * 100;
+			World.ThreadCount = mana.getThreadCount ();
+			
 			String t = String.format ("CPU:%2.1f%% 執行緒:%d 使用記憶體:%1.1f MB",
 				osmb.getProcessCpuLoad () * 100,
 				mana.getThreadCount (),
-				(float) World.UsedMemory / (1024 * 1024)
+				(float) World.MemoryUsage / (1024 * 1024)
 			) ;
 			try {
 				Socket Sock = ServiceSocket.accept () ;
@@ -38,7 +41,7 @@ public class ManageService extends Thread
 				
 			} catch (SocketTimeoutException e) {
 				//it's ok
-				//System.out.println (t) ;
+				System.out.println (t) ;
 			} catch (Exception e) {
 				e.printStackTrace () ;
 			}

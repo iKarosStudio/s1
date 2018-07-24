@@ -9,8 +9,7 @@ import Asgardia.World.*;
 
 public class GuiMain extends Thread
 {
-	Asgardia World;
-	
+	volatile Asgardia World;
 	
 	public GuiMain (Asgardia world) {
 		World = world;

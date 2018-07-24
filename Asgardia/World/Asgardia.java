@@ -22,12 +22,14 @@ public class Asgardia extends Thread
 	public MemoryMonitor MemMonitor = null;
 	public BoardcastMessage SysMessage = null;
 	
-	public long UsedMemory = 0;
+	
 	
 	/* 全局等級狀態 */
 	public static ServerTime Time = null; 
 	private static int OnlinePcs = 0;
-	
+	public int ThreadCount = 0;
+	public float CpuUsage = 0;
+	public float MemoryUsage = 0;
 	/* 
 	 * Bit[1-0] : 程度控制
 	 * 0:不下
@@ -93,12 +95,14 @@ public class Asgardia extends Thread
 			/*
 			 * Generate monster
 			 */
+			
 			System.out.printf ("Monster generator initialize interval:%.1f Sec...", (float)Configurations.MONSTER_GENERATOR_UPDATE_RATE/1000) ;
 			Maps.forEach ((Integer map_id, AsgardiaMap map)->{
 				map.MobGenerator = new MonsterGenerator (map) ;
 				KernelThreadPool.getInstance ().ScheduleAtFixedRate (map.MobGenerator, 1000, Configurations.MONSTER_GENERATOR_UPDATE_RATE) ;
 			}) ;
 			System.out.printf ("success\n") ;
+			
 			
 			/*
 			 * Generate Element Stone

@@ -59,6 +59,7 @@ public class CommonAttack
 				dest.ActionStatus = 2;
 				dest.TargetPc = src;
 			}
+			
 			/*
 			 * 挨打動作
 			 */

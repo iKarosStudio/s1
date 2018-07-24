@@ -1,13 +1,15 @@
 package Asgardia.World.Objects.RoutineTasks;
 
 import java.util.*;
+import java.util.concurrent.*;
 
 import Asgardia.Server.*;
 import Asgardia.World.Objects.*;
 
-public class PcRoutineTasks extends TimerTask implements Runnable
+public class PcRoutineTasks extends Thread implements Runnable
 {
-	private final Timer t = new Timer () ;
+	//private final Timer t = new Timer () ;
+	ScheduledFuture s;
 	private int TaskInterval = 0;
 	private SessionHandler Handle;
 	private PcInstance Pc;
@@ -28,10 +30,12 @@ public class PcRoutineTasks extends TimerTask implements Runnable
 	}
 	
 	public void Start () {
-		t.scheduleAtFixedRate (this, 0, TaskInterval) ;
+		//t.scheduleAtFixedRate (this, 0, TaskInterval) ;
+		s = KernelThreadPool.getInstance ().ScheduleAtFixedRate (this, 0, TaskInterval) ;
 	}
 	
 	public void Stop () {
-		t.cancel () ;
+		//t.cancel () ;
+		s.cancel (true) ;
 	}
 }

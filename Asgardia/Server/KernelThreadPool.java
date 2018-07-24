@@ -20,12 +20,12 @@ public class KernelThreadPool
 	private KernelThreadPool () {
 		System.out.print ("Kernel  thread pool initializing...") ;
 		
-		Pool = Executors.newCachedThreadPool () ;	
+		Pool = Executors.newCachedThreadPool () ;
+		
 		KernelPool = Executors.newScheduledThreadPool (
-			20, //Size
+			8, //Size
 			new PriorityThreadFactory ("KernelService", Thread.NORM_PRIORITY) //ThreadFactory
 		) ;
-		
 		System.out.println ("success") ;
 	}
 	

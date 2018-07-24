@@ -201,14 +201,16 @@ public class MonsterInstance extends DynamicObject
 		}
 	}
 	
-	public void ToggleAi () {
+	public synchronized void ToggleAi () {
 		if (Aikernel == null) {
 			Aikernel = new MonsterAiKernel (this) ;
-		} else {
+		} 
+		//else {
 			//Clear timeout counter			
 			if (Aikernel.isAiRunning) {
 				/*
-				 * 同步問題, AI工作位睡眠結束就被執行
+				 * 同步問題, AI工作未睡眠結束就被執行
+				 * 或視距內多個玩家觸發
 				 */
 				return;
 				
@@ -218,7 +220,7 @@ public class MonsterInstance extends DynamicObject
 				 */
 				MonsterAiQueue.getInstance ().getQueue ().offer (Aikernel) ;
 			}
-		}
+		//}
 	}
 	
 	public void ToggleHateList (PcInstance p, int dmg) {

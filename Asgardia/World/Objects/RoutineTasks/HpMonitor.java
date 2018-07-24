@@ -1,15 +1,17 @@
 package Asgardia.World.Objects.RoutineTasks;
 
 import java.util.*;
+import java.util.concurrent.*;
 
-
+import Asgardia.Server.KernelThreadPool;
 import Asgardia.Server.SessionHandler;
 import Asgardia.Server.ServerProcess.*;
 import Asgardia.World.Objects.*;
 
-public class HpMonitor extends TimerTask implements Runnable
+public class HpMonitor extends Thread implements Runnable
 {
-	private final Timer t = new Timer () ;
+	//private final Timer t = new Timer () ;
+	ScheduledFuture s;
 	private int TaskInterval = 0;
 	private PcInstance Pc;
 	private SessionHandler Handle;
@@ -25,6 +27,8 @@ public class HpMonitor extends TimerTask implements Runnable
 	public void run () {
 		
 		int div10 = 0;
+		
+		//System.out.printf ("%s hp\n", Pc.Name) ;
 		try {
 			//if (Pc.getHp < Pc.getMaxHp () ) {
 				//Pc.Hp++;
@@ -32,17 +36,19 @@ public class HpMonitor extends TimerTask implements Runnable
 				Handle.SendPacket (new HpUpdate (Pc.Hp, Pc.getMaxHp () ).getRaw () ) ;
 			//}
 		} catch (Exception e) {
-			Stop () ;
+			//s.cancel (true) ;
+			//e.printStackTrace () ;
 			//e.printStackTrace () ;
 			//System.out.printf ("HP Monitor %s\n", e.toString () ) ;
 		}
 	}
 	
 	public void Start () {
-		t.scheduleAtFixedRate (this, 1000, TaskInterval) ;
+		s = KernelThreadPool.getInstance ().ScheduleAtFixedRate (this, 1000, TaskInterval) ;
+		//t.scheduleAtFixedRate (this, 1000, TaskInterval) ;
 	}
 	
 	public void Stop () {
-		t.cancel () ;
+		s.cancel (true) ;
 	}
 }

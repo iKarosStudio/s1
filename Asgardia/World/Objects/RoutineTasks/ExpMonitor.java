@@ -1,6 +1,7 @@
 package Asgardia.World.Objects.RoutineTasks;
 
 import java.util.*;
+import java.util.concurrent.*;
 
 import Asgardia.Server.*;
 import Asgardia.Server.Utility.*;
@@ -11,9 +12,10 @@ import Asgardia.World.Objects.PcInstance;
 /*
  * 經驗值需求量參考server/datatables/ExpTables.java
  */
-public class ExpMonitor extends TimerTask implements Runnable
+public class ExpMonitor extends Thread implements Runnable
 {
 	private final Timer t = new Timer () ;
+	ScheduledFuture s;
 	private PcInstance Pc;
 	private SessionHandler Handle;
 
@@ -58,11 +60,13 @@ public class ExpMonitor extends TimerTask implements Runnable
 	}
 	
 	public void Start () {
-		t.scheduleAtFixedRate (this, 0, 300) ;
+		//t.scheduleAtFixedRate (this, 0, 300) ;
+		s = KernelThreadPool.getInstance ().ScheduleAtFixedRate (this, 0, 300) ;
 	}
 	
 	public void Stop () {
-		t.cancel () ;
+		t.cancel ();
+		s.cancel (true) ;
 	}
 	
 	/* 

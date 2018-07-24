@@ -7,7 +7,7 @@ import Asgardia.World.Objects.*;
 
 public class SystemTick extends TimerTask implements Runnable
 {
-	private final Timer SystemTickTimer = new Timer () ;
+	private final Timer SystemTickTimer = new Timer ("SystemTick") ;
 	private PcInstance pc;
 	private SessionHandler Handler;
 

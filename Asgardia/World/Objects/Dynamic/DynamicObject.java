@@ -28,8 +28,8 @@ public class DynamicObject extends ObjectInstance
 	
 	public int Lawful;
 	private boolean isDead = false;
-	public int Hp = 1;
-	public int Mp = 1;
+	volatile public int Hp = 1;
+	volatile public int Mp = 1;
 	
 	/*
 	public synchronized void setHp (int hp) {

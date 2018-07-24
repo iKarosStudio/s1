@@ -40,7 +40,7 @@ public class NpcShopMenu
 	
 	public ItemInstance getItemInstance () {
 		ItemInstance i = new ItemInstance (
-				UuidGenerator.getInstance ().Next (),
+				UuidGenerator.Next (), //<-UuidGenerator.getInstance().Next()
 				ItemId, 
 				0,
 				PackCount, 

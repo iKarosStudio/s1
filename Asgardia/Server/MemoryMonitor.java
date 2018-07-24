@@ -9,20 +9,22 @@ public class MemoryMonitor extends Thread implements Runnable
 	
 	public MemoryMonitor () {
 		world = Asgardia.getInstance () ;
+		this.setName ("System Monitor") ;
 	}
 	
 	public void run () {
 		Runtime r = Runtime.getRuntime () ;
-		long mmm = r.totalMemory () - r.freeMemory () ;
+		long memory_usage = r.totalMemory () - r.freeMemory () ;
 
 		//System.out.printf ("mem : %2.2f MB\n", (float) mmm / (1024 * 1024) ) ;
-		world.UsedMemory = mmm;
+		world.MemoryUsage = memory_usage;
 	}
 	
 	public static MemoryMonitor getInstance () {
 		if (instance == null) {
 			instance = new MemoryMonitor () ;
 		}
+		
 		return instance;
 	}
 }

@@ -49,6 +49,9 @@ public class PcInstance extends DynamicObject implements Runnable
 	/* 藥水延遲  <K, V> = <道具編號, 上一個時間戳記> */
 	private ConcurrentHashMap<Integer, Long> ItemDelay = null;
 	
+	/* 技能延遲  <K, V> = <技能編號, 上一個時間戳記> */
+	private ConcurrentHashMap<Integer, Long> SkillDelay = null;
+	
 	public SystemTick Tick;
 	public PcRoutineTasks RoutineTask;
 	public ObjectUpdate Ou;
@@ -91,6 +94,7 @@ public class PcInstance extends DynamicObject implements Runnable
 		DoorInsight = new ConcurrentHashMap<Integer, DoorInstance> () ;
 		
 		ItemDelay = new ConcurrentHashMap<Integer, Long> () ;
+		SkillDelay = new ConcurrentHashMap<Integer, Long> () ;
 		
 		equipment = new Equipment (Handle) ;
 	}
@@ -108,6 +112,7 @@ public class PcInstance extends DynamicObject implements Runnable
 		//SummonMonster = new ConcurrentHashMap () ;
 		
 		ItemDelay = new ConcurrentHashMap<Integer, Long> () ;
+		SkillDelay = new ConcurrentHashMap<Integer, Long> () ;
 		
 		equipment = new Equipment (Handle) ;
 	}
@@ -195,7 +200,7 @@ public class PcInstance extends DynamicObject implements Runnable
 				
 			} 			
 		} catch (Exception e) {
-			System.out.println (e.toString () ) ;
+			e.printStackTrace () ;
 		} finally {
 			DatabaseUtil.close (rs) ;
 			DatabaseUtil.close (ps) ;
@@ -504,7 +509,6 @@ public class PcInstance extends DynamicObject implements Runnable
 	
 	public void Offline () {
 		Asgardia.getInstance ().removePc (this) ;
-		//BoardcastPcInsight (new RemoveObject(Uuid).getRaw () ) ;
 		
 		Tick.Stop () ;
 		SkillTimer.Stop () ;
@@ -513,6 +517,14 @@ public class PcInstance extends DynamicObject implements Runnable
 		ExpKeeper.Stop () ;
 		HpKeeper.Stop () ;
 		MpKeeper.Stop () ;
+		
+		Tick = null;
+		SkillTimer = null;
+		Ou = null;
+		RoutineTask = null;
+		ExpKeeper = null;
+		HpKeeper = null;
+		MpKeeper = null;
 		
 		DatabaseCmds.SavePc (this) ;
 	}

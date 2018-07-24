@@ -1,19 +1,20 @@
 package Asgardia.World.Objects.RoutineTasks;
 
 import java.util.*;
-import java.net.*;
+import java.util.concurrent.*;
 
 import Asgardia.Config.*;
+import Asgardia.Server.*;
 import Asgardia.Server.ServerProcess.*;
-import Asgardia.Server.SessionHandler;
 import Asgardia.World.Npc.*;
 import Asgardia.World.Objects.*;
 import Asgardia.World.Objects.Items.*;
 import Asgardia.World.Objects.Monster.MonsterInstance;
 
-public class ObjectUpdate extends TimerTask implements Runnable
+public class ObjectUpdate extends Thread implements Runnable
 {
-	private final Timer t = new Timer () ;
+	//private final Timer t = new Timer () ;
+	ScheduledFuture s;
 	private PcInstance Pc;
 	private SessionHandler Handle;
 
@@ -142,10 +143,11 @@ public class ObjectUpdate extends TimerTask implements Runnable
 	}
 	
 	public void Start () {
-		t.scheduleAtFixedRate (this, 200, 500) ; //1000ms interval
+		s = KernelThreadPool.getInstance ().ScheduleAtFixedRate (this, 200, 500) ;
+		//t.scheduleAtFixedRate (this, 200, 500) ; //1000ms interval
 	}
 	
 	public void Stop () {
-		t.cancel () ;
+		s.cancel (true) ;
 	}
 }

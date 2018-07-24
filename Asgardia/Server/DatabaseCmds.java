@@ -34,12 +34,14 @@ public class DatabaseCmds
 		Connection con = HikariCP.getConnection ();
 		PreparedStatement ps = null;
 		try {
-			ps = con.prepareStatement ("INSERT INTO accounts set login=?, password=?, lastactive=?, access_level=?, ip=?, host=?, banned=?;") ;
+			ps = con.prepareStatement ("INSERT INTO accounts SET login=?, password=?, lastactive=?, access_level=?, ip=?, host=?, banned=?;") ;
 			ps.setString (1, user_account) ;
 			ps.setString (2, user_pw) ;
 			ps.setTimestamp (3, new Timestamp (System.currentTimeMillis () ) ) ;
-			ps.setString (4, ip) ;
-			ps.setString (5, hostname) ;
+			ps.setInt (4, 0) ; //access level
+			ps.setString (5, ip) ;
+			ps.setString (6, hostname) ;
+			ps.setInt (7, 0) ;
 			ps.execute () ;
 			
 		} catch (Exception e) {
@@ -78,7 +80,7 @@ public class DatabaseCmds
 		int count = 0;
 				
 		try {
-			ps = con.prepareStatement ("SELECT count(*) as cnt FROM characters WHERE account_name=?") ;
+			ps = con.prepareStatement ("SELECT count(*) AS cnt FROM characters WHERE account_name=?;") ;
 			ps.setString (1, user_account) ;
 			
 			rs = ps.executeQuery () ;
@@ -87,7 +89,6 @@ public class DatabaseCmds
 			}
 		} catch (Exception e) {
 			e.printStackTrace () ;
-			return 0;
 		} finally {
 			DatabaseUtil.close (rs) ;
 			DatabaseUtil.close (ps) ;

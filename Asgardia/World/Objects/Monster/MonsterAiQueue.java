@@ -19,7 +19,7 @@ public class MonsterAiQueue
 	}
 	
 	public MonsterAiQueue () {
-		System.out.printf ("Initializing Ai task queue...") ;
+		System.out.printf ("AI Task queue initializing...") ;
 		_queue = new ConcurrentLinkedQueue<Runnable> () ;
 		System.out.printf ("success\n") ;
 	}

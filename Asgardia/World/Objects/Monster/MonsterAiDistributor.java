@@ -1,5 +1,6 @@
 package Asgardia.World.Objects.Monster;
 
+import java.util.*;
 import java.util.concurrent.*;
 
 import Asgardia.Server.*;
@@ -9,11 +10,11 @@ import Asgardia.World.Map.*;
 /*
  * 抓地圖中的怪物AI執行需求塞到Queue
  */
-public class MonsterAiDistributor implements Runnable
+public class MonsterAiDistributor extends Thread implements Runnable
 {
 	private AsgardiaMap Map;
-	private ScheduledFuture<?> t;
-	private static java.util.Queue<Runnable> queue;
+	private ScheduledFuture<?> s;
+	private static Queue<Runnable> queue;
 	
 	public void run () {
 		Map.Monsters.forEach ((Integer u, MonsterInstance m)->{
@@ -28,7 +29,7 @@ public class MonsterAiDistributor implements Runnable
 				/*
 				 * 太久沒有被玩家觸發, 主動停止並清除AI核心節省系統資源
 				 */
-				if (m.Aikernel.TimeoutCounter < 60) { //500ms * 60 = 30s
+				if (m.Aikernel.TimeoutCounter < 20) { //500ms * 20 = 10s
 					m.Aikernel.TimeoutCounter++;
 				} else {
 					m.Aikernel.cancel () ;
@@ -55,15 +56,15 @@ public class MonsterAiDistributor implements Runnable
 	}
 	
 	public MonsterAiDistributor (AsgardiaMap map) {
-		Map = map;
+		this.Map = map;
 		queue = MonsterAiQueue.getInstance ().getQueue () ;
 	}
 	
 	public void Start () {
-		t = KernelThreadPool.getInstance ().ScheduleAtFixedRate (this, 100, 500) ;
+		s = KernelThreadPool.getInstance ().ScheduleAtFixedRate (this, 100, 500) ;
 	}
 	
 	public void Stop () {
-		t.cancel (false) ;
+		s.cancel (false) ;
 	}
 }

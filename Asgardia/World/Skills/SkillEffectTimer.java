@@ -13,7 +13,7 @@ import Asgardia.World.Skills.CommonSkill.*;
  */
 public class SkillEffectTimer extends TimerTask implements Runnable
 {
-	private final Timer timer = new Timer () ;
+	private final Timer timer = new Timer ("SkillEffectTimer") ;
 	private PcInstance Pc;
 	private SessionHandler Handle;
 	public ConcurrentHashMap<Integer, SkillEffect> Effect = null;
