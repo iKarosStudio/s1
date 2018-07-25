@@ -41,7 +41,7 @@ public class ManageService extends Thread
 				
 			} catch (SocketTimeoutException e) {
 				//it's ok
-				System.out.println (t) ;
+				//System.out.println (t) ;
 			} catch (Exception e) {
 				e.printStackTrace () ;
 			}

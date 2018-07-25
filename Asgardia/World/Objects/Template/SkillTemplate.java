@@ -25,7 +25,7 @@ public class SkillTemplate
 	
 	/*
 	 * 0:自己
-	 * 1:?
+	 * 1:PC(未確認)
 	 * 2:NPC
 	 * 4:血盟成員
 	 * 8:團隊成員

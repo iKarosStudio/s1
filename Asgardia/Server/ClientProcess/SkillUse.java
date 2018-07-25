@@ -2,9 +2,9 @@ package Asgardia.Server.ClientProcess;
 
 import Asgardia.Server.*;
 
-import Asgardia.World.*;
 import Asgardia.World.Objects.*;
-import Asgardia.World.Objects.Template.*;
+import Asgardia.World.Skills.*;
+import static Asgardia.World.Skills.CommonSkill.SkillIdTable.*;
 
 public class SkillUse
 {
@@ -29,14 +29,38 @@ public class SkillUse
 			int row = reader.ReadByte () ;
 			int col = reader.ReadByte () ;
 			int skill_id = (row << 3) + col + 1;
-			SkillTemplate Skill = CacheData.SkillCache.get (skill_id) ;
+			int target_uuid = 0;
+			int target_x = 0;
+			int target_y = 0;
+			String clan_name = null;
+			String clan_message = null;
 			
-			int uuid = 0;
-			if (Skill.Target != 0) {
-				uuid = reader.ReadDoubleWord () ;
+			if (Data.length > 4) {
+				try {
+					if (skill_id == CALL_CLAN || skill_id == RUN_CLAN) {
+						clan_name = reader.ReadString () ;
+					} else if (skill_id == TRUE_TARGET) {
+						target_uuid = reader.ReadDoubleWord () ;
+						target_x = reader.ReadWord () ;
+						target_y = reader.ReadWord () ;
+						clan_message = reader.ReadString () ;
+					} else if (skill_id == SKILL_TELEPORT || skill_id == SKILL_MASS_TELEPORT) {
+						reader.ReadWord () ;//mapid
+						target_uuid = reader.ReadDoubleWord () ; //Bookmark id
+					} else if (skill_id == SKILL_FIRE_WALL || skill_id == SKILL_LIFE_STREAM) {
+						target_x = reader.ReadWord () ; 
+						target_y = reader.ReadWord () ;
+					} else {
+						target_uuid = reader.ReadDoubleWord () ;
+						target_x = reader.ReadWord () ;
+						target_y = reader.ReadWord () ;
+					}
+				} catch (Exception e) {
+					e.printStackTrace () ;
+				}
 			}
 			
-			pc.useSkill (uuid) ;
+			new CastSkill (handle, Data, skill_id, target_uuid, target_x, target_y, clan_name, clan_message) ;
 			
 		} catch (Exception e) {
 			e.printStackTrace () ;

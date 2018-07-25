@@ -889,14 +889,6 @@ public class PcInstance extends DynamicObject implements Runnable
 		}
 	}
 	
-	public void useSkill (int target_uuid) {
-		if (target_uuid == 0) {
-			//
-		} else {
-			//
-		}
-	}
-	
 	public void saveItem () {
 		//
 	}
