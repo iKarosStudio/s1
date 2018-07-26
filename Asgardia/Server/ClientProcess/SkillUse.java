@@ -21,10 +21,12 @@ public class SkillUse
 		}
 		
 		try {
+			/*
 			for (byte d : Data) {
 				System.out.printf ("0x%2X ", d) ;
 			}
 			System.out.println () ;
+			*/
 			
 			int row = reader.ReadByte () ;
 			int col = reader.ReadByte () ;
@@ -52,8 +54,10 @@ public class SkillUse
 						target_y = reader.ReadWord () ;
 					} else {
 						target_uuid = reader.ReadDoubleWord () ;
-						target_x = reader.ReadWord () ;
-						target_y = reader.ReadWord () ;
+						if (Data.length > 11) {
+							target_x = reader.ReadWord () ;
+							target_y = reader.ReadWord () ;
+						}
 					}
 				} catch (Exception e) {
 					e.printStackTrace () ;
