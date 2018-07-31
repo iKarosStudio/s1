@@ -10,7 +10,7 @@ public class SkillBuyList
 	public SkillBuyList (SessionHandler Handle, int pc_type) {
 		int count = 0;
 		
-		builder.WriteByte (ServerOpcodes.SKILL_BUY_RESULT) ;
+		builder.writeByte (ServerOpcodes.SKILL_BUY_RESULT) ;
 		builder.WriteDoubleWord (100) ;
 		
 		/* count應為表達個職業可在NPC學習的技能數量限制-1(id) */

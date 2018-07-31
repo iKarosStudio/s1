@@ -9,7 +9,7 @@ public class ItemIdentify
 	PacketBuilder builder = new PacketBuilder () ;
 
 	public ItemIdentify (ItemInstance i) {
-		builder.WriteByte (ServerOpcodes.ITEM_IDENTIFY);
+		builder.writeByte (ServerOpcodes.ITEM_IDENTIFY);
 		builder.WriteWord (i.ItemDescId) ;
 		builder.WriteString (i.getName () ) ;
 	}

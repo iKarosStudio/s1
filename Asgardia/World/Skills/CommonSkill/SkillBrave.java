@@ -8,9 +8,9 @@ public class SkillBrave
 	PacketBuilder builder = new PacketBuilder () ;
 	
 	public SkillBrave (int uuid, int brave_speed, int time) {
-		builder.WriteByte (ServerOpcodes.SKILL_BRAVE) ; 
+		builder.writeByte (ServerOpcodes.SKILL_BRAVE) ; 
 		builder.WriteDoubleWord (uuid) ;
-		builder.WriteByte (brave_speed) ;
+		builder.writeByte (brave_speed) ;
 		
 		/*
 		 * Remain Time  0xFFFF -> 永久效果

@@ -19,12 +19,12 @@ public class NodeMove
 	public NodeMove (int uuid, int x, int y, int heading) {
 		builder = new PacketBuilder () ;
 
-		builder.WriteByte (ServerOpcodes.MOVE_NODE) ;
+		builder.writeByte (ServerOpcodes.MOVE_NODE) ;
 		builder.WriteDoubleWord (uuid) ;
 		builder.WriteWord (x) ;
 		builder.WriteWord (y) ;
-		builder.WriteByte (heading) ;
-		builder.WriteByte (129) ;
+		builder.writeByte (heading) ;
+		builder.writeByte (129) ;
 		builder.WriteDoubleWord (0) ;
 	}
 	
@@ -32,12 +32,12 @@ public class NodeMove
 	//public NodeMove (PcInstance Node) {
 		builder = new PacketBuilder () ;
 
-		builder.WriteByte (ServerOpcodes.MOVE_NODE) ;
+		builder.writeByte (ServerOpcodes.MOVE_NODE) ;
 		builder.WriteDoubleWord (Node.Uuid) ;
 		builder.WriteWord (Node.location.x) ;
 		builder.WriteWord (Node.location.y) ;
-		builder.WriteByte (Node.location.Heading) ;
-		builder.WriteByte (129) ;
+		builder.writeByte (Node.location.Heading) ;
+		builder.writeByte (129) ;
 		builder.WriteDoubleWord (0) ;
 	}
 	

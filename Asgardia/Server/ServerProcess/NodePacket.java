@@ -38,21 +38,21 @@ public class NodePacket
 		//Check FastMove
 		//Check Ghost
 		
-		Builder.WriteByte (ServerOpcodes.NODE_PACK);
+		Builder.writeByte (ServerOpcodes.NODE_PACK);
 		Builder.WriteWord (Node.location.x) ;
 		Builder.WriteWord (Node.location.y) ;
 		Builder.WriteDoubleWord (Node.Uuid) ;
 		
 		Builder.WriteWord (Node.TempGfx) ; //get gfx
 		if (Node.isDead () ) {
-			Builder.WriteByte (8) ;
+			Builder.writeByte (8) ;
 		} else {
-			Builder.WriteByte (Node.getWeaponGfx () ) ; //武器外型修正
+			Builder.writeByte (Node.getWeaponGfx () ) ; //武器外型修正
 		}
-		Builder.WriteByte (Node.location.Heading) ;
-		Builder.WriteByte (10) ; //light
+		Builder.writeByte (Node.location.Heading) ;
+		Builder.writeByte (10) ; //light
 		
-		Builder.WriteByte (Node.MoveSpeed) ; //move speed;
+		Builder.writeByte (Node.MoveSpeed) ; //move speed;
 		
 		Builder.WriteDoubleWord (Node.Exp) ;
 		Builder.WriteWord (Node.Lawful) ;
@@ -60,163 +60,163 @@ public class NodePacket
 		Builder.WriteString (Node.Title);
 		
 		Node.Status = status;
-		Builder.WriteByte (Node.Status) ; //status
+		Builder.writeByte (Node.Status) ; //status
 		Builder.WriteDoubleWord (Node.ClanId) ;
 		Builder.WriteString (Node.ClanName) ;
 		Builder.WriteString (null) ;
-		Builder.WriteByte (0x00) ;
+		Builder.writeByte (0x00) ;
 		
-		Builder.WriteByte (0xFF) ; //血條百分比
+		Builder.writeByte (0xFF) ; //血條百分比
 		
-		Builder.WriteByte (0x00) ;
-		Builder.WriteByte (0x00) ;
-		Builder.WriteByte (0x00) ;
-		Builder.WriteByte (0xFF) ;
-		Builder.WriteByte (0xFF) ;
+		Builder.writeByte (0x00) ;
+		Builder.writeByte (0x00) ;
+		Builder.writeByte (0x00) ;
+		Builder.writeByte (0xFF) ;
+		Builder.writeByte (0xFF) ;
 	}
 	
 	/*
 	 * 報告NPC物件
 	 */
 	public NodePacket (NpcInstance Npc) {
-		Builder.WriteByte (ServerOpcodes.NODE_PACK);
+		Builder.writeByte (ServerOpcodes.NODE_PACK);
 		Builder.WriteWord (Npc.location.x) ;
 		Builder.WriteWord (Npc.location.y) ;
 		Builder.WriteDoubleWord (Npc.Uuid) ;
 		
 		Builder.WriteWord (Npc.Gfx) ; //get gfx
 		if (Npc.isDead () ) {
-			Builder.WriteByte (8) ;
+			Builder.writeByte (8) ;
 		} else {
-			Builder.WriteByte (0) ;//weapon 0:hand 4:sword
+			Builder.writeByte (0) ;//weapon 0:hand 4:sword
 		}
-		Builder.WriteByte (Npc.location.Heading) ;
-		Builder.WriteByte (10) ; //light
-		Builder.WriteByte (Npc.MoveSpeed) ; //move speed;
+		Builder.writeByte (Npc.location.Heading) ;
+		Builder.writeByte (10) ; //light
+		Builder.writeByte (Npc.MoveSpeed) ; //move speed;
 		
 		Builder.WriteDoubleWord (0) ; //EXP
 		Builder.WriteWord (0) ; //Lawful
 		Builder.WriteString (Npc.NameId) ;
 		Builder.WriteString (null) ;//title
-		Builder.WriteByte (Npc.Status) ; //status
+		Builder.writeByte (Npc.Status) ; //status
 		Builder.WriteDoubleWord (0) ;
 		Builder.WriteString (null) ;
 		Builder.WriteString (null) ;
-		Builder.WriteByte (0x00) ;
+		Builder.writeByte (0x00) ;
 		
-		Builder.WriteByte (0xFF) ; //血條百分比
+		Builder.writeByte (0xFF) ; //血條百分比
 		
-		Builder.WriteByte (0x00) ;
-		Builder.WriteByte (Npc.Level) ;
-		Builder.WriteByte (0x00) ;
-		Builder.WriteByte (0xFF) ;
-		Builder.WriteByte (0xFF) ;
+		Builder.writeByte (0x00) ;
+		Builder.writeByte (Npc.Level) ;
+		Builder.writeByte (0x00) ;
+		Builder.writeByte (0xFF) ;
+		Builder.writeByte (0xFF) ;
 	}
 	
 	/*
 	 * 報告地面物件
 	 */
 	public NodePacket (ItemInstance i) {
-		Builder.WriteByte (ServerOpcodes.NODE_PACK) ;
+		Builder.writeByte (ServerOpcodes.NODE_PACK) ;
 		Builder.WriteWord (i.location.x) ;
 		Builder.WriteWord (i.location.y) ;
 		Builder.WriteDoubleWord (i.Uuid) ;
 		Builder.WriteWord (i.GndGfx) ;
-		Builder.WriteByte (0); //*
-		Builder.WriteByte (0); //heading
-		Builder.WriteByte (1) ; //light
-		Builder.WriteByte (0) ; //speed
+		Builder.writeByte (0); //*
+		Builder.writeByte (0); //heading
+		Builder.writeByte (1) ; //light
+		Builder.writeByte (0) ; //speed
 		Builder.WriteDoubleWord (i.Count) ;
-		Builder.WriteByte (0) ;
-		Builder.WriteByte (0) ;
+		Builder.writeByte (0) ;
+		Builder.writeByte (0) ;
 		if (i.Count > 1) {
 			Builder.WriteString (i.getName () ) ;
 		} else {
 			Builder.WriteString (i.Name) ;
 		}
-		Builder.WriteByte (0) ;
+		Builder.writeByte (0) ;
 		Builder.WriteDoubleWord (0) ;
 		Builder.WriteDoubleWord (0) ;
-		Builder.WriteByte (0xFF) ;
-		Builder.WriteByte (0) ;
-		Builder.WriteByte (0) ;
-		Builder.WriteByte (0) ;
+		Builder.writeByte (0xFF) ;
+		Builder.writeByte (0) ;
+		Builder.writeByte (0) ;
+		Builder.writeByte (0) ;
 		Builder.WriteWord (0xFFFF) ; 
 		Builder.WriteDoubleWord (0) ;
-		Builder.WriteByte (0) ;
-		Builder.WriteByte (0) ;
+		Builder.writeByte (0) ;
+		Builder.writeByte (0) ;
 	}
 	
 	/*
 	 * 報告門物件
 	 */
 	public NodePacket (DoorInstance d) {
-		Builder.WriteByte (ServerOpcodes.NODE_PACK) ;
+		Builder.writeByte (ServerOpcodes.NODE_PACK) ;
 		Builder.WriteWord (d.location.x) ;
 		Builder.WriteWord (d.location.y) ;
 		Builder.WriteDoubleWord (d.Uuid) ;
 		Builder.WriteWord (d.Gfx) ;
-		Builder.WriteByte (d.StatusActionCode) ;
-		Builder.WriteByte (0) ;
-		Builder.WriteByte (0) ;
-		Builder.WriteByte (0) ;
+		Builder.writeByte (d.StatusActionCode) ;
+		Builder.writeByte (0) ;
+		Builder.writeByte (0) ;
+		Builder.writeByte (0) ;
 		Builder.WriteDoubleWord (0x01) ;
 		Builder.WriteWord (0) ;
 		Builder.WriteString (null) ;
 		Builder.WriteString (null) ;
 		if (d.isVisible) {
-			Builder.WriteByte (0) ;
+			Builder.writeByte (0) ;
 		} else {
-			Builder.WriteByte (STATUS_INVISIBLE) ;
+			Builder.writeByte (STATUS_INVISIBLE) ;
 		}
 		Builder.WriteDoubleWord (0);
 		Builder.WriteString (null) ;
 		Builder.WriteString (null) ;
-		Builder.WriteByte (0) ;
-		Builder.WriteByte (0xFF) ;
-		Builder.WriteByte (0) ;
-		Builder.WriteByte (0) ;
-		Builder.WriteByte (0) ;
-		Builder.WriteByte (0xFF) ;
-		Builder.WriteByte (0xFF) ;
+		Builder.writeByte (0) ;
+		Builder.writeByte (0xFF) ;
+		Builder.writeByte (0) ;
+		Builder.writeByte (0) ;
+		Builder.writeByte (0) ;
+		Builder.writeByte (0xFF) ;
+		Builder.writeByte (0xFF) ;
 	}	
 	
 	/*
 	 * 報告怪物物件
 	 */
 	public NodePacket (MonsterInstance Npc) {
-		Builder.WriteByte (ServerOpcodes.NODE_PACK);
+		Builder.writeByte (ServerOpcodes.NODE_PACK);
 		Builder.WriteWord (Npc.location.x) ;
 		Builder.WriteWord (Npc.location.y) ;
 		Builder.WriteDoubleWord (Npc.Uuid) ;
 		
 		Builder.WriteWord (Npc.Gfx) ; //get gfx
 		if (Npc.isDead () ) {
-			Builder.WriteByte (8) ;
+			Builder.writeByte (8) ;
 		} else {
-			Builder.WriteByte (0) ;
+			Builder.writeByte (0) ;
 		}
-		Builder.WriteByte (Npc.location.Heading) ;
-		Builder.WriteByte (10) ; //light
-		Builder.WriteByte (Npc.MoveSpeed) ; //move speed;
+		Builder.writeByte (Npc.location.Heading) ;
+		Builder.writeByte (10) ; //light
+		Builder.writeByte (Npc.MoveSpeed) ; //move speed;
 		
 		Builder.WriteDoubleWord (0) ; //EXP
 		Builder.WriteWord (0) ; //Lawful
 		Builder.WriteString (Npc.NameId) ;
 		Builder.WriteString (null) ;//title
-		Builder.WriteByte (Npc.Status) ; //status
+		Builder.writeByte (Npc.Status) ; //status
 		Builder.WriteDoubleWord (0) ;
 		Builder.WriteString (null) ;
 		Builder.WriteString (null) ;
-		Builder.WriteByte (0x00) ;
+		Builder.writeByte (0x00) ;
 		
-		Builder.WriteByte (0xFF) ; //血條百分比
+		Builder.writeByte (0xFF) ; //血條百分比
 		
-		Builder.WriteByte (0x00) ;
-		Builder.WriteByte (Npc.Level) ;
-		Builder.WriteByte (0x00) ;
-		Builder.WriteByte (0xFF) ;
-		Builder.WriteByte (0xFF) ;
+		Builder.writeByte (0x00) ;
+		Builder.writeByte (Npc.Level) ;
+		Builder.writeByte (0x00) ;
+		Builder.writeByte (0xFF) ;
+		Builder.writeByte (0xFF) ;
 	}
 	
 	public byte[] getRaw () {

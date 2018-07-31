@@ -9,7 +9,7 @@ public class GameTime
 		PacketBuilder Builder = new PacketBuilder () ;
 		ServerTime St = ServerTime.getInstance ();
 		
-		Builder.WriteByte (ServerOpcodes.SYS_TICK) ;
+		Builder.writeByte (ServerOpcodes.SYS_TICK) ;
 		Builder.WriteDoubleWord (St.getTime () ) ; //get sys tick time
 		Handle.SendPacket (Builder.GetPacket () ) ;
 	}

@@ -9,10 +9,10 @@ public class Unknown2
 	public Unknown2 (SessionHandler Handle) 
 	{
 		PacketBuilder Builder = new PacketBuilder () ;
-		Builder.WriteByte (ServerOpcodes.UNKNOWN2) ;
-		Builder.WriteByte (0xFF) ;
-		Builder.WriteByte (0x7F) ;
-		Builder.WriteByte (0x03) ;
+		Builder.writeByte (ServerOpcodes.UNKNOWN2) ;
+		Builder.writeByte (0xFF) ;
+		Builder.writeByte (0x7F) ;
+		Builder.writeByte (0x03) ;
 		Handle.SendPacket (Builder.GetPacket () ) ;
 	}
 }

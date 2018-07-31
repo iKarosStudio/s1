@@ -14,7 +14,7 @@ public class LoginAnnounce
 		PacketBuilder Builder = new PacketBuilder () ;
 		String DefaultMsg = String.format ("帳號:%s\n密碼:%s\n登入IP:%s\n", Handle.Account.UserAccount, Handle.Account.UserPassword, Handle.getIP () ) ;
 		
-		Builder.WriteByte (ServerOpcodes.LOGIN_WELCOME_MSG) ;
+		Builder.writeByte (ServerOpcodes.LOGIN_WELCOME_MSG) ;
 		Builder.WriteString (DefaultMsg) ;
 		Handle.SendPacket (Builder.GetPacket () ) ;
 	}
@@ -22,7 +22,7 @@ public class LoginAnnounce
 	public LoginAnnounce (SessionHandler Handle, String Msg) {
 		PacketBuilder Builder = new PacketBuilder () ;
 		
-		Builder.WriteByte (ServerOpcodes.LOGIN_WELCOME_MSG) ;
+		Builder.writeByte (ServerOpcodes.LOGIN_WELCOME_MSG) ;
 		Builder.WriteString (Msg) ;
 		Handle.SendPacket (Builder.GetPacket () ) ;
 	}

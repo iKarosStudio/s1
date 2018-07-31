@@ -12,7 +12,7 @@ public class SkillTable
 	
 
 	public SkillTable (int pc_type, HashMap<Integer, Integer> skill_table) {		
-		builder.WriteByte (ServerOpcodes.SKILL_TABLE) ;
+		builder.writeByte (ServerOpcodes.SKILL_TABLE) ;
 		
 		int check_5_8 = 0;
 		int check_9_10 = 0;
@@ -26,15 +26,15 @@ public class SkillTable
 		}
 		
 		if (check_5_8 > 0 && check_9_10 == 0) {
-			builder.WriteByte (50) ;
+			builder.writeByte (50) ;
 		} else if (check_9_10 > 0) {
-			builder.WriteByte (100) ;
+			builder.writeByte (100) ;
 		} else {
-			builder.WriteByte (22);
+			builder.writeByte (22);
 		}
 		
 		for (int i = 1; i <= 24; i++) {
-			builder.WriteByte (skill_table.get (i) ) ;
+			builder.writeByte (skill_table.get (i) ) ;
 		}
 		builder.WriteDoubleWord (0) ;
 		builder.WriteDoubleWord (0) ;

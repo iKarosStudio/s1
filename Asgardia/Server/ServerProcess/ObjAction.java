@@ -8,9 +8,9 @@ public class ObjAction
 	PacketBuilder builder = new PacketBuilder () ;
 	
 	public ObjAction (int uuid, int action_code) {
-		builder.WriteByte (ServerOpcodes.OBJ_ACTION) ;
+		builder.writeByte (ServerOpcodes.OBJ_ACTION) ;
 		builder.WriteDoubleWord (uuid) ;
-		builder.WriteByte (action_code) ;
+		builder.writeByte (action_code) ;
 	}
 	
 	public byte[] getRaw () {

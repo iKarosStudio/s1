@@ -8,7 +8,7 @@ public class SkillGfx
 	PacketBuilder builder = new PacketBuilder () ;
 	
 	public SkillGfx (int uuid, int gfx_id) {
-		builder.WriteByte (ServerOpcodes.SKILL_GFX) ;
+		builder.writeByte (ServerOpcodes.SKILL_GFX) ;
 		builder.WriteDoubleWord (uuid) ;
 		builder.WriteWord (gfx_id) ;
 		builder.WriteWord (0) ;

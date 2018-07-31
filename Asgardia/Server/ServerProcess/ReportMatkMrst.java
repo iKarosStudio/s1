@@ -12,9 +12,9 @@ public class ReportMatkMrst
 	public ReportMatkMrst (SessionHandler Handle) {
 		PcInstance Pc = Handle.Account.ActivePc;
 		
-		Builder.WriteByte (ServerOpcodes.MATK_MRST) ;
-		Builder.WriteByte (Pc.getSp () ) ; //sp
-		Builder.WriteByte (Pc.getMr () ) ; //mr
+		Builder.writeByte (ServerOpcodes.MATK_MRST) ;
+		Builder.writeByte (Pc.getSp () ) ; //sp
+		Builder.writeByte (Pc.getMr () ) ; //mr
 	}
 	
 	public byte[] getRaw () {

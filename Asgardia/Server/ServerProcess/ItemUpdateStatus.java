@@ -9,18 +9,18 @@ public class ItemUpdateStatus
 	PacketBuilder builder = new PacketBuilder () ;
 	
 	public ItemUpdateStatus (ItemInstance item) {
-		builder.WriteByte (ServerOpcodes.ITEM_UPDATE_STATUS) ;
+		builder.writeByte (ServerOpcodes.ITEM_UPDATE_STATUS) ;
 		builder.WriteDoubleWord (item.Uuid) ;
 		builder.WriteString (item.getName () ) ;
 		builder.WriteDoubleWord (item.Count) ;
 		if (item.IsIdentified) {
 			byte[] detail = item.getDetail () ;
-			builder.WriteByte (detail.length) ;
+			builder.writeByte (detail.length) ;
 			for (byte b : detail) {
-				builder.WriteByte (b) ;
+				builder.writeByte (b) ;
 			}
 		} else {
-			builder.WriteByte (0) ;
+			builder.writeByte (0) ;
 		}
 	}
 	

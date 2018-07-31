@@ -15,25 +15,25 @@ public class ReportHeldItem
 	
 	public ReportHeldItem (ConcurrentHashMap<Integer, ItemInstance> ItemList) {
 		
-		builder.WriteByte (ServerOpcodes.ITEM_LIST) ;
-		builder.WriteByte (ItemList.size () ) ;
+		builder.writeByte (ServerOpcodes.ITEM_LIST) ;
+		builder.writeByte (ItemList.size () ) ;
 		
 		ItemList.forEach ((Integer id, ItemInstance item)->{
 			builder.WriteDoubleWord (item.Uuid);
-			builder.WriteByte (item.UseType) ;
-			builder.WriteByte (0) ;
+			builder.writeByte (item.UseType) ;
+			builder.writeByte (0) ;
 			builder.WriteWord (item.InvGfx) ;
-			builder.WriteByte (item.Bless) ;
+			builder.writeByte (item.Bless) ;
 			builder.WriteDoubleWord (item.Count) ;
 			builder.WriteByte (item.IsIdentified) ;				
 			builder.WriteString (item.getName () ) ;
 			
 			if (item.IsIdentified) {
 				byte[] Detail = item.getDetail () ;
-				builder.WriteByte (Detail.length) ;
+				builder.writeByte (Detail.length) ;
 				builder.WriteByte (Detail) ;
 			} else {
-				builder.WriteByte (0) ;
+				builder.writeByte (0) ;
 			}
 		}) ;
 	}

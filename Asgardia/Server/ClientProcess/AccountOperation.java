@@ -37,8 +37,8 @@ public class AccountOperation
 		 * 回報登入結果
 		 */
 		Builder.Reset () ;
-		Builder.WriteByte (ServerOpcodes.LOGIN_RESULT) ;
-		Builder.WriteByte (LoginResult) ; //LOGIN RESULT CODE
+		Builder.writeByte (ServerOpcodes.LOGIN_RESULT) ;
+		Builder.writeByte (LoginResult) ; //LOGIN RESULT CODE
 		Builder.WriteDoubleWord (0x00000000) ;
 		Builder.WriteDoubleWord (0x00000000) ;
 		Builder.WriteDoubleWord (0x00000000) ;		
@@ -113,8 +113,8 @@ public class AccountOperation
 			CharacterAmount = ReportCharacterAmount (Handle, Data) ;
 			
 			PacketBuilder Builder = new PacketBuilder () ;
-			Builder.WriteByte (ServerOpcodes.CHAR_AMOUNT) ;
-			Builder.WriteByte (CharacterAmount) ; //character amount
+			Builder.writeByte (ServerOpcodes.CHAR_AMOUNT) ;
+			Builder.writeByte (CharacterAmount) ; //character amount
 			Builder.WriteDoubleWord (0x00000000) ;
 			Builder.WriteDoubleWord (0x00000000) ;
 			Handle.SendPacket (Builder.GetPacket () ) ;
@@ -127,27 +127,27 @@ public class AccountOperation
 				 */
 				while (rs.next () ) {
 					Builder = new PacketBuilder () ;
-					Builder.WriteByte (ServerOpcodes.CHAR_LIST) ;
+					Builder.writeByte (ServerOpcodes.CHAR_LIST) ;
 					Builder.WriteString (rs.getString ("char_name") ) ;
 					Builder.WriteString (rs.getString ("Clanname") ) ;
 					
 					/* Type - 0:Royal 1:Knight 2:Elf 3:Mage 4:Darkelf */
-					Builder.WriteByte (rs.getInt ("Type") ) ;
+					Builder.writeByte (rs.getInt ("Type") ) ;
 					
 					/* Sex - 0:male, 1:female */
-					Builder.WriteByte (1) ;
+					Builder.writeByte (1) ;
 					Builder.WriteWord (rs.getInt ("Lawful") ) ; //lawful
 					Builder.WriteWord (rs.getInt ("CurHP") ) ; //hp
 					Builder.WriteWord (rs.getInt ("CurMP") ) ; //mp
-					Builder.WriteByte (rs.getByte ("Ac") ) ; //ac
-					Builder.WriteByte (rs.getByte ("level") ) ; //level
-					Builder.WriteByte (rs.getByte ("Str") ) ; //str
-					Builder.WriteByte (rs.getByte ("Dex") ) ; //dex
-					Builder.WriteByte (rs.getByte ("Con") ) ; //con
-					Builder.WriteByte (rs.getByte ("Wis") ) ; //wis
-					Builder.WriteByte (rs.getByte ("Cha") ) ; //cha
-					Builder.WriteByte (rs.getByte ("Intel") ) ; //int
-					Builder.WriteByte (0x00) ; //END	
+					Builder.writeByte (rs.getByte ("Ac") ) ; //ac
+					Builder.writeByte (rs.getByte ("level") ) ; //level
+					Builder.writeByte (rs.getByte ("Str") ) ; //str
+					Builder.writeByte (rs.getByte ("Dex") ) ; //dex
+					Builder.writeByte (rs.getByte ("Con") ) ; //con
+					Builder.writeByte (rs.getByte ("Wis") ) ; //wis
+					Builder.writeByte (rs.getByte ("Cha") ) ; //cha
+					Builder.writeByte (rs.getByte ("Intel") ) ; //int
+					Builder.writeByte (0x00) ; //END	
 					Handle.SendPacket (Builder.GetPacket () );
 				}
 			} else {

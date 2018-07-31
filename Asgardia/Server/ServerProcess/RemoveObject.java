@@ -8,7 +8,7 @@ public class RemoveObject
 	private PacketBuilder builder = new PacketBuilder () ;
 	
 	public RemoveObject (int uuid) {
-		builder.WriteByte (ServerOpcodes.REMOVE_OBJECT) ;
+		builder.writeByte (ServerOpcodes.REMOVE_OBJECT) ;
 		builder.WriteDoubleWord (uuid) ;
 	}
 	

@@ -9,23 +9,23 @@ public class NewCharacterPack
 	PacketBuilder pb = new PacketBuilder () ;
 	
 	public NewCharacterPack (PcInstance Pc) {
-		pb.WriteByte (ServerOpcodes.NEW_CHARACTER_PACK) ;
+		pb.writeByte (ServerOpcodes.NEW_CHARACTER_PACK) ;
 		pb.WriteString (Pc.Name) ;
 		pb.WriteString ("") ;
-		pb.WriteByte (Pc.Type) ;
-		pb.WriteByte (Pc.Sex) ;
+		pb.writeByte (Pc.Type) ;
+		pb.writeByte (Pc.Sex) ;
 		pb.WriteWord (Pc.Lawful) ;
 		pb.WriteWord (Pc.BasicParameter.MaxHp) ;
 		pb.WriteWord (Pc.BasicParameter.MaxMp) ;
-		pb.WriteByte (Pc.BasicParameter.Ac) ;
-		pb.WriteByte (Pc.Level) ;
-		pb.WriteByte (Pc.BasicParameter.Str) ;
-		pb.WriteByte (Pc.BasicParameter.Dex) ;
-		pb.WriteByte (Pc.BasicParameter.Con) ;
-		pb.WriteByte (Pc.BasicParameter.Wis) ;
-		pb.WriteByte (Pc.BasicParameter.Cha) ;
-		pb.WriteByte (Pc.BasicParameter.Intel) ;
-		pb.WriteByte (0) ;	
+		pb.writeByte (Pc.BasicParameter.Ac) ;
+		pb.writeByte (Pc.Level) ;
+		pb.writeByte (Pc.BasicParameter.Str) ;
+		pb.writeByte (Pc.BasicParameter.Dex) ;
+		pb.writeByte (Pc.BasicParameter.Con) ;
+		pb.writeByte (Pc.BasicParameter.Wis) ;
+		pb.writeByte (Pc.BasicParameter.Cha) ;
+		pb.writeByte (Pc.BasicParameter.Intel) ;
+		pb.writeByte (0) ;	
 		
 	}
 	

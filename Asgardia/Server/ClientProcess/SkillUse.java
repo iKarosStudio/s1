@@ -38,29 +38,29 @@ public class SkillUse
 			String clan_message = null;
 			
 			if (Data.length > 4) {
-				try {
-					if (skill_id == CALL_CLAN || skill_id == RUN_CLAN) {
-						clan_name = reader.ReadString () ;
-					} else if (skill_id == TRUE_TARGET) {
-						target_uuid = reader.ReadDoubleWord () ;
+				if (skill_id == CALL_CLAN || skill_id == RUN_CLAN) {
+					clan_name = reader.ReadString () ;
+					
+				} else if (skill_id == TRUE_TARGET) {
+					target_uuid = reader.ReadDoubleWord () ;
+					target_x = reader.ReadWord () ;
+					target_y = reader.ReadWord () ;
+					clan_message = reader.ReadString () ;
+					
+				} else if (skill_id == SKILL_TELEPORT || skill_id == SKILL_MASS_TELEPORT) {
+					reader.ReadWord () ;//mapid
+					target_uuid = reader.ReadDoubleWord () ; //Bookmark id
+					
+				} else if (skill_id == SKILL_FIRE_WALL || skill_id == SKILL_LIFE_STREAM) {
+					target_x = reader.ReadWord () ; 
+					target_y = reader.ReadWord () ;
+					
+				} else {
+					target_uuid = reader.ReadDoubleWord () ;
+					if (Data.length > 11) {
 						target_x = reader.ReadWord () ;
 						target_y = reader.ReadWord () ;
-						clan_message = reader.ReadString () ;
-					} else if (skill_id == SKILL_TELEPORT || skill_id == SKILL_MASS_TELEPORT) {
-						reader.ReadWord () ;//mapid
-						target_uuid = reader.ReadDoubleWord () ; //Bookmark id
-					} else if (skill_id == SKILL_FIRE_WALL || skill_id == SKILL_LIFE_STREAM) {
-						target_x = reader.ReadWord () ; 
-						target_y = reader.ReadWord () ;
-					} else {
-						target_uuid = reader.ReadDoubleWord () ;
-						if (Data.length > 11) {
-							target_x = reader.ReadWord () ;
-							target_y = reader.ReadWord () ;
-						}
 					}
-				} catch (Exception e) {
-					e.printStackTrace () ;
 				}
 			}
 			

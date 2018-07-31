@@ -9,7 +9,7 @@ public class ReportTitle
 	PacketBuilder Builder = new PacketBuilder () ;
 	
 	public ReportTitle (SessionHandler Handle) {
-		Builder.WriteByte (ServerOpcodes.CHAR_TITLE) ;
+		Builder.writeByte (ServerOpcodes.CHAR_TITLE) ;
 		Builder.WriteDoubleWord (Handle.Account.ActivePc.Uuid) ;
 		Builder.WriteString (Handle.Account.ActivePc.Title) ;
 	}

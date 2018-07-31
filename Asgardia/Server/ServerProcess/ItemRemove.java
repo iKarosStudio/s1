@@ -9,7 +9,7 @@ public class ItemRemove
 	PacketBuilder builder = new PacketBuilder () ;
 	
 	public ItemRemove (ItemInstance item) {
-		builder.WriteByte (ServerOpcodes.ITEM_REMOVE) ;
+		builder.writeByte (ServerOpcodes.ITEM_REMOVE) ;
 		builder.WriteDoubleWord (item.Uuid) ;
 	}
 	

@@ -9,9 +9,9 @@ public class ItemUpdateBless
 	PacketBuilder builder = new PacketBuilder () ;
 	
 	public ItemUpdateBless (ItemInstance item) {
-		builder.WriteByte (ServerOpcodes.ITEM_UPDATE_BLESS) ;
+		builder.writeByte (ServerOpcodes.ITEM_UPDATE_BLESS) ;
 		builder.WriteDoubleWord (item.Uuid) ;
-		builder.WriteByte (item.Bless) ;
+		builder.writeByte (item.Bless) ;
 	}
 	
 	/*

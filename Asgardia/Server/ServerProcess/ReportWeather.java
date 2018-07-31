@@ -9,8 +9,8 @@ public class ReportWeather
 	PacketBuilder builder = new PacketBuilder () ;
 	
 	public ReportWeather (int weather) {
-		builder.WriteByte (ServerOpcodes.WEATHER) ;
-		builder.WriteByte (weather) ;
+		builder.writeByte (ServerOpcodes.WEATHER) ;
+		builder.writeByte (weather) ;
 	}
 	
 	public byte[] getRaw () {

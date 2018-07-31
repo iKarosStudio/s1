@@ -9,9 +9,9 @@ public class RequestStart
 	public RequestStart (SessionHandler Handle) 
 	{
 		PacketBuilder Builder = new PacketBuilder () ;
-		Builder.WriteByte (ServerOpcodes.LOGIN_START) ;
-		Builder.WriteByte (0x14) ;
-		Builder.WriteByte (0x69) ;
+		Builder.writeByte (ServerOpcodes.LOGIN_START) ;
+		Builder.writeByte (0x14) ;
+		Builder.writeByte (0x69) ;
 		/*
 		Builder.WriteByte (0x50) ;
 		Builder.WriteByte (0x40) ;

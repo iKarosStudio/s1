@@ -8,9 +8,9 @@ public class SkillHaste
 	PacketBuilder builder = new PacketBuilder () ;
 	
 	public SkillHaste (int uuid, int move_speed, int time) {
-		builder.WriteByte (ServerOpcodes.SKILL_HASTE) ; 
+		builder.writeByte (ServerOpcodes.SKILL_HASTE) ; 
 		builder.WriteDoubleWord (uuid) ;
-		builder.WriteByte (move_speed) ;
+		builder.writeByte (move_speed) ;
 		
 		/*
 		 * Remain Time  0xFFFF -> 永久效果

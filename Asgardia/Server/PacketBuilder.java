@@ -13,6 +13,10 @@ public class PacketBuilder
 	}
 	
 	public void WriteByte (int Value) {
+		writeByte (Value);
+	}
+
+	public void writeByte (int Value) {
 		Packet.write (Value & 0xFF) ;
 	}
 	

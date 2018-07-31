@@ -12,14 +12,14 @@ public class ServerMessage
 	}
 	
 	public ServerMessage (int msg_code, String[] argv) {
-		builder.WriteByte (ServerOpcodes.SERVER_MSG) ;
+		builder.writeByte (ServerOpcodes.SERVER_MSG) ;
 		builder.WriteWord (msg_code) ;
 		
 		if (argv == null) {
-			builder.WriteByte (0) ;
+			builder.writeByte (0) ;
 			
 		} else {
-			builder.WriteByte (argv.length) ;
+			builder.writeByte (argv.length) ;
 			for (int index = 0; index < argv.length; index++) {
 				builder.WriteString (argv[index]) ;
 			}

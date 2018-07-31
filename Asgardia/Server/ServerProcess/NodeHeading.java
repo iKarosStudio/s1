@@ -11,9 +11,9 @@ public class NodeHeading
 	PacketBuilder Builder = new PacketBuilder () ;
 	public NodeHeading (int Uuid, int Heading) {
 		
-		Builder.WriteByte (ServerOpcodes.SET_HEADING) ;
+		Builder.writeByte (ServerOpcodes.SET_HEADING) ;
 		Builder.WriteDoubleWord (Uuid) ;
-		Builder.WriteByte (Heading) ;
+		Builder.writeByte (Heading) ;
 	}
 	
 	public byte[] getRaw () {

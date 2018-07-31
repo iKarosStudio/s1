@@ -8,9 +8,9 @@ public class UpdatePcGfx
 	PacketBuilder builder = new PacketBuilder () ;
 	
 	public UpdatePcGfx (int uuid, int gfx) {
-		builder.WriteByte (ServerOpcodes.UPDATE_PC_GFX) ;
+		builder.writeByte (ServerOpcodes.UPDATE_PC_GFX) ;
 		builder.WriteDoubleWord (uuid) ;
-		builder.WriteByte (gfx) ;
+		builder.writeByte (gfx) ;
 	}
 	
 	public byte[] getRaw () {

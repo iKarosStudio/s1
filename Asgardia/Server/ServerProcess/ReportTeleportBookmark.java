@@ -8,7 +8,7 @@ public class ReportTeleportBookmark
 {
 	public ReportTeleportBookmark (SessionHandler Handle) {
 		PacketBuilder Builder = new PacketBuilder () ;
-		Builder.WriteByte (ServerOpcodes.BOOKMARK) ;
+		Builder.writeByte (ServerOpcodes.BOOKMARK) ;
 		Builder.WriteString ("dd"); //name
 		Builder.WriteWord (0) ; //mapid
 		Builder.WriteDoubleWord (Handle.Account.ActivePc.Uuid) ;

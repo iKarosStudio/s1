@@ -13,8 +13,8 @@ public class CharCreateResult
 	public static int WRONG_AMOUNT = 0x15;
 	
 	public CharCreateResult (int Result) {
-		pb.WriteByte (ServerOpcodes.CHAR_CREATE_RESULT) ;
-		pb.WriteByte (Result) ;
+		pb.writeByte (ServerOpcodes.CHAR_CREATE_RESULT) ;
+		pb.writeByte (Result) ;
 		pb.WriteDoubleWord (0) ;
 		pb.WriteDoubleWord (0) ;
 	}

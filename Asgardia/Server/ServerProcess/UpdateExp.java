@@ -9,8 +9,8 @@ public class UpdateExp
 	PacketBuilder builder = new PacketBuilder () ;
 	
 	public UpdateExp (PcInstance p) {
-		builder.WriteByte (ServerOpcodes.UPDATE_EXP) ;
-		builder.WriteByte (p.Level) ;
+		builder.writeByte (ServerOpcodes.UPDATE_EXP) ;
+		builder.writeByte (p.Level) ;
 		builder.WriteDoubleWord (p.Exp) ;
 	}
 	

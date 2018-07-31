@@ -10,7 +10,7 @@ public class MapUse
 	public MapUse (int uuid, int item_id) {
 		int map_value = 0;
 		
-		builder.WriteByte (ServerOpcodes.MAP_USE) ;
+		builder.writeByte (ServerOpcodes.MAP_USE) ;
 		builder.WriteDoubleWord (uuid) ;
 		
 		switch (item_id) {

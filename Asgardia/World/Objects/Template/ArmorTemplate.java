@@ -192,17 +192,17 @@ public class ArmorTemplate
 	public byte[] ParseArmorDetail () {
 		PacketBuilder builder = new PacketBuilder () ;
 		
-		builder.WriteByte (19) ;
-		builder.WriteByte (Math.abs (Ac) ) ;
-		builder.WriteByte (Material) ;
+		builder.writeByte (19) ;
+		builder.writeByte (Math.abs (Ac) ) ;
+		builder.writeByte (Material) ;
 		builder.WriteDoubleWord (Weight / 1000) ;
 		
 		//
-		builder.WriteByte (2) ; //Enchant level
-		builder.WriteByte (0) ;
+		builder.writeByte (2) ; //Enchant level
+		builder.writeByte (0) ;
 		
-		builder.WriteByte (3) ; //Durability
-		builder.WriteByte (100) ;
+		builder.writeByte (3) ; //Durability
+		builder.writeByte (100) ;
 		
 		byte UseClass = 0;
 		if (UseRoyal) UseClass   |= 0x01;
@@ -210,87 +210,87 @@ public class ArmorTemplate
 		if (UseElf) UseClass     |= 0x04;
 		if (UseMage) UseClass    |= 0x08;
 		if (UseDarkElf) UseClass |= 0x10;
-		builder.WriteByte (7) ; //use class
-		builder.WriteByte (UseClass);
+		builder.writeByte (7) ; //use class
+		builder.writeByte (UseClass);
 
 		
 		if (BowHitRate > 0) {
-			builder.WriteByte (24) ;
-			builder.WriteByte (BowHitRate) ;
+			builder.writeByte (24) ;
+			builder.writeByte (BowHitRate) ;
 		}
 		
 		if (AddStr > 0) {
-			builder.WriteByte (8) ;
-			builder.WriteByte (AddStr) ;
+			builder.writeByte (8) ;
+			builder.writeByte (AddStr) ;
 		}
 		
 		if (AddDex > 0) {
-			builder.WriteByte (9) ;
-			builder.WriteByte (AddDex) ;
+			builder.writeByte (9) ;
+			builder.writeByte (AddDex) ;
 		}
 		
 		if (AddCon > 0) {
-			builder.WriteByte (10) ;
-			builder.WriteByte (AddCon) ;
+			builder.writeByte (10) ;
+			builder.writeByte (AddCon) ;
 		}
 		
 		if (AddInt > 0) {
-			builder.WriteByte (11) ;
-			builder.WriteByte (AddInt) ;
+			builder.writeByte (11) ;
+			builder.writeByte (AddInt) ;
 		}
 		
 		if (AddWis > 0) {
-			builder.WriteByte (12) ;
-			builder.WriteByte (AddWis) ;
+			builder.writeByte (12) ;
+			builder.writeByte (AddWis) ;
 		}
 		
 		if (AddCha > 0) {
-			builder.WriteByte (13) ;
-			builder.WriteByte (AddCha) ;
+			builder.writeByte (13) ;
+			builder.writeByte (AddCha) ;
 		}
 		
 		if (AddHp > 0) {
-			builder.WriteByte (31) ;
-			builder.WriteByte (AddHp) ;
+			builder.writeByte (31) ;
+			builder.writeByte (AddHp) ;
 		}
 		
 		if (AddMp > 0) {
-			builder.WriteByte (32) ;
-			builder.WriteByte (AddMp) ;
+			builder.writeByte (32) ;
+			builder.writeByte (AddMp) ;
 		}
 		
 		if (Mdef > 0) {
-			builder.WriteByte (15) ;
+			builder.writeByte (15) ;
 			builder.WriteWord (Mdef) ;
 		}
 		
 		if (AddSp > 0) {
-			builder.WriteByte (17) ;
+			builder.writeByte (17) ;
 			builder.WriteWord (AddSp) ;
 		}
 		
 		if (HasteItem) {
-			builder.WriteByte (18) ;
+			builder.writeByte (18) ;
 		}
 		
 		if (DefenseFire > 0) {
-			builder.WriteByte (27) ;
-			builder.WriteByte (DefenseFire) ;
+			builder.writeByte (27) ;
+			builder.writeByte (DefenseFire) ;
 		}
 		
 		if (DefenseWater > 0) {
-			builder.WriteByte (28) ;
-			builder.WriteByte (DefenseWater) ;
+			builder.writeByte (28) ;
+			builder.writeByte (DefenseWater) ;
 		}
 		
 		if (DefenseWind > 0) {
-			builder.WriteByte (29) ;
-			builder.WriteByte (DefenseWind) ;
+			builder.writeByte (29) ;
+			builder.writeByte (DefenseWind) ;
 		}
 		
 		if (DefenseEarth > 0) {
-			builder.WriteByte (30) ;
-			builder.WriteByte (DefenseEarth) ;
+			builder.writeByte (30) ;
+			builder.writeByte (DefenseEarth) ;
 		}
 		
 		return builder.GetPacketNoPadding () ;

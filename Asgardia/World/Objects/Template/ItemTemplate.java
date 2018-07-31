@@ -176,27 +176,27 @@ public class ItemTemplate
 		
 		switch (TypeName) {
 		case "light" :
-			builder.WriteByte (22) ;
+			builder.writeByte (22) ;
 			builder.WriteWord (10) ; //light range
 			break;
 			
 		case "food" :
-			builder.WriteByte (21) ;
+			builder.writeByte (21) ;
 			builder.WriteWord (FoodValue) ;
 			break;
 		
 		case "arrow" :
 		case "sting" :
-			builder.WriteByte (1) ;
-			builder.WriteByte (DmgSmall) ;
-			builder.WriteByte (DmgLarge) ;
+			builder.writeByte (1) ;
+			builder.writeByte (DmgSmall) ;
+			builder.writeByte (DmgLarge) ;
 			
 		default :
-			builder.WriteByte (23) ;
+			builder.writeByte (23) ;
 			break;
 		}
 		
-		builder.WriteByte (Material) ;
+		builder.writeByte (Material) ;
 		builder.WriteDoubleWord ((Weight * count) / 1000);
 		
 		return builder.GetPacketNoPadding () ;

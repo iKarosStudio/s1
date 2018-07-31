@@ -8,7 +8,7 @@ public class HpUpdate
 	PacketBuilder builder = new PacketBuilder () ;
 	
 	public HpUpdate (int hp, int max_hp) {
-		builder.WriteByte (ServerOpcodes.HP_UPDATE) ;
+		builder.writeByte (ServerOpcodes.HP_UPDATE) ;
 		builder.WriteWord (hp) ;
 		builder.WriteWord (max_hp) ;
 	}

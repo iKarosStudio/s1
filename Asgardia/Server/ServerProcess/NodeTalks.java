@@ -8,8 +8,8 @@ public class NodeTalks
 	PacketBuilder Builder = new PacketBuilder () ;
 	
 	public NodeTalks (PcInstance Node, String Text, int Opcode, int TalksType) {		
-		Builder.WriteByte (Opcode) ;
-		Builder.WriteByte (TalksType) ;
+		Builder.writeByte (Opcode) ;
+		Builder.writeByte (TalksType) ;
 		Builder.WriteDoubleWord (Node.Uuid) ;
 		Builder.WriteString (Node.Name + ": " + Text) ;
 	}

@@ -12,7 +12,7 @@ public class NpcAccessResult
 	
 	public NpcAccessResult (int NpcId, String HtmlKey) {
 		
-		builder.WriteByte (ServerOpcodes.NPC_RESULT) ;
+		builder.writeByte (ServerOpcodes.NPC_RESULT) ;
 		builder.WriteDoubleWord (NpcId) ;
 		builder.WriteString (HtmlKey) ;
 		//有參數在這邊帶入

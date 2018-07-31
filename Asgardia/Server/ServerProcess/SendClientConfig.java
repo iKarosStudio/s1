@@ -28,8 +28,8 @@ public class SendClientConfig
 			
 			rs = ps.executeQuery () ;
 			
-			Builder.WriteByte (ServerOpcodes.FUNCTION_KEY) ;
-			Builder.WriteByte (41) ;
+			Builder.writeByte (ServerOpcodes.FUNCTION_KEY) ;
+			Builder.writeByte (41) ;
 			if (rs.next () ) {
 				length = rs.getInt ("length") ;
 				data = rs.getBytes ("data") ;
@@ -39,7 +39,7 @@ public class SendClientConfig
 					Builder.WriteByte (data) ;
 				}
 			} else {
-				Builder.WriteByte (0) ;
+				Builder.writeByte (0) ;
 			}
 		} catch (Exception e) {
 			e.printStackTrace () ;

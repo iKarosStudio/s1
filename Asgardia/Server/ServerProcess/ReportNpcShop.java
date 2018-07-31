@@ -23,7 +23,7 @@ public class ReportNpcShop
 		//List<NpcShopMenu> menu = shop.Menu;
 		HashMap<Integer, NpcShopMenu> menu = shop.Menu;
 		
-		builder.WriteByte (ServerOpcodes.NPC_SELL_LIST) ;
+		builder.writeByte (ServerOpcodes.NPC_SELL_LIST) ;
 		builder.WriteDoubleWord (NpcId) ;
 		builder.WriteWord (menu.size () ) ;
 		
@@ -75,17 +75,17 @@ public class ReportNpcShop
 			/*
 			 * 寫入每個道具細節數值
 			 */
-			builder.WriteByte (Detail.length) ;
+			builder.writeByte (Detail.length) ;
 			if (Detail.length > 0) {
 				for (byte b : Detail) {
-					builder.WriteByte (b) ;
+					builder.writeByte (b) ;
 				}
 			}
 		}
 	}
 	
 	public void SellList () {
-		builder.WriteByte (ServerOpcodes.NPC_BUY_LIST) ;
+		builder.writeByte (ServerOpcodes.NPC_BUY_LIST) ;
 	}
 	
 	public byte[] getRaw () {

@@ -234,31 +234,31 @@ public class WeaponTemplate
 	public byte[] ParseWeaponDetail () {
 		PacketBuilder builder = new PacketBuilder () ;
 		
-		builder.WriteByte (1) ;
-		builder.WriteByte (DmgSmall) ;
-		builder.WriteByte (DmgLarge) ;
-		builder.WriteByte (Material) ;
+		builder.writeByte (1) ;
+		builder.writeByte (DmgSmall) ;
+		builder.writeByte (DmgLarge) ;
+		builder.writeByte (Material) ;
 		builder.WriteDoubleWord (Weight / 1000) ;
 		
 		//
-		builder.WriteByte (2) ; //Enchant level
-		builder.WriteByte (0) ;
+		builder.writeByte (2) ; //Enchant level
+		builder.writeByte (0) ;
 		
 		//builder.WriteByte (3) ; //Durability
 		//builder.WriteByte (100) ;
 		
 		if (isTwohandedWeapon () ) {
-			builder.WriteByte (4) ;
+			builder.writeByte (4) ;
 		}
 		
 		if (HitModifier > 0) {
-			builder.WriteByte (5) ; //hit modifier
-			builder.WriteByte (HitModifier) ;
+			builder.writeByte (5) ; //hit modifier
+			builder.writeByte (HitModifier) ;
 		}
 		
 		if (DmgModifier > 0) {
-			builder.WriteByte (6) ; //dmg modifier
-			builder.WriteByte (DmgModifier) ;
+			builder.writeByte (6) ; //dmg modifier
+			builder.writeByte (DmgModifier) ;
 		}
 		
 		byte UseClass = 0;
@@ -267,65 +267,65 @@ public class WeaponTemplate
 		if (UseElf) UseClass     |= 0x04;
 		if (UseMage) UseClass    |= 0x08;
 		if (UseDarkElf) UseClass |= 0x10;
-		builder.WriteByte (7) ; //use class
-		builder.WriteByte (UseClass);
+		builder.writeByte (7) ; //use class
+		builder.writeByte (UseClass);
 		
 		if (ManaItem || ItemId == 126 || ItemId == 127) {
-			builder.WriteByte (16) ;
+			builder.writeByte (16) ;
 		}
 		
 		if (AddStr > 0) {
-			builder.WriteByte (8) ;
-			builder.WriteByte (AddStr) ;
+			builder.writeByte (8) ;
+			builder.writeByte (AddStr) ;
 		}
 		
 		if (AddDex > 0) {
-			builder.WriteByte (9) ;
-			builder.WriteByte (AddDex) ;
+			builder.writeByte (9) ;
+			builder.writeByte (AddDex) ;
 		}
 		
 		if (AddCon > 0) {
-			builder.WriteByte (10) ;
-			builder.WriteByte (AddCon) ;
+			builder.writeByte (10) ;
+			builder.writeByte (AddCon) ;
 		}
 		
 		if (AddInt > 0) {
-			builder.WriteByte (11) ;
-			builder.WriteByte (AddInt) ;
+			builder.writeByte (11) ;
+			builder.writeByte (AddInt) ;
 		}
 		
 		if (AddWis > 0) {
-			builder.WriteByte (12) ;
-			builder.WriteByte (AddWis) ;
+			builder.writeByte (12) ;
+			builder.writeByte (AddWis) ;
 		}
 		
 		if (AddCha > 0) {
-			builder.WriteByte (13) ;
-			builder.WriteByte (AddCha) ;
+			builder.writeByte (13) ;
+			builder.writeByte (AddCha) ;
 		}
 		
 		if (AddHp > 0) {
-			builder.WriteByte (31) ;
-			builder.WriteByte (AddHp) ;
+			builder.writeByte (31) ;
+			builder.writeByte (AddHp) ;
 		}
 		
 		if (AddMp > 0) {
-			builder.WriteByte (32) ;
-			builder.WriteByte (AddMp) ;
+			builder.writeByte (32) ;
+			builder.writeByte (AddMp) ;
 		}
 		
 		if (Mdef > 0) {
-			builder.WriteByte (15) ;
+			builder.writeByte (15) ;
 			builder.WriteWord (Mdef) ;
 		}
 		
 		if (AddSp > 0) {
-			builder.WriteByte (17) ;
+			builder.writeByte (17) ;
 			builder.WriteWord (AddSp) ;
 		}
 		
 		if (HasteItem) {
-			builder.WriteByte (18) ;
+			builder.writeByte (18) ;
 		}
 		
 		return builder.GetPacketNoPadding () ;

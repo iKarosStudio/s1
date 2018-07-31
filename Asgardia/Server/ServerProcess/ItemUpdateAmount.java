@@ -9,10 +9,10 @@ public class ItemUpdateAmount
 	PacketBuilder builder = new PacketBuilder () ;
 	
 	public ItemUpdateAmount (ItemInstance item) {
-		builder.WriteByte (ServerOpcodes.ITEM_UPDATE_AMOUNT) ;
+		builder.writeByte (ServerOpcodes.ITEM_UPDATE_AMOUNT) ;
 		builder.WriteDoubleWord (item.Uuid) ;
 		builder.WriteDoubleWord (item.Count) ;
-		builder.WriteByte (0) ;
+		builder.writeByte (0) ;
 	}
 	
 	public byte[] getRaw () {
