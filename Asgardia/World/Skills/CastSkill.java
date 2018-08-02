@@ -54,7 +54,7 @@ public class CastSkill
 		
 		try {
 			//技能效果
-			byte[] virtual = new SkillGfx (TargetUUID, 2).getRaw ();
+			byte[] virtual = new SkillGfx (TargetUUID, SkillTemplate.GfxId).getRaw ();
 			Handle.SendPacket (virtual) ;
 			
 			//自身動作效果

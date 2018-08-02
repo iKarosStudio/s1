@@ -1,5 +1,7 @@
 package Asgardia.Server;
 
+import Asgardia.Blockchain.*;
+
 public class Shutdown extends Thread implements Runnable
 {
 	public void run () {
@@ -14,6 +16,8 @@ public class Shutdown extends Thread implements Runnable
 		//kill server instance
 		
 		//rebuild server instance
+		
+		BlockchainMain.getInstance ();
 	}
 	
 	public Shutdown () {

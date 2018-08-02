@@ -58,7 +58,7 @@ public class Main
 		if (Configurations.USE_BLOCKCHAIN) {
 			BlockchainMain.getInstance ();
 		}
-
+		
 		/*
 		 * 系統執行緒池建立
 		 */

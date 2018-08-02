@@ -18,15 +18,16 @@ public class CastTargetedSkill
 		pack.WriteByte (18);//action id
 		pack.WriteDoubleWord (pc.Uuid); //
 		pack.WriteDoubleWord (target_uuid);
-		pack.WriteByte (6); //isHit
+		pack.WriteByte (6); 
 		pack.WriteByte (pc.location.Heading) ;
 		pack.WriteDoubleWord (_sequentialNumber.getAndIncrement () );
 		pack.WriteWord (skill_gfx);
-		pack.WriteByte (6);
+		pack.WriteByte (6);//0:Arrow 6:RemoteSkill 8:RemoteAOE Skill
 		pack.writeByte (pc.location.x);
 		pack.writeByte (pc.location.y);
 		pack.WriteWord (target_x);
 		pack.WriteWord (target_y);
+		
 		pack.WriteWord (0);
 		pack.WriteByte (0);
 	}
