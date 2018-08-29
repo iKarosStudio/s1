@@ -45,7 +45,7 @@ public class Main
 	public static void main (String[] args) throws InterruptedException {
 		// ShowSlog () ;
 		System.out.printf ("Kernel Author:%s\n", Configurations.AUTHOR);
-		System.out.printf ("OS:%s-%s\n", System.getProperty ("os.name"), System.getProperty ("os.arch"));
+		System.out.printf ("SERVER OS:%s-%s\n", System.getProperty ("os.name"), System.getProperty ("os.arch"));
 
 		/*
 		 * 載入參數設定
@@ -111,7 +111,7 @@ public class Main
 		 * System.out.println ("Drop Item Rate:" + Configurations.RateDropItem) ;
 		 * System.out.println ("Drop Gold Rate:" + Configurations.RateDropGold) ;
 		 */
-		System.out.printf ("PID %s\n", ManagementFactory.getRuntimeMXBean ().getName ().split ("@")[0]);
+		System.out.printf ("System_PID:%s\n", ManagementFactory.getRuntimeMXBean ().getName ().split ("@")[0]);
 
 		/*
 		 * 本地端控制台
